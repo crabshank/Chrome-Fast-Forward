@@ -8,6 +8,12 @@ var t_a=0;
 var clck_b=0;
 var m_c=0;
 var m_l=0;
+var pg_e=0;
+var wh2_e=0;
+var wh_e=1;
+var clk_e=0;
+var ip_e=0;
+var rc_e=0;
 
 function get_src(vid){
 	if (vid.src !== "") {
@@ -56,24 +62,29 @@ if(myVdo.currentTime<=t_i && myVdo.currentTime>=s_i){
 }
 
 function progress_hdl(evt,i) {
+if(pg_e==1){
 if(evt.target.readyState>2){
 calcSp(evt.target,i);
 }else{
 evt.target.playbackRate=1;
 }
 }
+}
 
 function ratechange_hdl(evt,i) {
-
+if(rc_e==1){
 butn[i].innerHTML = "Fast forwarding: "+evt.target.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-
+}
 }
 
 function cl_inp(video,i) {
+if(ip_e==1){
 calcSp(video,i);
+}
 }
 
 function cl_whl(evt,i) {
+	if(wh_e==1){
 	evt.preventDefault();
 	evt.stopPropagation();
 
@@ -82,10 +93,12 @@ function cl_whl(evt,i) {
 	}
 	if (evt.deltaY<0){
 		clse[i].value=(Math.min(16,clse[i].valueAsNumber+parseFloat(clse[i].step))).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7});
+	}
 	}
 }
 
 function cl_whl2(evt,video,i) {
+	if(wh2_e==1){
 	evt.preventDefault();
 	evt.stopPropagation();
 
@@ -98,10 +111,13 @@ function cl_whl2(evt,video,i) {
 		calcSp(video,i);
 	}
 }
+}
 
 function cl_clk() {
+if(clk_e==1){
 event.preventDefault();
 event.stopPropagation();
+}
 }
 
 chrome.runtime.onMessage.addListener(gotMessage);
@@ -133,9 +149,6 @@ var tmpVidTags = videoTags;
                                 if (source !== '') {
                                         createbutn(i, videoTags[i], source);
                                 }
-						}
-						for (let i = 0, len = videoTags.length; i < len; i++) {
-							ff[i]=0;
 						}
 						
 						 if (videoTags.length>1){ 
@@ -201,7 +214,7 @@ var tmpVidTags = videoTags;
 											ff[j]="";
 										}
 									}
-								ff[i]=0;
+								ff[i]=-1;
                                 sdivs[i] = document.createElement("div");
 								clse[i] = document.createElement("input");
                                 clse[i].type = "number";
@@ -231,27 +244,45 @@ var tmpVidTags = videoTags;
                                 return function() {
 									event.preventDefault();
 									event.stopPropagation();
-									if (ff[i]==0){
-									butn[i].innerHTML = "Fast forwarding";
-butn[i].style.cssText="display: initial !important; visibility: initial !important; webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: #00e900 !important; border-color: #00e900 !important;";
-
+									if(ff[i]==-1){
+									pg_e=1;
+									wh2_e=1;
+									wh_e=0;
+									clk_e=1;
+									ip_e=1;
+									rc_e=1;
 									videoTags[i].addEventListener('progress',(evt) => progress_hdl(evt,i));
+									butn[i].innerHTML = "Fast forwarding";
+									butn[i].setAttribute("grn_synced", true);
+									butn[i].style.cssText="display: initial !important; visibility: initial !important; webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: #00e900 !important; border-color: #00e900 !important;";
 									videoTags[i].addEventListener('ratechange',(evt) => ratechange_hdl(evt,i));
 									videoTags[i].playbackRate=clse[i].valueAsNumber;
-									clse[i].removeEventListener('wheel',cl_whl,true);
 									clse[i].addEventListener('wheel',(evt) => cl_whl2(evt,videoTags[i],i),true);
 									clse[i].addEventListener('input',cl_inp(videoTags[i],i),true);
 									clse[i].addEventListener('click',cl_clk,true);
 									butn[i].setAttribute("grn_synced", true);	
 									ff[i]=1;
+									}else if (ff[i]==0){
+									pg_e=1;
+									wh2_e=1;
+									wh_e=0;
+									clk_e=1;
+									ip_e=1;
+									rc_e=1;
+									videoTags[i].playbackRate=clse[i].valueAsNumber;
+									butn[i].innerHTML = "Fast forwarding";
+									butn[i].setAttribute("grn_synced", true);
+									butn[i].style.cssText="display: initial !important; visibility: initial !important; webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: #00e900 !important; border-color: #00e900 !important;";
+									ff[i]=1;
 									}else{
-									videoTags[i].removeEventListener('progress',progress_hdl, true);
-									clse[i].removeEventListener('wheel',cl_whl2,true);
-									clse[i].addEventListener('wheel',(evt) => cl_whl(evt,i),true);
-									clse[i].removeEventListener('click',cl_clk,true);
-									clse[i].removeEventListener('input',cl_inp,true);
-									videoTags[i].removeEventListener('ratechange',ratechange_hdl, true);
+									pg_e=0;
+									wh2_e=0;
+									wh_e=1;
+									clk_e=0;
+									ip_e=0;
+									rc_e=0;
 									videoTags[i].playbackRate=1;
+									butn[i].setAttribute("grn_synced", false);	
 									butn[i].style.cssText = "display: initial !important; visibility: initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: buttonface !important; border-color: buttonface !important";
 									butn[i].innerHTML = "Fast forward";
 									ff[i]=0;
