@@ -35,21 +35,21 @@ function removeEls(d, array) {
     return newArray;
 }
 
-function calcSp(myVdo,k){
+function calcSp(i){
 if(clck_a==-1){
-	t_a=myVdo.currentTime;
-	myVdo.playbackRate=clse[k].valueAsNumber;
+	t_a=videoTags[i].currentTime;
+	videoTags[i].playbackRate=clse[i].valueAsNumber;
 	clck_a = performance.now();
 }else{
-for (let i=myVdo.buffered.length-1; i>=0; i--){	
-let t_i=myVdo.buffered.end(i);
-let s_i=myVdo.buffered.start(i);
-if(myVdo.currentTime<=t_i && myVdo.currentTime>=s_i){
+for (let k=videoTags[i].buffered.length-1; k>=0; k--){	
+let t_i=videoTags[i].buffered.end(k);
+let s_i=videoTags[i].buffered.start(k);
+if(videoTags[i].currentTime<=t_i && videoTags[i].currentTime>=s_i){
 
 	if(t_i>t_a){
 		clck_b = performance.now();
 		lst=Math.floor((100000*((t_i-t_a)/(clck_b-clck_a))))*0.01;
-		myVdo.playbackRate=Math.min(clse[k].valueAsNumber,Math.max(1,lst));
+		videoTags[i].playbackRate=Math.min(clse[i].valueAsNumber,Math.max(1,lst));
 		t_a=t_i;
 		clck_a=performance.now();
 		break;
@@ -61,28 +61,29 @@ if(myVdo.currentTime<=t_i && myVdo.currentTime>=s_i){
 
 }
 
-function progress_hdl(evt,i) {
+function progress_hdl(i) {
 if(pg_e==1){
-if(evt.target.readyState>2){
-calcSp(evt.target,i);
+if(videoTags[i].readyState>2){
+calcSp(videoTags[i],i);
 }else{
-evt.target.playbackRate=1;
+videoTags[i].playbackRate=1;
 }
 }
 }
 
-function ratechange_hdl(evt,i) {
+function ratechange_hdl(i) {
 if(rc_e==1){
-butn[i].innerHTML = "Fast forwarding: "+evt.target.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+butn[i].innerHTML = "Fast forwarding: "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 }
 }
 
-function cl_inp(video,i) {
+function cl_inp(i) {
 if(ip_e==1){
-video.playbackRate=Math.max(1,clse[i].valueAsNumber);
-calcSp(video,i);
+videoTags[i].playbackRate=Math.min(16,Math.max(1,clse[i].valueAsNumber));
+calcSp(i);
 }
 }
+
 
 function cl_whl(evt,i) {
 	if(wh_e==1){
@@ -237,13 +238,16 @@ var tmpVidTags = videoTags;
 									clk_e=1;
 									ip_e=1;
 									rc_e=1;
-									videoTags[i].addEventListener('progress',(evt) => progress_hdl(evt,i));
+									videoTags[i].addEventListener('progress',() => progress_hdl(i));
 									butn[i].innerHTML = "Fast forwarding";
 									butn[i].setAttribute("grn_synced", true);
 									butn[i].style.cssText="display: initial !important; visibility: initial !important; webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: #00e900 !important; border-color: #00e900 !important;";
-									videoTags[i].addEventListener('ratechange',(evt) => ratechange_hdl(evt,i));
+									videoTags[i].addEventListener('ratechange',() => ratechange_hdl(i));
 									videoTags[i].playbackRate=clse[i].valueAsNumber;
-									clse[i].addEventListener('input',cl_inp(videoTags[i],i),true);
+									clse[i].addEventListener('keyup',() => cl_inp(i),true);
+									clse[i].addEventListener('keydown',() => cl_inp(i),true);
+									clse[i].addEventListener('change',() => cl_inp(i),true);
+									clse[i].addEventListener('change',() => cl_inp(i),true);
 									clse[i].addEventListener('click',cl_clk,true);
 									butn[i].setAttribute("grn_synced", true);	
 									ff[i]=1;
