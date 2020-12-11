@@ -64,7 +64,7 @@ if(videoTags[i].currentTime<=t_i && videoTags[i].currentTime>=s_i){
 function progress_hdl(i) {
 if(pg_e==1){
 if(videoTags[i].readyState>2){
-calcSp(videoTags[i],i);
+calcSp(i);
 }else{
 videoTags[i].playbackRate=1;
 }
