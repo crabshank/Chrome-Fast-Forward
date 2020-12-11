@@ -92,11 +92,11 @@ function cl_whl(evt,i) {
 
 	if(evt.deltaY>0){
 		clse[i].value=(Math.max(1,clse[i].valueAsNumber-parseFloat(clse[i].step))).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7});
-		cl_inp(videoTags[i],i);
+		cl_inp(i);
 	}
 	if (evt.deltaY<0){
 		clse[i].value=(Math.min(16,clse[i].valueAsNumber+parseFloat(clse[i].step))).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7});
-		cl_inp(videoTags[i],i);
+		cl_inp(i);
 	}
 	}
 }
