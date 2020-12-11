@@ -2,6 +2,7 @@ var ff = [];
 var butn = [];
 var clse = [];
 var sdivs = [];
+var videoTags=[];
 var bdkCol="buttonface";
 var clck_a=-1;
 var t_a=0;
@@ -9,7 +10,6 @@ var clck_b=0;
 var m_c=0;
 var m_l=0;
 var pg_e=0;
-var wh2_e=0;
 var wh_e=1;
 var clk_e=0;
 var ip_e=0;
@@ -79,6 +79,7 @@ butn[i].innerHTML = "Fast forwarding: "+evt.target.playbackRate.toLocaleString('
 
 function cl_inp(video,i) {
 if(ip_e==1){
+video.playbackRate=Math.max(1,clse[i].valueAsNumber);
 calcSp(video,i);
 }
 }
@@ -90,27 +91,13 @@ function cl_whl(evt,i) {
 
 	if(evt.deltaY>0){
 		clse[i].value=(Math.max(1,clse[i].valueAsNumber-parseFloat(clse[i].step))).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7});
+		cl_inp(videoTags[i],i);
 	}
 	if (evt.deltaY<0){
 		clse[i].value=(Math.min(16,clse[i].valueAsNumber+parseFloat(clse[i].step))).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7});
+		cl_inp(videoTags[i],i);
 	}
 	}
-}
-
-function cl_whl2(evt,video,i) {
-	if(wh2_e==1){
-	evt.preventDefault();
-	evt.stopPropagation();
-
-	if(evt.deltaY>0){
-		clse[i].value=(Math.max(1,clse[i].valueAsNumber-parseFloat(clse[i].step))).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7});
-		calcSp(video,i);
-	}
-	if (evt.deltaY<0){
-		clse[i].value=(Math.min(16,clse[i].valueAsNumber+parseFloat(clse[i].step))).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7});
-		calcSp(video,i);
-	}
-}
 }
 
 function cl_clk() {
@@ -127,7 +114,7 @@ function gotMessage(message, sender, sendResponse) {
 		switch (message.message) {
 						
                 case "Scan!":
-						                        var videoTags = [
+						                        videoTags = [
     ...document.getElementsByTagName('video'),
     ...document.getElementsByTagName('audio')
 ];
@@ -231,6 +218,7 @@ var tmpVidTags = videoTags;
 								clse[i].min=1;
 								clse[i].max=16;
 								clse[i].step=0.5;
+								wh_e=1;
 								clse[i].addEventListener('wheel',(evt) => cl_whl(evt,i),true);
 								clse[i].title="Maximum speed when fast forwarding; scroll to change.";
 								clse[i].className = "sync_butn";
@@ -246,8 +234,6 @@ var tmpVidTags = videoTags;
 									event.stopPropagation();
 									if(ff[i]==-1){
 									pg_e=1;
-									wh2_e=1;
-									wh_e=0;
 									clk_e=1;
 									ip_e=1;
 									rc_e=1;
@@ -257,15 +243,12 @@ var tmpVidTags = videoTags;
 									butn[i].style.cssText="display: initial !important; visibility: initial !important; webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: #00e900 !important; border-color: #00e900 !important;";
 									videoTags[i].addEventListener('ratechange',(evt) => ratechange_hdl(evt,i));
 									videoTags[i].playbackRate=clse[i].valueAsNumber;
-									clse[i].addEventListener('wheel',(evt) => cl_whl2(evt,videoTags[i],i),true);
 									clse[i].addEventListener('input',cl_inp(videoTags[i],i),true);
 									clse[i].addEventListener('click',cl_clk,true);
 									butn[i].setAttribute("grn_synced", true);	
 									ff[i]=1;
 									}else if (ff[i]==0){
 									pg_e=1;
-									wh2_e=1;
-									wh_e=0;
 									clk_e=1;
 									ip_e=1;
 									rc_e=1;
@@ -276,8 +259,6 @@ var tmpVidTags = videoTags;
 									ff[i]=1;
 									}else{
 									pg_e=0;
-									wh2_e=0;
-									wh_e=1;
 									clk_e=0;
 									ip_e=0;
 									rc_e=0;
