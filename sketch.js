@@ -1,9 +1,7 @@
 function setup() {
   noCanvas();
 
- select('#scan').mousePressed(sca1);
- 
- function sca1(){send("Scan!")}
+	send("Scan!");
   function send(message) {
 
     let params = {
@@ -24,5 +22,7 @@ function setup() {
     }
 
   }
+  
+  setTimeout(function(){window.close() }, 5000);
 
 }

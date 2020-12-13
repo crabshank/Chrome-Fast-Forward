@@ -14,6 +14,8 @@ var wh_e=1;
 var clk_e=0;
 var ip_e=0;
 var rc_e=0;
+var trk=0;
+var trk2=0;
 
 function get_src(vid){
 	if (vid.src !== "") {
@@ -115,28 +117,45 @@ function gotMessage(message, sender, sendResponse) {
 		switch (message.message) {
 						
                 case "Scan!":
-						                        videoTags = [
-    ...document.getElementsByTagName('video'),
-    ...document.getElementsByTagName('audio')
-];
-var tmpVidTags = videoTags;
+
 						getStrms();
 						function getStrms(){
 
+						                        var tmpVidTags = [
+    ...document.getElementsByTagName('video'),
+    ...document.getElementsByTagName('audio')
+];
+
+if (videoTags.length==0){
+	videoTags=tmpVidTags;
+	  trk=0;
+	for (let k = 0; k<videoTags.length; k++) {
+	if (!((get_src(videoTags[k])!='') && (videoTags[k].readyState != 0))) {
+		 videoTags=removeEls(videoTags[k], videoTags);
+	}
+	}
+}else{
+		  trk2=(videoTags.length==0)?0:videoTags.length;
+		  
+for (let k = 0; k<tmpVidTags.length; k++) {
+	if (!videoTags.includes(tmpVidTags[k])) {
+		 videoTags.push(tmpVidTags[k]);
+		 trk=trk2;
+	}
+}
+	for (let k = trk; k<videoTags.length; k++) {
+	if (!((get_src(videoTags[k])!='') && (videoTags[k].readyState != 0))) {
+		 videoTags=removeEls(videoTags[k], videoTags);
+		 trk--;
+	}
+	}
+
+}
    
-                        for (let k = 0, len = videoTags.length; k < len; k++) {
-                                if ((videoTags[k].src == "") && (videoTags[k].currentSrc == "") && (videoTags[k].readyState != 0)) {
-									 tmpVidTags=removeEls(videoTags[k], videoTags);
-								}
-                        }
+
 						
-						videoTags=tmpVidTags;
-						
-						for (let i = 0, len = videoTags.length; i < len; i++) {
-								let source=get_src(videoTags[i]);
-                                if (source !== '') {
-                                        createbutn(i, videoTags[i], source);
-                                }
+						for (let i = trk; i<videoTags.length; i++) {
+                            createbutn(i, videoTags[i], get_src(videoTags[i]));
 						}
 						
 						 if (videoTags.length>1){ 
