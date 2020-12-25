@@ -76,6 +76,9 @@ videoTags[i].playbackRate=1;
 function ratechange_hdl(i) {
 if(rc_e==1){
 butn[i].innerHTML = "Fast forwarding: "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+if(videoTags[i].readyState>2){
+	calcSp();
+}
 }
 }
 
