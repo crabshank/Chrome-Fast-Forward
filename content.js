@@ -12,6 +12,7 @@ var m_l=0;
 var pg_e=0;
 var wh_e=1;
 var clk_e=0;
+var skd_e=0;
 var ip_e=0;
 var rc_e=0;
 var trk=0;
@@ -73,11 +74,21 @@ videoTags[i].playbackRate=1;
 }
 }
 
+function seeked_hdl(i) {
+if(skd_e==1){
+if(videoTags[i].readyState>2){
+calcSp(i);
+}else{
+videoTags[i].playbackRate=1;
+}
+}
+}
+
 function ratechange_hdl(i) {
 if(rc_e==1){
 butn[i].innerHTML = "Fast forwarding: "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 if(videoTags[i].readyState>2){
-	calcSp();
+	calcSp(i);
 }
 }
 }
@@ -261,6 +272,7 @@ for (let k = 0; k<tmpVidTags.length; k++) {
 									ip_e=1;
 									rc_e=1;
 									videoTags[i].addEventListener('progress',() => progress_hdl(i));
+									videoTags[i].addEventListener('seeked',() => seeked_hdl(i));
 									butn[i].innerHTML = "Fast forwarding";
 									butn[i].setAttribute("grn_synced", true);
 									butn[i].style.cssText="display: initial !important; visibility: initial !important; webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: #00e900 !important; border-color: #00e900 !important;";
