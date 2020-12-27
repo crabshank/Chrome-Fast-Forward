@@ -175,7 +175,7 @@ for (let k = 0; k<tmpVidTags.length; k++) {
 									if((typeof b.childNodes[0]!=="undefined")&&(typeof b.childNodes[1]!=="undefined")){
 									bdkCol=(b.childNodes[0].getAttribute("grn_synced")=="true")?"#00e900":"buttonface";
                                         if (!hide) {
-												b.style.cssText = "display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important;";
+												b.style.cssText = "display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.3em, 2.4em);";
 												if (b.childNodes.length==2){
 													b.childNodes[0].style.cssText = "display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important";
 													b.childNodes[1].style.cssText = "display: initial !important; visibility: initial !important; background-color: #de0000 !important; webkit-text-fill-color: #ececec !important; border-width: 2px !important; border-style: outset !important; border-color: #de0000 !important; width: 9ch !important";
@@ -200,7 +200,7 @@ for (let k = 0; k<tmpVidTags.length; k++) {
 							    v.removeEventListener('mousemove', cursorhide, true);
                                 var timer;
                                 var hide = false;
-                                b.style.cssText = "display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important;";
+                                b.style.cssText = "display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.3em, 2.4em);";
 								if (b.childNodes.length==2){
 								bdkCol=(b.childNodes[0].getAttribute("grn_synced")=="true")?"#00e900":"buttonface";
                                 b.childNodes[0].style.cssText = "display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important";
@@ -228,7 +228,7 @@ for (let k = 0; k<tmpVidTags.length; k++) {
                                 sdivs[i] = document.createElement("div");
 								clse[i] = document.createElement("input");
                                 clse[i].type = "number";
-                                sdivs[i].style.cssText = "display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important;";
+                                sdivs[i].style.cssText = "display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.3em, 2.4em);";
                                 butn[i] = document.createElement("button");
 								butn[i].setAttribute("grn_synced", false);	
 								butn[i].style.cssText = "display: initial !important; visibility: initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: buttonface !important; border-color: buttonface !important";
