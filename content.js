@@ -39,6 +39,7 @@ function removeEls(d, array) {
 }
 
 function calcSp(i){
+	if(clse[i].valueAsNumber>1){
 if(clck_a==-1){
 	t_a=videoTags[i].currentTime;
 	videoTags[i].playbackRate=clse[i].valueAsNumber;
@@ -61,7 +62,7 @@ if(videoTags[i].currentTime<=t_i && videoTags[i].currentTime>=s_i){
 
 }
 }
-
+}
 }
 
 function progress_hdl(i) {
