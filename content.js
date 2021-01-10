@@ -56,7 +56,7 @@ if(videoTags[i].currentTime<=t_i && videoTags[i].currentTime>=s_i){
 		let perSc=(t_i-t_a)/(clck_b-clck_a);
 		lst=100000*perSc;
 		perSec[i]=(Math.floor(10*lst)*0.001).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 3});
-		butn[i].innerHTML=(perSec[i]!="" && perSec[i]>0 && typeof perSec[i]!=="undefined")?"Fast forwarding: ("+perSec[i]+"s loaded per second) "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":"Fast forwarding: "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+		butn[i].innerHTML=(perSec[i]>0 && typeof perSec[i]!=="undefined")?"Fast forwarding: ("+perSec[i]+"s loaded per second) "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":"Fast forwarding: "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 		lst=Math.floor(lst)*0.01;
 		videoTags[i].playbackRate=Math.min(clse[i].valueAsNumber,Math.max(1,lst));
 		t_a=t_i;
@@ -92,7 +92,7 @@ videoTags[i].playbackRate=1;
 
 function ratechange_hdl(i) {
 if(rc_e==1){
-		butn[i].innerHTML=(perSec[i]!="" && perSec[i]>0 && typeof perSec[i]!=="undefined")?"Fast forwarding: ("+perSec[i]+"s loaded per second) "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":"Fast forwarding: "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+		butn[i].innerHTML=(perSec[i]>0 && typeof perSec[i]!=="undefined")?"Fast forwarding: ("+perSec[i]+"s loaded per second) "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":"Fast forwarding: "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 if(videoTags[i].readyState>2){
 	calcSp(i);
 }
