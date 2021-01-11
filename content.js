@@ -15,6 +15,8 @@ var clk_e=0;
 var skd_e=0;
 var ip_e=0;
 var rc_e=0;
+var wt_e=0;
+var pl_e=0;
 var trk=0;
 var trk2=0;
 var perSec=[];
@@ -42,26 +44,27 @@ function removeEls(d, array) {
 function calcSp(i){
 	if(clse[i].valueAsNumber>1){
 if(clck_a==-1){
-	t_a=videoTags[i].currentTime;
-	videoTags[i].playbackRate=clse[i].valueAsNumber;
+		t_a=videoTags[i].currentTime;
 	clck_a = performance.now();
 }else{
 for (let k=videoTags[i].buffered.length-1; k>=0; k--){
 clck_b = performance.now();
 let t_i=videoTags[i].buffered.end(k);
 let s_i=videoTags[i].buffered.start(k);
-if(videoTags[i].currentTime<=t_i && videoTags[i].currentTime>=s_i){
+let c_i=videoTags[i].currentTime;
+if(c_i<=t_i && c_i>=s_i){
 
 	if(t_i>t_a){
-		let perSc=(t_i-t_a)/(clck_b-clck_a);
+		let perSc=Math.abs(t_i-t_a)/(clck_b-clck_a);
 		lst=100000*perSc;
 		perSec[i]=(Math.floor(10*lst)*0.001).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 3});
-		butn[i].innerHTML=(perSec[i]>0 && typeof perSec[i]!=="undefined")?"Fast forwarding: ("+perSec[i]+"s loaded per second) "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":"Fast forwarding: "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+		butn[i].innerHTML=(perSec[i]>0 && typeof perSec[i]!=="undefined" && skd_e!=2)?"Fast forwarding: ("+perSec[i]+"s loaded per second) "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":"Fast forwarding: "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 		lst=Math.floor(lst)*0.01;
 		videoTags[i].playbackRate=Math.min(clse[i].valueAsNumber,Math.max(1,lst));
 		t_a=t_i;
+		skd_e=(skd_e==2)?1:skd_e;
+		k=0;
 		clck_a=performance.now();
-		break;
 	}
 }
 
@@ -80,8 +83,8 @@ videoTags[i].playbackRate=1;
 }
 }
 
-function seeked_hdl(i) {
-if(skd_e==1){
+function play_hdl(i) {
+if(pl_e==1){
 if(videoTags[i].readyState>2){
 calcSp(i);
 }else{
@@ -90,10 +93,26 @@ videoTags[i].playbackRate=1;
 }
 }
 
+function waiting_hdl(i) {
+if(wt_e==1){
+videoTags[i].playbackRate=1;
+}
+}
+
+function seeked_hdl(i) {
+if(skd_e>=1){
+butn[i].innerHTML="Fast forwarding: "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+skd_e=2;
+if(videoTags[i].readyState<=2){
+videoTags[i].playbackRate=1;
+}
+}
+}
+
 function ratechange_hdl(i) {
 if(rc_e==1){
-		butn[i].innerHTML=(perSec[i]>0 && typeof perSec[i]!=="undefined")?"Fast forwarding: ("+perSec[i]+"s loaded per second) "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":"Fast forwarding: "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-if(videoTags[i].readyState>2){
+		butn[i].innerHTML=(perSec[i]>0 && typeof perSec[i]!=="undefined" && skd_e!=2)?"Fast forwarding: ("+perSec[i]+"s loaded per second) "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":"Fast forwarding: "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+if(videoTags[i].readyState>2 && skd_e!=2){
 	calcSp(i);
 }
 }
@@ -102,7 +121,9 @@ if(videoTags[i].readyState>2){
 function cl_inp(i) {
 if(ip_e==1){
 videoTags[i].playbackRate=Math.min(16,Math.max(1,clse[i].valueAsNumber));
-calcSp(i);
+if(skd_e!=2){
+	calcSp(i);
+}
 }
 }
 
@@ -111,7 +132,7 @@ function cl_whl(evt,i) {
 	if(wh_e==1){
 	evt.preventDefault();
 	evt.stopPropagation();
-
+	
 	if(evt.deltaY>0){
 		clse[i].value=(Math.max(1,clse[i].valueAsNumber-parseFloat(clse[i].step))).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7});
 		cl_inp(i);
@@ -277,10 +298,15 @@ for (let k = 0; k<tmpVidTags.length; k++) {
 									event.stopPropagation();
 									if(ff[i]==-1){
 									pg_e=1;
+									wt_e=1;
+									pl_e=1;
 									clk_e=1;
+									skd_e=1;
 									ip_e=1;
 									rc_e=1;
 									videoTags[i].addEventListener('progress',() => progress_hdl(i));
+									videoTags[i].addEventListener('play',() => play_hdl(i));
+									videoTags[i].addEventListener('waiting',() => waiting_hdl(i));
 									videoTags[i].addEventListener('seeked',() => seeked_hdl(i));
 									butn[i].innerHTML = "Fast forwarding";
 									butn[i].setAttribute("grn_synced", true);
@@ -296,7 +322,10 @@ for (let k = 0; k<tmpVidTags.length; k++) {
 									ff[i]=1;
 									}else if (ff[i]==0){
 									pg_e=1;
+									wt_e=1;
+									pl_e=1;
 									clk_e=1;
+									skd_e=1;
 									ip_e=1;
 									rc_e=1;
 									videoTags[i].playbackRate=clse[i].valueAsNumber;
@@ -306,7 +335,10 @@ for (let k = 0; k<tmpVidTags.length; k++) {
 									ff[i]=1;
 									}else{
 									pg_e=0;
+									wt_e=0;
+									pl_e=0;
 									clk_e=0;
+									skd_e=0;
 									ip_e=0;
 									rc_e=0;
 									videoTags[i].playbackRate=1;
