@@ -20,7 +20,6 @@ var pl_e=0;
 var trk=0;
 var trk2=0;
 var perSec=[];
-var neg=[];
 
 function get_src(vid){
 	if (vid.src !== "") {
@@ -63,15 +62,7 @@ if(c_i<=t_i && c_i>=s_i){
 		skd_e=(skd_e==2)?1:skd_e;
 		t_a=t_i;
 		k=0;
-		if(neg[i]>0){
-		let rate=Math.min(clse[i].valueAsNumber,Math.max(1,lst-neg));
-		neg[i]=(rate==1)?1-lst+neg:0;
-		neg[i]=(lst<1)?neg+1-lst:0;
-		videoTags[i].playbackRate=rate;
-		}else{
-		neg[i]=(lst<1)?neg+1-lst:0;
 		videoTags[i].playbackRate=Math.min(clse[i].valueAsNumber,Math.max(1,lst));
-		}
 		clck_a=performance.now();
 	}
 }
@@ -272,13 +263,9 @@ for (let k = 0; k<tmpVidTags.length; k++) {
 										if (typeof perSec[j]==="undefined"){
 											perSec[j]="";
 										}
-										if (typeof neg[j]==="undefined"){
-											neg[j]="";
-										}
 									}
 								ff[i]=-1;
 								perSec[i]=0;
-								neg[i]=0;
                                 sdivs[i] = document.createElement("div");
 								clse[i] = document.createElement("input");
                                 clse[i].type = "number";
