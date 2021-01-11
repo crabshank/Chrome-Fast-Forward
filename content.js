@@ -20,6 +20,7 @@ var pl_e=0;
 var trk=0;
 var trk2=0;
 var perSec=[];
+var neg=[];
 
 function get_src(vid){
 	if (vid.src !== "") {
@@ -58,12 +59,19 @@ if(c_i<=t_i && c_i>=s_i){
 		let perSc=Math.abs(t_i-t_a)/(clck_b-clck_a);
 		lst=100000*perSc;
 		perSec[i]=(Math.floor(10*lst)*0.001).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 3});
-		butn[i].innerHTML=(perSec[i]>0 && typeof perSec[i]!=="undefined" && skd_e!=2)?"Fast forwarding: ("+perSec[i]+"s loaded per second) "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":"Fast forwarding: "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 		lst=Math.floor(lst)*0.01;
-		videoTags[i].playbackRate=Math.min(clse[i].valueAsNumber,Math.max(1,lst));
-		t_a=t_i;
 		skd_e=(skd_e==2)?1:skd_e;
+		t_a=t_i;
 		k=0;
+		if(neg[i]>0){
+		let rate=Math.min(clse[i].valueAsNumber,Math.max(1,lst-neg));
+		neg[i]=(rate==1)?1-lst+neg:0;
+		neg[i]=(lst<1)?neg+1-lst:0;
+		videoTags[i].playbackRate=rate;
+		}else{
+		neg[i]=(lst<1)?neg+1-lst:0;
+		videoTags[i].playbackRate=Math.min(clse[i].valueAsNumber,Math.max(1,lst));
+		}
 		clck_a=performance.now();
 	}
 }
@@ -111,7 +119,7 @@ videoTags[i].playbackRate=1;
 
 function ratechange_hdl(i) {
 if(rc_e==1){
-		butn[i].innerHTML=(perSec[i]>0 && typeof perSec[i]!=="undefined" && skd_e!=2)?"Fast forwarding: ("+perSec[i]+"s loaded per second) "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":"Fast forwarding: "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+		butn[i].innerHTML=(perSec[i]>0 && skd_e!=2)?"Fast forwarding: ("+perSec[i]+"s loaded per second) "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":"Fast forwarding: "+videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 if(videoTags[i].readyState>2 && skd_e!=2){
 	calcSp(i);
 }
@@ -264,8 +272,13 @@ for (let k = 0; k<tmpVidTags.length; k++) {
 										if (typeof perSec[j]==="undefined"){
 											perSec[j]="";
 										}
+										if (typeof neg[j]==="undefined"){
+											neg[j]="";
+										}
 									}
 								ff[i]=-1;
+								perSec[i]=0;
+								neg[i]=0;
                                 sdivs[i] = document.createElement("div");
 								clse[i] = document.createElement("input");
                                 clse[i].type = "number";
