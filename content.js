@@ -61,9 +61,9 @@ if(c_i<=t_i && c_i>=s_i){
 		lst=Math.floor(lst)*0.01;
 		skd_e=(skd_e==2)?1:skd_e;
 		t_a=t_i;
-		k=0;
 		videoTags[i].playbackRate=Math.min(clse[i].valueAsNumber,Math.max(1,lst));
 		clck_a=performance.now();
+		break;
 	}
 }
 
