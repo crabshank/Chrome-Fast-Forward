@@ -47,11 +47,11 @@ if(clck_a==-1){
 		t_a=videoTags[i].currentTime;
 	clck_a = performance.now();
 }else{
+let c_i=videoTags[i].currentTime;
 for (let k=videoTags[i].buffered.length-1; k>=0; k--){
 clck_b = performance.now();
 let t_i=videoTags[i].buffered.end(k);
 let s_i=videoTags[i].buffered.start(k);
-let c_i=videoTags[i].currentTime;
 if(c_i<=t_i && c_i>=s_i){
 
 	if(t_i>t_a){
@@ -65,6 +65,8 @@ if(c_i<=t_i && c_i>=s_i){
 		clck_a=performance.now();
 		break;
 	}
+}else if(c_i>t_i){
+	break;
 }
 
 }
