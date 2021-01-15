@@ -20,6 +20,8 @@ var pl_e=0;
 var trk=0;
 var trk2=0;
 var perSec=[];
+var dfSpd=6;
+var dfStp=0.5;
 
 function get_src(vid){
 	if (vid.src !== "") {
@@ -152,6 +154,44 @@ event.stopPropagation();
 }
 }
 
+restore_options();
+
+function restore_options()
+{
+	if(typeof chrome.storage==='undefined'){
+		restore_options();
+	}else{
+	chrome.storage.sync.get(null, function(items)
+	{
+		if (Object.keys(items).length !== 0)
+		{
+			//console.log(items);
+			dfSpd = items.defSpd;
+			dfStp = items.defStp;
+		}
+		else
+		{
+
+			save_options();
+			restore_options();
+		}
+	});
+	}
+}
+
+function save_options()
+{
+	chrome.storage.sync.set(
+	{
+		defSpd: 6,
+		defStp: 0.5
+	}, function()
+	{
+		console.log('Default options saved.');
+	});
+
+}
+
 chrome.runtime.onMessage.addListener(gotMessage);
 
 function gotMessage(message, sender, sendResponse) {
@@ -280,10 +320,10 @@ for (let k = 0; k<tmpVidTags.length; k++) {
                                 video.insertAdjacentElement('beforebegin', sdivs[i]);
                                 butn[i].addEventListener("click", btclk(i, src));
 								clse[i].style.cssText = "display: initial !important; visibility: initial !important; background-color: #f00000 !important; webkit-text-fill-color: #ececec !important; border-width: 2px !important; border-style: outset !important; border-color: #f00000 !important; width: 9ch !important";								
-                                clse[i].value =6;
+                                clse[i].value =dfSpd;
 								clse[i].min=1;
 								clse[i].max=16;
-								clse[i].step=0.5;
+								clse[i].step=dfStp;
 								wh_e=1;
 								clse[i].addEventListener('wheel',(evt) => cl_whl(evt,i),true);
 								clse[i].title="Maximum speed when fast forwarding; scroll to change.";
