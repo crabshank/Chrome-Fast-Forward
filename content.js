@@ -29,10 +29,12 @@ var entered=false;
 var yt=[];
 
 function def_retCSS(i){
+var d_yt="display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.164vw, 0.92vh) !important;";
+var d="display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.164vw, 9.75vh) !important;";
 if(yt[i]){
-	sdivs[i].style.cssText = "display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.164vw, 0.92vh) !important;";
+	sdivs[i].style.cssText = d_yt;
 }else{
-	sdivs[i].style.cssText = "display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.164vw, 9.75vh) !important;";
+	sdivs[i].style.cssText = d;
 }
 bdkCol=(butn[i].getAttribute("grn_synced")=="true")?"#007500":"buttonface";
 bdkCol2=(butn[i].getAttribute("grn_synced")=="true")?"#00750080":"#f0f0f080";
@@ -46,10 +48,11 @@ timer2 = setTimeout(function(){
 butn[i].style.cssText = "display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; padding-right: 0.44ch !important; min-width: 9ch !important; text-align-last: right !important";
 clse[i].style.cssText = "display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; padding-bottom: 2px !important; padding-top: 2px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; width: 9ch !important; padding-left: 4px !important";
 		}else{
-		let hide = "display: none !important; visibility: hidden !important;";
-		sdivs[i].style.cssText = hide;
-		clse[i].style.cssText = hide;
-		butn[i].style.cssText = hide;
+			if(yt[i]){
+			sdivs[i].style.cssText = d_yt+" opacity: 0 !important";
+			}else{
+			sdivs[i].style.cssText = d+" opacity: 0 !important";
+			}
 		}
 		
 	}
@@ -472,15 +475,15 @@ go();
 				if(!checkInclude(DOMvids,videoTags[j]) ||  !eligVid(videoTags[j])){
 					videoTags[j]='';
 					ff[j]='';
-					if(typeof butn[j].parentNode!=='undefined'){
+					if(typeof butn[j].parentNode!=='undefined' && !!butn[j].parentNode){
 					butn[j].parentNode.removeChild(butn[j]);
 					}
 					butn[j]='';
-					if(typeof clse[j].parentNode!=='undefined'){
+					if(typeof clse[j].parentNode!=='undefined' && !!clse[j].parentNode){
 					clse[j].parentNode.removeChild(clse[j]);
 					}
 					clse[j]='';
-					if(typeof sdivs[j].parentNode!=='undefined'){
+					if(typeof sdivs[j].parentNode!=='undefined' && !!sdivs[j].parentNode){
 					sdivs[j].parentNode.removeChild(sdivs[j]);
 					}
 					sdivs[j]='';
