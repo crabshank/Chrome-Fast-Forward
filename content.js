@@ -341,7 +341,7 @@ for (let k = 0; k<tmpVidTags.length; k++) {
 										}
 										if (typeof perSec[j]==="undefined"){
 											perSec[j]="";
-										}if (typeof perSec[j]==="undefined"){
+										}if (typeof yt[j]==="undefined"){
 											yt[j]=false;
 										}
 									}
@@ -355,7 +355,7 @@ for (let k = 0; k<tmpVidTags.length; k++) {
 								butn[i].setAttribute("grn_synced", false);	
                                 butn[i].innerHTML = videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x"
                                 butn[i].className = "sync_butn";
-								if (!!video.offsetParent.offsetParent.offsetParent && window.location.href.startsWith('https://m.youtube.com/')){
+								if (window.location.href.startsWith('https://m.youtube.com/') && !!video.offsetParent.offsetParent.offsetParent){
 								yt[i]=true;
 								video.offsetParent.offsetParent.offsetParent.insertAdjacentElement('beforebegin',sdivs[i]);
 								//sdivs[i].style.setProperty("transform", " ", "important");
@@ -469,14 +469,20 @@ go();
 			];
 			
 			for (let j=0; j<videoTags.length; j++){
-				if(!checkInclude(DOMvids,videoTags[j])){
+				if(!checkInclude(DOMvids,videoTags[j]) ||  !eligVid(videoTags[j])){
 					videoTags[j]='';
 					ff[j]='';
+					if(typeof butn[j].parentNode!=='undefined'){
 					butn[j].parentNode.removeChild(butn[j]);
+					}
 					butn[j]='';
+					if(typeof clse[j].parentNode!=='undefined'){
 					clse[j].parentNode.removeChild(clse[j]);
+					}
 					clse[j]='';
+					if(typeof sdivs[j].parentNode!=='undefined'){
 					sdivs[j].parentNode.removeChild(sdivs[j]);
+					}
 					sdivs[j]='';
 					perSec[j]='';
 				}
