@@ -38,15 +38,15 @@ if(yt[i]){
 }
 bdkCol=(butn[i].getAttribute("grn_synced")=="true")?"#007500":"buttonface";
 bdkCol2=(butn[i].getAttribute("grn_synced")=="true")?"#00750080":"#f0f0f080";
-butn[i].style.cssText = "display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important; padding-right: 0.44ch !important; min-width: 9ch !important; text-align-last: right !important";
-clse[i].style.cssText = "display: initial !important; visibility: initial !important; background-color: #f00000 !important; webkit-text-fill-color: #ececec !important;  border-width: 0px !important; padding-bottom: 2px !important; padding-top: 2px !important; border-style: outset !important; border-color: #f00000 !important; width: 9ch !important; padding-left: 4px !important";
+butn[i].style.cssText = "display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important; padding-right: 0.44ch !important; min-width: 9ch !important; text-align-last: right !important; color: white !important";
+clse[i].style.cssText = "display: initial !important; visibility: initial !important; background-color: #f00000 !important; webkit-text-fill-color: #ececec !important;  border-width: 0px !important; padding-bottom: 2px !important; padding-top: 2px !important; border-style: outset !important; border-color: #f00000 !important; width: 9ch !important; padding-left: 4px !important; color: white !important";
 
 clearTimeout(timer2);
 timer2 = setTimeout(function(){
 	if(!entered){
 		if(mbMde){
-butn[i].style.cssText = "display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; padding-right: 0.44ch !important; min-width: 9ch !important; text-align-last: right !important";
-clse[i].style.cssText = "display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; padding-bottom: 2px !important; padding-top: 2px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; width: 9ch !important; padding-left: 4px !important";
+butn[i].style.cssText = "display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; padding-right: 0.44ch !important; min-width: 9ch !important; text-align-last: right !important; color: white !important";
+clse[i].style.cssText = "display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; padding-bottom: 2px !important; padding-top: 2px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; width: 9ch !important; padding-left: 4px !important; color: white !important";
 		}else{
 			if(yt[i]){
 			sdivs[i].style.cssText = d_yt+" opacity: 0 !important";
