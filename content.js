@@ -188,6 +188,8 @@ if(rc_e==1){
 if(videoTags[i].readyState>2 && skd_e!=2){
 	calcSp(i);
 }
+}else{
+	butn[i].innerHTML=videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 }
 }
 
@@ -372,6 +374,7 @@ for (let k = 0; k<tmpVidTags.length; k++) {
 								def_retCSS(i);
 								sdivs[i].appendChild(butn[i]);
 								sdivs[i].appendChild(clse[i]);
+								videoTags[i].addEventListener('ratechange',() => ratechange_hdl(i));
 									//clk_e=1;
 									clse[i].addEventListener('keyup',() => cl_inp(i));
 									clse[i].addEventListener('keydown',() => cl_inp(i));
@@ -406,7 +409,6 @@ for (let k = 0; k<tmpVidTags.length; k++) {
 									videoTags[i].addEventListener('seeked',() => seeked_hdl(i));
 									butn[i].setAttribute("grn_synced", true);
 									def_retCSS(i);
-									videoTags[i].addEventListener('ratechange',() => ratechange_hdl(i));
 									let vN=(Number.isNaN(clse[i].valueAsNumber))?1:clse[i].valueAsNumber;
 									videoTags[i].playbackRate=vN;
 									butn[i].innerHTML = videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x"
