@@ -27,16 +27,11 @@ var dfStp=0.5;
 var mbMde=false;
 var timer2;
 var entered=false;
-var yt=[];
+//var yt=[];
 
 function def_retCSS(i){
-var d_yt="display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.164vw, 0.92vh) !important;";
-var d="display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.164vw, 9.75vh) !important;";
-if(yt[i]){
-	sdivs[i].style.cssText = d_yt;
-}else{
+var d="display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.24em) !important;";
 	sdivs[i].style.cssText = d;
-}
 bdkCol=(butn[i].getAttribute("grn_synced")=="true")?"#007500":"buttonface";
 txCol=(butn[i].getAttribute("grn_synced")=="true")?"white":"black";
 bdkCol2=(butn[i].getAttribute("grn_synced")=="true")?"#00750080":"#f0f0f080";
@@ -50,11 +45,7 @@ timer2 = setTimeout(function(){
 butn[i].style.cssText = "display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; padding-right: 0.44ch !important; min-width: 9ch !important; text-align-last: right !important; "+txCol+" !important";
 clse[i].style.cssText = "display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; padding-bottom: 2px !important; padding-top: 2px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; width: 9ch !important; padding-left: 4px !important; color: white !important";
 		}else{
-			if(yt[i]){
-			sdivs[i].style.cssText = d_yt+" opacity: 0 !important";
-			}else{
 			sdivs[i].style.cssText = d+" opacity: 0 !important";
-			}
 		}
 		
 	}
@@ -346,9 +337,10 @@ for (let k = 0; k<tmpVidTags.length; k++) {
 										}
 										if (typeof perSec[j]==="undefined"){
 											perSec[j]="";
-										}if (typeof yt[j]==="undefined"){
-											yt[j]=false;
 										}
+										/*if (typeof yt[j]==="undefined"){
+											yt[j]=false;
+										}*/
 									}
 								ff[i]=-1;
 								perSec[i]=0;
@@ -361,15 +353,14 @@ for (let k = 0; k<tmpVidTags.length; k++) {
                                 butn[i].innerHTML = videoTags[i].playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x"
                                 butn[i].className = "sync_butn";
 								if (window.location.href.startsWith('https://m.youtube.com/') && !!video.offsetParent.offsetParent.offsetParent){
-								yt[i]=true;
+								//yt[i]=true;
 								video.offsetParent.offsetParent.offsetParent.insertAdjacentElement('beforebegin',sdivs[i]);
 								//sdivs[i].style.setProperty("transform", " ", "important");
-								sdivs[i].style.cssText = "display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.164vw, 0.92vh) !important;";
 								}else{
-								yt[i]=false;
+								//yt[i]=false;
                                 video.insertAdjacentElement('beforebegin', sdivs[i]);
-								sdivs[i].style.cssText = "display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.164vw, 9.75vh) !important;";
                                 }
+								sdivs[i].style.cssText = "display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.24em) !important;";
 								butn[i].addEventListener("click", btclk(i, src));								
                                 clse[i].value =dfSpd;
 								clse[i].min=1;
