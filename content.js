@@ -100,6 +100,14 @@ function removeEls(d, array) {
     return newArray;
 }
 
+function elRemover(el){
+	if(typeof el!=='undefined' && !!el){
+	if(typeof el.parentNode!=='undefined' && !!el.parentNode){
+		el.parentNode.removeChild(el);
+	}
+	}
+}
+
 function calcSp(i){
 	let vN=(Number.isNaN(clse[i].valueAsNumber))?1:clse[i].valueAsNumber;
 	if(vN>1){
@@ -478,17 +486,11 @@ go();
 				if(!checkInclude(DOMvids,videoTags[j]) ||  !eligVid(videoTags[j])){
 					videoTags[j]='';
 					ff[j]='';
-					if(typeof butn[j].parentNode!=='undefined' && !!butn[j].parentNode){
-					butn[j].parentNode.removeChild(butn[j]);
-					}
+					elRemover(butn[j]);
 					butn[j]='';
-					if(typeof clse[j].parentNode!=='undefined' && !!clse[j].parentNode){
-					clse[j].parentNode.removeChild(clse[j]);
-					}
+					elRemover(clse[j]);
 					clse[j]='';
-					if(typeof sdivs[j].parentNode!=='undefined' && !!sdivs[j].parentNode){
-					sdivs[j].parentNode.removeChild(sdivs[j]);
-					}
+					elRemover(sdivs[j]);
 					sdivs[j]='';
 					perSec[j]='';
 				}
