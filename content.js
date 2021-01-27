@@ -61,6 +61,14 @@ if((get_src(vid)!='') && (vid.readyState != 0)){
 }
 }
 
+function simpleCopyArray(array){
+		var newArray = [];
+	    for (let i = 0; i < array.length; i++) {
+            newArray.push(array[i]);
+		}
+		return newArray;
+}
+
 function get_src(vid){
 	if (vid.src !== "") {
 		return vid.src;
@@ -73,7 +81,7 @@ function get_src(vid){
 
 function checkInclude(arr,el){
 	let inside=false;
-	for (let i = 0; i < arr.length; i++) {
+	for (let i = arr.length-1; i >= 0; i--) {
 		if(arr[i]===el){
 			inside=true;
 			break;
@@ -281,7 +289,7 @@ function go() {
 ];
 
 if (videoTags.length==0){
-	videoTags=tmpVidTags;
+	videoTags=simpleCopyArray(tmpVidTags);
 	  trk=0;
 	for (let k = 0; k<videoTags.length; k++) {
 	if (!eligVid(videoTags[k])){
@@ -289,10 +297,10 @@ if (videoTags.length==0){
 	}
 	}
 }else{
-		  trk2=(videoTags.length==0)?0:videoTags.length;
+		  trk2=videoTags.length;
 		  
 for (let k = 0; k<tmpVidTags.length; k++) {
-	if (!videoTags.includes(tmpVidTags[k])) {
+	if (!checkInclude(videoTags,tmpVidTags[k])) {
 		 videoTags.push(tmpVidTags[k]);
 		 trk=trk2;
 	}
