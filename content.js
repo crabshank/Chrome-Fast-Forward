@@ -214,7 +214,7 @@ function cl_whl(evt,i) {
 		let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 		i.clse.value=(Math.min(16,vN+parseFloat(i.clse.step))).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7});
 		}
-	if(wh_e==1){
+	if(i.wh_e==1){
 		cl_inp(i);
 	}
 
