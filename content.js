@@ -431,7 +431,12 @@ function checker(){
 					global.instances=removeEls(inst,global.instances);
 				}
 			}
-			
+						
+	}
+
+restore_options();
+
+
 		if(typeof observer ==="undefined" && typeof timer ==="undefined" ){
 			var timer;
 		const observer = new MutationObserver((mutations) =>
@@ -454,9 +459,3 @@ function checker(){
 			subtree: true
 		});
 	}
-
-			
-			
-	}
-
-restore_options();
