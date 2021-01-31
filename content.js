@@ -227,8 +227,6 @@ def_retCSS(i);
 //if(clk_e==1){}
 }
 
-restore_options();
-
 function restore_options()
 {
 	if(typeof chrome.storage==='undefined'){
@@ -242,6 +240,7 @@ function restore_options()
 			dfSpd = items.defSpd;
 			dfStp = items.defStp;
 			mbMde = items.mob;
+			checker();
 		}
 		else
 		{
@@ -263,6 +262,7 @@ function save_options()
 	}, function()
 	{
 		console.log('Default options saved.');
+		restore_options();
 	});
 
 }
@@ -396,8 +396,6 @@ function btclk(i) {
 		};
 }
 
- 
-checker();
 
 function checker(){
 	
@@ -434,9 +432,7 @@ function checker(){
 				}
 			}
 			
-	}
-
-	if(typeof observer ==="undefined" && typeof timer ==="undefined" ){
+		if(typeof observer ==="undefined" && typeof timer ==="undefined" ){
 			var timer;
 		const observer = new MutationObserver((mutations) =>
 		{
@@ -458,3 +454,9 @@ function checker(){
 			subtree: true
 		});
 	}
+
+			
+			
+	}
+
+restore_options();
