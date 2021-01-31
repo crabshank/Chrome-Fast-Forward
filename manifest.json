@@ -4,7 +4,7 @@
   "options_ui":{
 	"page": "options.html"
 	},
-  "version": "2.1",
+  "version": "2.2",
   "content_scripts": [
     {
 	      "all_frames": true,
