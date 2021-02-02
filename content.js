@@ -3,10 +3,9 @@ var global={instances:[]};
 var bdkCol="buttonface";
 var txCol="black";
 var bdkCol2="#f0f0f080";
-var dfSpd=2.3;
-var dfStp=0.5;
+var dfSpd=2.25;
+var dfStp=0.25;
 var mbMde=false;
-
 
 function def_retCSS(i){
 var d="display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.24em) !important;";
@@ -194,7 +193,8 @@ event.stopPropagation();
 def_retCSS(i);
 if(i.ip_e==1){
 let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
-i.video.playbackRate=Math.min(16,Math.max(1,vN));
+dfSpd=Math.min(16,Math.max(1,vN));
+i.video.playbackRate=dfSpd;
 if(i.skd_e!=2){
 	calcSp(i);
 }
@@ -208,11 +208,15 @@ function cl_whl(evt,i) {
 	def_retCSS(i);
 		if(evt.deltaY>0){
 		let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
-		i.clse.value=(Math.max(1,vN-parseFloat(i.clse.step))).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7});
+		dfSpd=(Math.max(1,vN-parseFloat(i.clse.step))).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7});
+		i.clse.value=dfSpd;
+		i.video.playbackRate=dfSpd;
 		}
 		if (evt.deltaY<0){
 		let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
-		i.clse.value=(Math.min(16,vN+parseFloat(i.clse.step))).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7});
+		dfSpd=(Math.min(16,vN+parseFloat(i.clse.step))).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7});
+		i.clse.value=dfSpd;
+		i.video.playbackRate=dfSpd;
 		}
 	if(i.wh_e==1){
 		cl_inp(i);
@@ -256,8 +260,8 @@ function save_options()
 {
 	chrome.storage.sync.set(
 	{
-		defSpd: 2.3,
-		defStp: 0.5,
+		defSpd: 2.25,
+		defStp: 0.25,
 		mob: false,
 	}, function()
 	{
