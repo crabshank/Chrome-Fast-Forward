@@ -3,7 +3,7 @@ var global={instances:[]};
 var bdkCol="buttonface";
 var txCol="black";
 var bdkCol2="#f0f0f080";
-var dfSpd=6;
+var dfSpd=2.3;
 var dfStp=0.5;
 var mbMde=false;
 
@@ -256,7 +256,7 @@ function save_options()
 {
 	chrome.storage.sync.set(
 	{
-		defSpd: 6,
+		defSpd: 2.3,
 		defStp: 0.5,
 		mob: false,
 	}, function()
