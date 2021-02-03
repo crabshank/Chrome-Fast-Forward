@@ -155,17 +155,21 @@ i.entered=true;
 def_retCSS(i);
 }
 
+function mousemove_hdl(i) {
+def_retCSS(i);
+}
+
 function mouseleave_hdl(i) {
 i.entered=false;
 def_retCSS(i);
 }
 
 function seeked_hdl(i) {
+i.entered=false;
+def_retCSS(i);
 if(i.skd_e>=1){
 i.skd_e=2;
 i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-i.entered=false;
-def_retCSS(i);
 if(i.video.readyState<=2){
 i.video.playbackRate=1;
 }
@@ -173,11 +177,11 @@ i.video.playbackRate=1;
 }
 
 function seeking_hdl(i) {
+i.entered=true;
+def_retCSS(i);
 if(i.skd_e>=1){
 i.skd_e=2;
 i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-i.entered=true;
-def_retCSS(i);
 }
 }
 
@@ -344,7 +348,7 @@ obj.entered=false;
 global.instances.push(obj);
 def_retCSS(obj);
 butn.addEventListener("click", btclk(obj));	
-clse.addEventListener('wheel',(evt) => cl_whl(evt,obj),true);
+clse.addEventListener('wheel',(evt) => cl_whl(evt,obj));
 vid.addEventListener('ratechange',() => ratechange_hdl(obj));
 //clk_e=1;
 clse.addEventListener('keyup',() => cl_inp(obj));
@@ -356,12 +360,10 @@ sdivs.addEventListener('click',() => cl_clk(obj));
 butn.addEventListener('click',() => cl_clk(obj));
 sdivs.addEventListener('mouseenter',() => mouseenter_hdl(obj));
 sdivs.addEventListener('mouseleave',() => mouseleave_hdl(obj));
-vid.addEventListener('mouseenter',() => mouseenter_hdl(obj));
-vid.addEventListener('mouseleave',() => mouseleave_hdl(obj));
-vid.addEventListener('mousemove',() => mouseenter_hdl(obj));
-
+vid.addEventListener('mousemove',() => mousemove_hdl(obj));
+vid.addEventListener('seeked',() => seeked_hdl(obj));
+vid.addEventListener('seeking',() => seeking_hdl(obj));
 }
-
 
 function btclk(i) {
 		return function() {
@@ -378,8 +380,6 @@ function btclk(i) {
 			i.video.addEventListener('progress',() => progress_hdl(i));
 			i.video.addEventListener('play',() => play_hdl(i));
 			i.video.addEventListener('waiting',() => waiting_hdl(i));
-			i.video.addEventListener('seeked',() => seeked_hdl(i));
-			i.video.addEventListener('seeking',() => seeking_hdl(i));
 			i.butn.setAttribute("grn_synced", true);
 			def_retCSS(i);
 			let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
@@ -418,7 +418,6 @@ function btclk(i) {
 			}
 		};
 }
-
 
 function checker(){
 	
