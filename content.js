@@ -8,20 +8,20 @@ var dfStp=0.25;
 var mbMde=false;
 
 function def_retCSS(i){
-var d="display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.24em) !important;";
+var d="line-height: 0px !important; padding: 0 !important; display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.32em) !important;";
 	i.sdivs.style.cssText = d;
 bdkCol=(i.butn.getAttribute("grn_synced")=="true")?"#007500":"buttonface";
 txCol=(i.butn.getAttribute("grn_synced")=="true")?"white":"black";
 bdkCol2=(i.butn.getAttribute("grn_synced")=="true")?"#00750080":"#f0f0f080";
-i.butn.style.cssText = "display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important; padding-right: 0.44ch !important; min-width: 9ch !important; text-align-last: right !important; color: "+txCol+" !important";
-i.clse.style.cssText = "display: initial !important; visibility: initial !important; background-color: #f00000 !important; webkit-text-fill-color: #ececec !important;  border-width: 0px !important; padding-bottom: 2px !important; padding-top: 2px !important; border-style: outset !important; border-color: #f00000 !important; width: 9ch !important; padding-left: 4px !important; color: white !important";
+i.butn.style.cssText = "line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important; min-width: 9ch !important; text-align-last: right !important; color: "+txCol+" !important";
+i.clse.style.cssText = "line-height: 2ch !important; padding: 2px 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: #f00000 !important; webkit-text-fill-color: #ececec !important;  border-width: 0px !important; border-style: outset !important; border-color: #f00000 !important; width: 9ch !important; color: white !important";
 
 clearTimeout(i.timer2);
 i.timer2 = setTimeout(function(){
 	if(!i.entered){
 		if(mbMde){
-i.butn.style.cssText = "display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; padding-right: 0.44ch !important; min-width: 9ch !important; text-align-last: right !important; "+txCol+" !important";
-i.clse.style.cssText = "display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; padding-bottom: 2px !important; padding-top: 2px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; width: 9ch !important; padding-left: 4px !important; color: white !important";
+i.butn.style.cssText = "line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; min-width: 9ch !important; text-align-last: right !important; "+txCol+" !important";
+i.clse.style.cssText = "line-height: 2ch !important; padding: 2px 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; width: 9ch !important; color: white !important";
 		}else{
 			i.sdivs.style.cssText = d+" opacity: 0 !important";
 		}
@@ -311,7 +311,7 @@ vid.offsetParent.offsetParent.offsetParent.insertAdjacentElement('beforebegin',s
 }else{
 vid.insertAdjacentElement('beforebegin', sdivs);
 }
-sdivs.style.cssText = "display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.24em) !important;";
+sdivs.style.cssText = "line-height: 0px !important; padding: 0 !important; display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.32em) !important;";
 	
 clse.value =dfSpd;
 clse.min=1;
