@@ -39,14 +39,6 @@ if((get_src(vid)!='') && (vid.readyState != 0)){
 }
 }
 
-function simpleCopyArray(array){
-		var newArray = [];
-	    for (let i = 0; i < array.length; i++) {
-            newArray.push(array[i]);
-		}
-		return newArray;
-}
-
 function get_src(vid){
 	if (vid.src !== "") {
 		return vid.src;
@@ -87,6 +79,7 @@ function elRemover(el){
 }
 
 function calcSp(i){
+	if(!i.video.paused){
 		if(i.clck_a==-1){
 				i.t_a=i.video.currentTime;
 			i.clck_a = performance.now();
@@ -119,6 +112,9 @@ function calcSp(i){
 
 			}
 		}
+	}else{
+		i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+	}
 }
 
 function progress_hdl(i) {
