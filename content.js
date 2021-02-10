@@ -85,8 +85,8 @@ function calcSp(i){
 			i.clck_a = performance.now();
 		}else{
 			let c_i=i.video.currentTime;
-			for (let k=i.video.buffered.length-1; k>=0; k--){
 			i.clck_b = performance.now();
+			for (let k=i.video.buffered.length-1; k>=0; k--){
 			let t_i=i.video.buffered.end(k);
 			let s_i=i.video.buffered.start(k);
 			if(c_i<=t_i && c_i>=s_i){
