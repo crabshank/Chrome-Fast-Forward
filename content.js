@@ -95,7 +95,6 @@ function calcSp(i){
 					lst=100000*perSc;
 					lst=Math.floor(lst)*0.01;
 					i.perSec=lst.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 2});
-					i.skd_e=(i.skd_e==2)?1:i.skd_e;
 					i.t_a=t_i;
 					let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 					i.video.playbackRate=Math.min(vN,Math.max(1,lst));
@@ -132,7 +131,6 @@ i.video.playbackRate=1;
 
 function play_hdl(i) {
 if(i.pl_e==1){
-i.skd_e=(i.skd_e==2)?1:i.skd_e;
 if(i.video.readyState>2){
 calcSp(i);
 }else{
@@ -144,7 +142,6 @@ i.video.playbackRate=1;
 function waiting_hdl(i) {
 if(i.wt_e==1){
 i.video.playbackRate=1;
-i.skd_e=2;
 i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 def_retCSS(i);
 }
@@ -167,9 +164,8 @@ def_retCSS(i);
 function seeked_hdl(i) {
 i.entered=false;
 def_retCSS(i);
-if(i.skd_e>=1){
+if(i.skd_e==1){
 t_a=i.video.currentTime;
-i.skd_e=2;
 i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 if(i.video.readyState<=2){
 i.video.playbackRate=1;
@@ -180,15 +176,14 @@ i.video.playbackRate=1;
 function seeking_hdl(i) {
 i.entered=true;
 def_retCSS(i);
-if(i.skd_e>=1){
-i.skd_e=2;
+if(i.skd_e==1){
 i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 }
 }
 
 function ratechange_hdl(i) {
 if(i.rc_e==1){
-	if(parseFloat(i.perSec)>0 && i.skd_e!=2){
+	if(parseFloat(i.perSec)>0){
 		if(parseFloat(i.perSec)>i.video.playbackRate){
 			i.butn.innerHTML= "(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 		}else{
@@ -198,7 +193,7 @@ if(i.rc_e==1){
 		i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 	}
 		
-if(i.video.readyState>2 && i.skd_e!=2){
+if(i.video.readyState>2){
 	calcSp(i);
 }
 }else{
@@ -214,9 +209,8 @@ if(i.ip_e==1){
 let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 dfSpd=Math.min(16,Math.max(1,vN));
 i.video.playbackRate=dfSpd;
-if(i.skd_e!=2){
 	calcSp(i);
-}
+
 }
 }
 
