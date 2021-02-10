@@ -3,8 +3,8 @@ var global={instances:[]};
 var bdkCol="buttonface";
 var txCol="black";
 var bdkCol2="#f0f0f080";
-var dfSpd=2.25;
-var dfStp=0.25;
+var dfSpd=2.2;
+var dfStp=0.1;
 var mbMde=false;
 
 function def_retCSS(i){
@@ -90,7 +90,6 @@ function calcSp(i){
 			let t_i=i.video.buffered.end(k);
 			let s_i=i.video.buffered.start(k);
 			if(c_i<=t_i && c_i>=s_i){
-
 				if(t_i>i.t_a){
 					let perSc=Math.abs(t_i-i.t_a)/(i.clck_b-i.clck_a);
 					lst=100000*perSc;
@@ -103,6 +102,10 @@ function calcSp(i){
 					if(parseFloat(i.perSec)>i.video.playbackRate){
 						i.butn.innerHTML= "(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 					}
+					i.clck_a=performance.now();
+					break;
+				}else{
+					i.t_a=c_i;
 					i.clck_a=performance.now();
 					break;
 				}
@@ -129,6 +132,7 @@ i.video.playbackRate=1;
 
 function play_hdl(i) {
 if(i.pl_e==1){
+i.skd_e=(i.skd_e==2)?1:i.skd_e;
 if(i.video.readyState>2){
 calcSp(i);
 }else{
@@ -164,6 +168,7 @@ function seeked_hdl(i) {
 i.entered=false;
 def_retCSS(i);
 if(i.skd_e>=1){
+t_a=i.video.currentTime;
 i.skd_e=2;
 i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 if(i.video.readyState<=2){
@@ -278,8 +283,8 @@ function save_options()
 {
 	chrome.storage.sync.set(
 	{
-		defSpd: 2.25,
-		defStp: 0.25,
+		defSpd: 2.2,
+		defStp: 0.1,
 		mob: false,
 	}, function()
 	{

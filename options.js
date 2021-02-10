@@ -4,8 +4,8 @@
  var mbMd = document.getElementById('mobe');
  
 var saver =function(){
-	 	 spd.value=(spd.value>=1 && spd.value<=16)?spd.value:2.25;
-	 stp.value=(stp.value>=0.01 && stp.value<=15)?stp.value:0.25;
+	 	 spd.value=(spd.value>=1 && spd.value<=16)?spd.value:2.2;
+	 stp.value=(stp.value>=0.01 && stp.value<=15)?stp.value:0.1;
 		chrome.storage.sync.set(
 		{
 			defSpd: spd.value,
@@ -51,8 +51,8 @@ function save_options()
 {
 	chrome.storage.sync.set(
 	{
-		defSpd: 2.25,
-		defStp: 0.25,
+		defSpd: 2.2,
+		defStp: 0.1,
 		mob: false,
 	}, function(){});
 
