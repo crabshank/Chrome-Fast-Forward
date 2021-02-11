@@ -101,13 +101,11 @@ function calcSp(i){
 					if(parseFloat(i.perSec)>i.video.playbackRate){
 						i.butn.innerHTML= "(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 					}
-					i.clck_a=performance.now();
-					break;
 				}else{
 					i.t_a=c_i;
-					i.clck_a=performance.now();
-					break;
 				}
+				i.clck_a=performance.now();
+				break;
 			}else if(c_i>t_i){
 				break;
 			}
