@@ -440,10 +440,20 @@ function checker(){
 			for(let n=0; n<global.instances.length; n++){
 				let inst=global.instances[n];
 				if(!checkInclude(DOMvids,inst.video) || !eligVid(inst.video)){
+					try{
+						i.video.removeEventListener('progress',progress_hdl);
+						i.video.removeEventListener('play',play_hdl);
+						i.video.removeEventListener('waiting',waiting_hdl);
+					}
+					catch(err){
+						;
+					}
+					finally{
 					elRemover(inst.butn);
 					elRemover(inst.clse);
 					elRemover(inst.sdivs);
 					global.instances=removeEls(inst,global.instances);
+					}
 				}
 			}
 						
