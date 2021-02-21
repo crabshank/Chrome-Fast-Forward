@@ -78,7 +78,7 @@ function elRemover(el){
 	}
 }
 
-function calcSp(i){
+function calcSp(i,pg){
 	if(!i.video.paused){
 		if(i.clck_a==-1){
 				i.t_a=i.video.currentTime;
@@ -91,16 +91,18 @@ function calcSp(i){
 			let s_i=i.video.buffered.start(k);
 			if(c_i<=t_i && c_i>=s_i){
 				if(t_i>i.t_a){
-					let perSc=Math.abs(t_i-i.t_a)/(i.clck_b-i.clck_a);
-					lst=100000*perSc;
-					lst=Math.floor(lst)*0.01;
-					i.perSec=lst.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 2});
-					i.t_a=t_i;
-					let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
-					i.video.playbackRate=Math.min(vN,Math.max(1,lst));
-					if(parseFloat(i.perSec)>i.video.playbackRate){
-						i.butn.innerHTML= "(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-					}
+						let perSc=Math.abs(t_i-i.t_a)/(i.clck_b-i.clck_a);
+						lst=100000*perSc;
+						lst=Math.floor(lst)*0.01;
+						i.perSec=lst.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 2});
+						i.t_a=t_i;
+						let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
+						i.video.playbackRate=Math.min(vN,Math.max(1,lst));
+						if(pg && parseFloat(i.perSec)>i.video.playbackRate){
+						i.butn.innerHTML="(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+						}else{
+						i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+						}
 				}else{
 					i.t_a=c_i;
 				}
@@ -120,7 +122,7 @@ function calcSp(i){
 function progress_hdl(i) {
 if(i.pg_e==1){
 if(i.video.readyState>2){
-calcSp(i);
+calcSp(i,true);
 }else{
 i.video.playbackRate=1;
 }
@@ -130,7 +132,7 @@ i.video.playbackRate=1;
 function play_hdl(i) {
 if(i.pl_e==1){
 if(i.video.readyState>2){
-calcSp(i);
+calcSp(i,false);
 }else{
 i.video.playbackRate=1;
 }
@@ -192,7 +194,7 @@ if(i.rc_e==1){
 	}
 		
 if(i.video.readyState>2){
-	calcSp(i);
+	calcSp(i,false);
 }
 }else{
 	i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
@@ -207,7 +209,7 @@ if(i.ip_e==1){
 let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 dfSpd=Math.min(16,Math.max(1,vN));
 i.video.playbackRate=dfSpd;
-	calcSp(i);
+	calcSp(i,false);
 
 }
 }
