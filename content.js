@@ -8,7 +8,7 @@ var dfStp=0.1;
 var mbMde=false;
 
 function def_retCSS(i){
-var d="line-height: 0px !important; padding: 0 !important; display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.32em) !important;";
+var d="left: 0em !important; line-height: 0px !important; padding: 0 !important; display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.32em) !important;";
 	i.sdivs.style.cssText = d;
 bdkCol=(i.butn.getAttribute("grn_synced")=="true")?"#007500":"buttonface";
 txCol=(i.butn.getAttribute("grn_synced")=="true")?"white":"black";
@@ -94,7 +94,7 @@ function calcSp(i,pg){
 						let perSc=Math.abs(t_i-i.t_a)/(i.clck_b-i.clck_a);
 						lst=100000*perSc;
 						lst=Math.floor(lst)*0.01;
-						i.perSec=lst.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 2});
+						i.perSec=(pg)?lst.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 2}):i.perSec;
 						i.t_a=t_i;
 						let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 						i.video.playbackRate=Math.min(vN,Math.max(1,lst));
@@ -183,15 +183,15 @@ i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDi
 
 function ratechange_hdl(i) {
 if(i.rc_e==1){
-	if(parseFloat(i.perSec)>0){
+	/*if(parseFloat(i.perSec)>0){
 		if(parseFloat(i.perSec)>i.video.playbackRate){
 			i.butn.innerHTML= "(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 		}else{
 			i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 		}
-	}else{
+	}else{*/
 		i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-	}
+	//}
 		
 if(i.video.readyState>2){
 	calcSp(i,false);
@@ -306,7 +306,7 @@ vid.offsetParent.offsetParent.offsetParent.insertAdjacentElement('beforebegin',s
 }else{
 vid.insertAdjacentElement('beforebegin', sdivs);
 }
-sdivs.style.cssText = "line-height: 0px !important; padding: 0 !important; display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.32em) !important;";
+sdivs.style.cssText = "left: 0em !important; line-height: 0px !important; padding: 0 !important; display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.32em) !important;";
 	
 clse.value =dfSpd;
 clse.min=1;
