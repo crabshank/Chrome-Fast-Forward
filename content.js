@@ -343,7 +343,7 @@ obj.entered=false;
 global.instances.push(obj);
 def_retCSS(obj);
 butn.addEventListener("click", btclk(obj));	
-clse.addEventListener('wheel',(evt) => cl_whl(evt,obj));
+sdivs.addEventListener('wheel',(evt) => cl_whl(evt,obj));
 vid.addEventListener('ratechange',() => ratechange_hdl(obj));
 //clk_e=1;
 clse.addEventListener('keyup',() => cl_inp(obj));
