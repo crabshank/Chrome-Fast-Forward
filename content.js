@@ -242,7 +242,7 @@ function cl_whl(evt,i) {
 }
 
 function cl_clk(i) {
-event.preventDefault();
+//event.preventDefault();
 event.stopPropagation();
 def_retCSS(i);
 //if(clk_e==1){}
