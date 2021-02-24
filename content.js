@@ -8,7 +8,7 @@ var dfStp=0.1;
 var mbMde=false;
 
 function def_retCSS(i){
-var d="left: 0em !important; line-height: 0px !important; padding: 0 !important; display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.32em) !important;";
+var d="left: inherit !important; line-height: 0px !important; padding: 0 !important; display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.32em) !important;";
 	i.sdivs.style.cssText = d;
 bdkCol=(i.butn.getAttribute("grn_synced")=="true")?"#007500":"buttonface";
 txCol=(i.butn.getAttribute("grn_synced")=="true")?"white":"black";
@@ -306,7 +306,7 @@ vid.offsetParent.offsetParent.offsetParent.insertAdjacentElement('beforebegin',s
 }else{
 vid.insertAdjacentElement('beforebegin', sdivs);
 }
-sdivs.style.cssText = "left: 0em !important; line-height: 0px !important; padding: 0 !important; display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.32em) !important;";
+sdivs.style.cssText = "left: inherit !important; line-height: 0px !important; padding: 0 !important; display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.32em) !important;";
 	
 clse.value =dfSpd;
 clse.min=1;
