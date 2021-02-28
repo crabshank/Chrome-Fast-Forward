@@ -7,6 +7,15 @@ var dfSpd=2.2;
 var dfStp=0.1;
 var mbMde=false;
 
+function findInst(v){
+	for(let i=0; i<global.instances.length; i++){
+		if (global.instances[i].video===v){
+			return global.instances[i];
+		}
+	}
+	return null;
+}
+
 function def_retCSS(i){
 var d="left: inherit !important; line-height: 0px !important; padding: 0 !important; display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.32em) !important;";
 	i.sdivs.style.cssText = d;
@@ -119,7 +128,9 @@ function calcSp(i,pg){
 	}
 }
 
-function progress_hdl(i) {
+function progress_hdl(event) {
+let i=findInst(event.target);
+if(!!i){
 if(i.pg_e==1){
 if(i.video.readyState>2){
 calcSp(i,true);
@@ -128,8 +139,11 @@ i.video.playbackRate=1;
 }
 }
 }
+}
 
-function play_hdl(i) {
+function play_hdl(event) {
+let i=findInst(event.target);
+if(!!i){
 if(i.pl_e==1){
 if(i.video.readyState>2){
 calcSp(i,false);
@@ -138,12 +152,16 @@ i.video.playbackRate=1;
 }
 }
 }
+}
 
-function waiting_hdl(i) {
+function waiting_hdl(event) {
+let i=findInst(event.target);
+if(!!i){
 if(i.wt_e==1){
 i.video.playbackRate=1;
 i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 def_retCSS(i);
+}
 }
 }
 
@@ -152,8 +170,11 @@ i.entered=true;
 def_retCSS(i);
 }
 
-function mousemove_hdl(i) {
+function mousemove_hdl(event) {
+let i=findInst(event.target);
+if(!!i){
 def_retCSS(i);
+}
 }
 
 function mouseleave_hdl(i) {
@@ -161,7 +182,9 @@ i.entered=false;
 def_retCSS(i);
 }
 
-function seeked_hdl(i) {
+function seeked_hdl(event) {
+let i=findInst(event.target);
+if(!!i){
 i.entered=false;
 def_retCSS(i);
 if(i.skd_e==1){
@@ -172,16 +195,22 @@ i.video.playbackRate=1;
 }
 }
 }
+}
 
-function seeking_hdl(i) {
+function seeking_hdl(event) {
+let i=findInst(event.target);
+if(!!i){
 i.entered=true;
 def_retCSS(i);
 if(i.skd_e==1){
 i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 }
 }
+}
 
-function ratechange_hdl(i) {
+function ratechange_hdl(event) {
+let i=findInst(event.target);
+if(!!i){
 if(i.rc_e==1){
 	/*if(parseFloat(i.perSec)>0){
 		if(parseFloat(i.perSec)>i.video.playbackRate){
@@ -198,6 +227,7 @@ if(i.video.readyState>2){
 }
 }else{
 	i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+}
 }
 }
 
@@ -344,7 +374,7 @@ global.instances.push(obj);
 def_retCSS(obj);
 butn.addEventListener("click", btclk(obj));	
 sdivs.addEventListener('wheel',(evt) => cl_whl(evt,obj));
-vid.addEventListener('ratechange',() => ratechange_hdl(obj));
+vid.addEventListener('ratechange',ratechange_hdl);
 //clk_e=1;
 clse.addEventListener('keyup',() => cl_inp(obj));
 clse.addEventListener('keydown',() => cl_inp(obj));
@@ -361,9 +391,9 @@ sdivs.addEventListener('pointerdown',() => cl_clk(obj));
 butn.addEventListener('pointerdown',() => cl_clk(obj));
 sdivs.addEventListener('mouseenter',() => mouseenter_hdl(obj));
 sdivs.addEventListener('mouseleave',() => mouseleave_hdl(obj));
-vid.addEventListener('mousemove',() => mousemove_hdl(obj));
-vid.addEventListener('seeked',() => seeked_hdl(obj));
-vid.addEventListener('seeking',() => seeking_hdl(obj));
+vid.addEventListener('mousemove',mousemove_hdl);
+vid.addEventListener('seeked',seeked_hdl);
+vid.addEventListener('seeking',seeking_hdl);
 }
 
 function btclk(i) {
@@ -378,9 +408,9 @@ function btclk(i) {
 		    i.rc_e=1;
 			i.wh_e=1;
 			i.ip_e=1;
-			i.video.addEventListener('progress',() => progress_hdl(i));
-			i.video.addEventListener('play',() => play_hdl(i));
-			i.video.addEventListener('waiting',() => waiting_hdl(i));
+			i.video.addEventListener('progress',progress_hdl);
+			i.video.addEventListener('play',play_hdl);
+			i.video.addEventListener('waiting',waiting_hdl);
 			i.butn.setAttribute("grn_synced", true);
 			def_retCSS(i);
 			let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
@@ -452,6 +482,10 @@ function checker(){
 						i.video.removeEventListener('progress',progress_hdl);
 						i.video.removeEventListener('play',play_hdl);
 						i.video.removeEventListener('waiting',waiting_hdl);
+						i.video.removeEventListener('mousemove',mousemove_hdl);
+						i.video.removeEventListener('ratechange',ratechange_hdl);
+						i.video.removeEventListener('seeked',seeked_hdl);
+						i.video.removeEventListener('seeking',seeking_hdl);
 					}
 					catch(err){
 						;
