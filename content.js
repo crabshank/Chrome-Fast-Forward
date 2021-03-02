@@ -40,6 +40,18 @@ i.clse.style.cssText = "line-height: 2ch !important; padding: 2px 0 2px 4px !imp
 
 }
 
+function chgFlgs(i,on){
+			i.pg_e=(on)?1:0;
+			i.wt_e=(on)?1:0;
+			i.pl_e=(on)?1:0;
+			i.skd_e=(on)?1:0;
+		    i.rc_e=(on)?1:0;
+			i.wh_e=(on)?1:0;
+			i.ip_e=(on)?1:0;
+			i.pg=(on)?1:0;
+}
+			
+
 function eligVid(vid){
 if((get_src(vid)!='') && (vid.readyState != 0)){
 	return true;
@@ -87,7 +99,7 @@ function elRemover(el){
 	}
 }
 
-function calcSp(i,pg){
+function calcSp(i){
 	if(!i.video.paused){
 		if(i.clck_a==-1){
 				i.t_a=i.video.currentTime;
@@ -103,15 +115,11 @@ function calcSp(i,pg){
 						let perSc=Math.abs(t_i-i.t_a)/(i.clck_b-i.clck_a);
 						lst=100000*perSc;
 						lst=Math.floor(lst)*0.01;
-						i.perSec=(pg)?lst.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 2}):i.perSec;
+						i.pg=(i.pg==1)?2:i.pg;
+						i.perSec=(i.pg==2)?lst.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 2}):i.perSec;
 						i.t_a=t_i;
 						let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 						i.video.playbackRate=Math.min(vN,Math.max(1,lst));
-						if(pg && parseFloat(i.perSec)>i.video.playbackRate){
-						i.butn.innerHTML="(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-						}else{
-						i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-						}
 				}else{
 					i.t_a=c_i;
 				}
@@ -123,8 +131,6 @@ function calcSp(i,pg){
 
 			}
 		}
-	}else{
-		i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 	}
 }
 
@@ -133,7 +139,8 @@ let i=findInst(event.target);
 if(!!i){
 if(i.pg_e==1){
 if(i.video.readyState>2){
-calcSp(i,true);
+i.pg=1;
+calcSp(i);
 }else{
 i.video.playbackRate=1;
 }
@@ -146,7 +153,7 @@ let i=findInst(event.target);
 if(!!i){
 if(i.pl_e==1){
 if(i.video.readyState>2){
-calcSp(i,false);
+calcSp(i);
 }else{
 i.video.playbackRate=1;
 }
@@ -159,7 +166,6 @@ let i=findInst(event.target);
 if(!!i){
 if(i.wt_e==1){
 i.video.playbackRate=1;
-i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 def_retCSS(i);
 }
 }
@@ -189,7 +195,6 @@ i.entered=false;
 def_retCSS(i);
 if(i.skd_e==1){
 t_a=i.video.currentTime;
-i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 if(i.video.readyState<=2){
 i.video.playbackRate=1;
 }
@@ -202,9 +207,9 @@ let i=findInst(event.target);
 if(!!i){
 i.entered=true;
 def_retCSS(i);
-if(i.skd_e==1){
+/*if(i.skd_e==1){
 i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-}
+}*/
 }
 }
 
@@ -212,18 +217,16 @@ function ratechange_hdl(event) {
 let i=findInst(event.target);
 if(!!i){
 if(i.rc_e==1){
-	/*if(parseFloat(i.perSec)>0){
-		if(parseFloat(i.perSec)>i.video.playbackRate){
-			i.butn.innerHTML= "(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-		}else{
-			i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-		}
-	}else{*/
-		i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-	//}
-		
+
+if(i.pg==2 && parseFloat(i.perSec)>i.video.playbackRate){
+	i.butn.innerHTML="(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+	i.pg=0;
+}else{
+	i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+}
+	
 if(i.video.readyState>2){
-	calcSp(i,false);
+	calcSp(i);
 }
 }else{
 	i.butn.innerHTML=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
@@ -239,7 +242,7 @@ if(i.ip_e==1){
 let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 dfSpd=Math.min(16,Math.max(1,vN));
 i.video.playbackRate=dfSpd;
-	calcSp(i,false);
+	calcSp(i);
 
 }
 }
@@ -366,6 +369,7 @@ obj.t_a=0;
 obj.clck_b=0;
 obj.pg_e=0;
 obj.wh_e=0;
+obj.pg=0;
 //obj.clk_e=0;
 obj.timer2;
 obj.entered=false;
@@ -375,7 +379,7 @@ def_retCSS(obj);
 butn.addEventListener("click", btclk(obj));	
 sdivs.addEventListener('wheel',(evt) => cl_whl(evt,obj));
 vid.addEventListener('ratechange',ratechange_hdl);
-//clk_e=1;
+
 clse.addEventListener('keyup',() => cl_inp(obj));
 clse.addEventListener('keydown',() => cl_inp(obj));
 clse.addEventListener('change',() => cl_inp(obj));
@@ -401,52 +405,28 @@ function btclk(i) {
 			event.preventDefault();
 			event.stopPropagation();
 			if(i.ff==-1){
-			i.pg_e=1;
-			i.wt_e=1;
-			i.pl_e=1;
-			i.skd_e=1;
-		    i.rc_e=1;
-			i.wh_e=1;
-			i.ip_e=1;
+			chgFlgs(i,true);
 			i.video.addEventListener('progress',progress_hdl);
 			i.video.addEventListener('play',play_hdl);
 			i.video.addEventListener('waiting',waiting_hdl);
 			i.butn.setAttribute("grn_synced", true);
-			def_retCSS(i);
 			let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 			i.video.playbackRate=vN;
-			i.butn.innerHTML = i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x"
 			i.butn.setAttribute("grn_synced", true);	
 			i.ff=1;
 			}else if (i.ff==0){
-			i.pg_e=1;
-			i.wt_e=1;
-			i.pl_e=1;
-			//clk_e=1;
-			i.skd_e=1;
-			i.ip_e=1;
-			i.rc_e=1;
+			chgFlgs(i,true);
 			let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 			i.video.playbackRate=vN;
-			i.butn.innerHTML = i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x"
 			i.butn.setAttribute("grn_synced", true);
-			def_retCSS(i);
 			i.ff=1;
 			}else{
-			i.pg_e=0;
-			i.wt_e=0;
-			i.pl_e=0;
-			//clk_e=0;
-			i.skd_e=0;
-			i.ip_e=0;
-			i.rc_e=0;
-			i.wh_e=0;
+			chgFlgs(i,false);
 			i.video.playbackRate=1;
 			i.butn.setAttribute("grn_synced", false);	
-			def_retCSS(i);
-			i.butn.innerHTML = i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x"
 			i.ff=0;
 			}
+			def_retCSS(i);
 		};
 }
 
