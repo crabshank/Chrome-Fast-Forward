@@ -1,8 +1,8 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Fast forward",
   "options_page":  "options.html",
-  "version": "2.38",
+  "version": "2.40",
   "content_scripts": [
     {
 	      "all_frames": true,
@@ -13,7 +13,7 @@
     }
   ],
   "permissions": ["tabs","activeTab","storage"],
-  "browser_action": {
+  "action": {
     "default_icon": "icon.png",
     "default_title": "Fast forward"
   },

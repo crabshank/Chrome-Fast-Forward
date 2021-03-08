@@ -423,6 +423,7 @@ function btclk(i) {
 			}else{
 			chgFlgs(i,false);
 			i.video.playbackRate=1;
+			i.butn.innerHTML="1x";
 			i.butn.setAttribute("grn_synced", false);	
 			i.ff=0;
 			}
