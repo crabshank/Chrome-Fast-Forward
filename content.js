@@ -7,7 +7,7 @@ var dfSpd=2.2;
 var dfStp=0.1;
 var mbMde=false;
 
-var sDivsCSS="line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: fixed !important; background-color: transparent !important; flex-direction: row;";
+var sDivsCSS="line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: sticky !important; background-color: transparent !important; flex-direction: row;";
 
 function findInst(v){
 	for(let i=0; i<global.instances.length; i++){
@@ -370,7 +370,7 @@ let sdRct=sdivs.getBoundingClientRect();
 			sDivsCSS+=' left: '+(parseFloat(sdivs.style.left)-(sdRct.left-vrct.left))+'px !important;';
 		}
 
-sDivsCSS+='  transform: translate(0.102em, 4.32em) !important;';
+sDivsCSS+='  transform: translate(0.102em, 6.6em) !important;';
 
 sdivs.style.cssText = sDivsCSS;
 clse.value =dfSpd;
