@@ -7,6 +7,8 @@ var dfSpd=2.2;
 var dfStp=0.1;
 var mbMde=false;
 
+var sDivsCSS="line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: fixed !important; background-color: transparent !important; flex-direction: row;";
+
 function findInst(v){
 	for(let i=0; i<global.instances.length; i++){
 		if (global.instances[i].video===v){
@@ -17,8 +19,9 @@ function findInst(v){
 }
 
 function def_retCSS(i){
-var d="left: inherit !important; line-height: 0px !important; padding: 0 !important; display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.32em) !important;";
-	i.sdivs.style.cssText = d;
+	
+i.sdivs.style.cssText = sDivsCSS;
+
 bdkCol=(i.butn.getAttribute("grn_synced")=="true")?"#007500":"buttonface";
 txCol=(i.butn.getAttribute("grn_synced")=="true")?"white":"black";
 bdkCol2=(i.butn.getAttribute("grn_synced")=="true")?"#00750080":"#f0f0f080";
@@ -32,7 +35,7 @@ i.timer2 = setTimeout(function(){
 i.butn.style.cssText = "line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; min-width: 9ch !important; text-align-last: right !important; "+txCol+" !important";
 i.clse.style.cssText = "line-height: 2ch !important; padding: 2px 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; width: 9ch !important; color: white !important";
 		}else{
-			i.sdivs.style.cssText = d+" opacity: 0 !important";
+			i.sdivs.style.cssText = sDivsCSS+" opacity: 0 !important";
 		}
 		
 	}
@@ -353,8 +356,23 @@ vid.offsetParent.offsetParent.offsetParent.insertAdjacentElement('beforebegin',s
 }else{
 vid.insertAdjacentElement('beforebegin', sdivs);
 }
-sdivs.style.cssText = "left: inherit !important; line-height: 0px !important; padding: 0 !important; display: initial !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; transform: translate(0.102em, 4.32em) !important;";
-	
+		let vrct=vid.getBoundingClientRect();
+
+let sDivsCSS2=sDivsCSS+' left: 0px !important; top: 0px !important;';
+sdivs.style.cssText = sDivsCSS2;
+let sdRct=sdivs.getBoundingClientRect();
+
+		if(sdRct.top!=vrct.top){
+			sDivsCSS+=' top: '+(parseFloat(sdivs.style.top)-(sdRct.top-vrct.top))+'px !important;';
+		}		
+		
+		if(sdRct.left!=vrct.left){
+			sDivsCSS+=' left: '+(parseFloat(sdivs.style.left)-(sdRct.left-vrct.left))+'px !important;';
+		}
+
+sDivsCSS+='  transform: translate(0.102em, 4.32em) !important;';
+
+sdivs.style.cssText = sDivsCSS;
 clse.value =dfSpd;
 clse.min=1;
 clse.max=16;
