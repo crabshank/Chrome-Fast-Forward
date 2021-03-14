@@ -362,8 +362,8 @@ let sDivsCSS2=sDivsCSS+' left: 0px !important; top: 0px !important;';
 sdivs.style.cssText = sDivsCSS2;
 let sdRct=sdivs.getBoundingClientRect();
 
-sDivsCSS+=' top: '+(parseFloat(sdivs.style.top)-(sdRct.top-vrct.top))+'px !important;';
-sDivsCSS+=' left: '+(parseFloat(sdivs.style.left)-(sdRct.left-vrct.left))+'px !important;';
+sDivsCSS+=' top: '+(vrct.top-sdRct.top)+'px !important;';
+sDivsCSS+=' left: '+(vrct.left-sdRct.left)+'px !important;';
 
 sDivsCSS+='  transform: translate(0.102em, 6.6em) !important;';
 
