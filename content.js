@@ -358,14 +358,10 @@ vid.insertAdjacentElement('beforebegin', sdivs);
 }
 		let vrct=vid.getBoundingClientRect();
 
-let sDivsCSS2=sDivsCSS+' left: 0px !important; top: 0px !important;';
-sdivs.style.cssText = sDivsCSS2;
-let sdRct=sdivs.getBoundingClientRect();
+sDivsCSS+=' top: '+(vrct.top)+'px !important;';
+sDivsCSS+=' left: '+(vrct.left)+'px !important;';
 
-sDivsCSS+=' top: '+(vrct.top-sdRct.top)+'px !important;';
-sDivsCSS+=' left: '+(vrct.left-sdRct.left)+'px !important;';
-
-sDivsCSS+='  transform: translate(0.102em, 6.6em) !important;';
+sDivsCSS+='  transform: translate(0.102em, 4.32em) !important;';
 
 sdivs.style.cssText = sDivsCSS;
 clse.value =dfSpd;
