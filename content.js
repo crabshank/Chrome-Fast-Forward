@@ -361,7 +361,7 @@ vid.insertAdjacentElement('beforebegin', sdivs);
 sDivsCSS+=' top: '+(vrct.top)+'px !important;';
 sDivsCSS+=' left: '+(vrct.left)+'px !important;';
 
-sDivsCSS+='  transform: translate(0.102em, 4.32em) !important;';
+sDivsCSS+='  transform: translate(0.102em, 6.07em) !important;';
 
 sdivs.style.cssText = sDivsCSS;
 clse.value =dfSpd;
