@@ -7,7 +7,7 @@ var dfSpd=2.2;
 var dfStp=0.1;
 var mbMde=false;
 
-var sDivsCSS="line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: sticky !important; background-color: transparent !important; flex-direction: row;";
+var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: sticky !important; background-color: transparent !important; flex-direction: row !important;";
 
 function findInst(v){
 	for(let i=0; i<global.instances.length; i++){
@@ -356,14 +356,16 @@ vid.offsetParent.offsetParent.offsetParent.insertAdjacentElement('beforebegin',s
 }else{
 vid.insertAdjacentElement('beforebegin', sdivs);
 }
+
+
+
+
+sdivs.style.cssText=sDivsCSS;
 		let vrct=vid.getBoundingClientRect();
+let sdrct=sdivs.getBoundingClientRect();
 
-sDivsCSS+=' top: '+(vrct.top)+'px !important;';
-sDivsCSS+=' left: '+(vrct.left)+'px !important;';
+sDivsCSS+=' top: '+(vrct.top-sdrct.top+0.102*vrct.height)+'px !important;';
 
-sDivsCSS+='  transform: translate(0.102em, 6.07em) !important;';
-
-sdivs.style.cssText = sDivsCSS;
 clse.value =dfSpd;
 clse.min=1;
 clse.max=16;
