@@ -364,7 +364,7 @@ sdivs.style.cssText=sDivsCSS;
 		let vrct=vid.getBoundingClientRect();
 let sdrct=sdivs.getBoundingClientRect();
 
-sDivsCSS+=' top: '+(vrct.top-sdrct.top+0.102*vrct.height)+'px !important;';
+sDivsCSS+=' top: '+(vrct.top-sdrct.top+0.102*vrct.height)+'px !important; left: 0.102em !important;';
 
 clse.value =dfSpd;
 clse.min=1;
