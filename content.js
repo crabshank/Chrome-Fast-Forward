@@ -129,7 +129,12 @@ function calcSp(i){
 						i.perSec=(i.pg==2)?lst.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 2, useGrouping: false}):i.perSec;
 						i.t_a=t_i;
 						let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
-						i.video.playbackRate=Math.min(vN,Math.max(1,lst));
+						vN=Math.min(vN,Math.max(1,lst));
+						if(i.video.playbackRate==vN){
+							i.butn.innerHTML="(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+						}else{
+							i.video.playbackRate=vN;
+						}
 				}else{
 					i.t_a=c_i;
 				}
@@ -235,7 +240,7 @@ let i=findInst(event.target);
 if(!!i){
 if(i.rc_e==1){
 let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
-if(i.pg==2 && parseFloat(i.perSec)>vN){
+if(i.pg==2 && parseFloat(i.perSec)>vN && i.video.playbackRate==vN){
 	i.butn.innerHTML="(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 	i.pg=0;
 }else{
