@@ -131,7 +131,7 @@ function calcSp(i){
 						let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 						vN=Math.min(vN,Math.max(1,lst));
 						if(i.video.playbackRate==vN){
-							i.butn.innerHTML="(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+							i.butn.innerHTML=(parseFloat(i.perSec)>vN)?"(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 						}else{
 							i.video.playbackRate=vN;
 						}
