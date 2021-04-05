@@ -9,6 +9,16 @@ var mbMde=false;
 
 var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; flex-direction: row !important;";
 
+function getAncestors(el){
+	firstParent=el;
+	let ancestors=[el];
+	while(!!firstParent && typeof firstParent !=='undefined' && !!firstParent.parentElement && typeof firstParent.parentElement!=='undefined' && firstParent.parentElement.tagName!='BODY' && firstParent.parentElement.tagName!='HEAD' && firstParent.parentElement.tagName!='HTML'){
+		firstParent=firstParent.parentElement;
+		ancestors.push(firstParent);
+	}
+	return ancestors;
+}
+
 function findInst(v){
 	for(let i=0; i<global.instances.length; i++){
 		if (global.instances[i].video===v){
@@ -356,14 +366,11 @@ clse.type = "number";
 butn.setAttribute("grn_synced", false);	
 butn.innerHTML = vid.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x"
 butn.className = "sync_butn";
-if (window.location.href.startsWith('https://m.youtube.com/') && !!vid.offsetParent.offsetParent.offsetParent){
-vid.offsetParent.offsetParent.offsetParent.insertAdjacentElement('beforebegin',sdivs);
-}else{
-vid.insertAdjacentElement('beforebegin', sdivs);
-}
 
+let anc=getAncestors(vid);
+let fpt=anc[anc.length-1];
 
-
+fpt.insertAdjacentElement('beforebegin', sdivs);
 
 sdivs.style.cssText=sDivsCSS;
 		let vrct=vid.getBoundingClientRect();
