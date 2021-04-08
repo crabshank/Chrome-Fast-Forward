@@ -6,6 +6,8 @@ var bdkCol2="#f0f0f080";
 var dfSpd=2.2;
 var dfStp=0.1;
 var mbMde=false;
+var lowest=0;
+var rightest=0;
 
 var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; flex-direction: row !important; left: 0.102em !important;";
 var sDivsCSS2="";
@@ -30,6 +32,14 @@ function findInst(v){
 }
 
 function def_retCSS(i){
+
+let vrct=i.video.getBoundingClientRect();
+let sdrct=i.sdivs.getBoundingClientRect();
+let tp=vrct.top-sdrct.top+0.102*vrct.height+sdrct.height;
+lowest=(tp>lowest)?tp:lowest;
+let lf=vrct.left+0.001*vrct.width;
+rightest=(lf>rightest)?lf:rightest;
+sDivsCSS2='top: '+lowest+'px !important;  left: '+rightest+'px !important;';
 
 i.sdivs.style.cssText = sDivsCSS+sDivsCSS2;
 
@@ -184,13 +194,16 @@ i.video.playbackRate=1;
 function play_hdl(event) {
 let i=findInst(event.target);
 if(!!i){
-if(i.pl_e==1){
-if(i.video.readyState>2){
 let vrct=i.video.getBoundingClientRect();
 let sdrct=i.sdivs.getBoundingClientRect();
-sDivsCSS2='top: '+(vrct.top-sdrct.top+0.102*vrct.height+sdrct.height)+'px !important;';
-sdivs.style.cssText=sDivsCSS+sDivsCSS2;
-
+let tp=vrct.top-sdrct.top+0.102*vrct.height+sdrct.height;
+lowest=(tp>lowest)?tp:lowest;
+let lf=vrct.left+0.001*vrct.width;
+rightest=(lf>rightest)?lf:rightest;
+sDivsCSS2='top: '+lowest+'px !important;  left: '+rightest+'px !important;';
+i.sdivs.style.cssText=sDivsCSS+sDivsCSS2;
+if(i.pl_e==1){
+if(i.video.readyState>2){
 calcSp(i);
 }else{
 i.video.playbackRate=1;
@@ -382,7 +395,7 @@ sdivs.style.cssText=sDivsCSS;
 		let vrct=vid.getBoundingClientRect();
 let sdrct=sdivs.getBoundingClientRect();
 
-sDivsCSS2='top: '+(vrct.top-sdrct.top+0.102*vrct.height+sdrct.height)+'px !important;';
+sDivsCSS2='top: '+(vrct.top-sdrct.top+0.102*vrct.height+sdrct.height)+'px !important;  left: '+(vrct.left+0.001*vrct.width)+'px !important;';
 
 sdivs.style.cssText=sDivsCSS+sDivsCSS2;
 
@@ -440,6 +453,7 @@ sdivs.addEventListener('pointerdown',() => cl_clk(obj));
 butn.addEventListener('pointerdown',() => cl_clk(obj));
 sdivs.addEventListener('mouseenter',() => mouseenter_hdl(obj));
 sdivs.addEventListener('mouseleave',() => mouseleave_hdl(obj));
+vid.addEventListener('play',play_hdl);
 vid.addEventListener('mousemove',mousemove_hdl);
 vid.addEventListener('seeked',seeked_hdl);
 vid.addEventListener('seeking',seeking_hdl);
@@ -452,7 +466,6 @@ function btclk(i) {
 			if(i.ff==-1){
 			chgFlgs(i,true);
 			i.video.addEventListener('progress',progress_hdl);
-			i.video.addEventListener('play',play_hdl);
 			i.video.addEventListener('waiting',waiting_hdl);
 			i.butn.setAttribute("grn_synced", true);
 			let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
