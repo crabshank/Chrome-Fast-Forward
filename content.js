@@ -7,7 +7,8 @@ var dfSpd=2.2;
 var dfStp=0.1;
 var mbMde=false;
 
-var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; flex-direction: row !important;";
+var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; flex-direction: row !important; left: 0.102em !important;";
+var sDivsCSS2="";
 
 function getAncestors(el){
 	firstParent=el;
@@ -29,8 +30,8 @@ function findInst(v){
 }
 
 function def_retCSS(i){
-	
-i.sdivs.style.cssText = sDivsCSS;
+
+i.sdivs.style.cssText = sDivsCSS+sDivsCSS2;
 
 bdkCol=(i.butn.getAttribute("grn_synced")=="true")?"#007500":"buttonface";
 txCol=(i.butn.getAttribute("grn_synced")=="true")?"white":"black";
@@ -45,7 +46,7 @@ i.timer2 = setTimeout(function(){
 i.butn.style.cssText = "line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; min-width: 9ch !important; text-align-last: right !important; "+txCol+" !important";
 i.clse.style.cssText = "line-height: 2ch !important; padding: 2px 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; width: 9ch !important; color: white !important";
 		}else{
-			i.sdivs.style.cssText = sDivsCSS+" opacity: 0 !important";
+			i.sdivs.style.cssText = sDivsCSS+sDivsCSS2+" opacity: 0 !important";
 		}
 		
 	}
@@ -185,6 +186,11 @@ let i=findInst(event.target);
 if(!!i){
 if(i.pl_e==1){
 if(i.video.readyState>2){
+let vrct=i.video.getBoundingClientRect();
+let sdrct=i.sdivs.getBoundingClientRect();
+sDivsCSS2='top: '+(vrct.top-sdrct.top+0.102*vrct.height+sdrct.height)+'px !important;';
+sdivs.style.cssText=sDivsCSS+sDivsCSS2;
+
 calcSp(i);
 }else{
 i.video.playbackRate=1;
@@ -376,7 +382,9 @@ sdivs.style.cssText=sDivsCSS;
 		let vrct=vid.getBoundingClientRect();
 let sdrct=sdivs.getBoundingClientRect();
 
-sDivsCSS+=' top: '+(vrct.top-sdrct.top+0.102*vrct.height+sdrct.height)+'px !important; left: 0.102em !important;';
+sDivsCSS2='top: '+(vrct.top-sdrct.top+0.102*vrct.height+sdrct.height)+'px !important;';
+
+sdivs.style.cssText=sDivsCSS+sDivsCSS2;
 
 clse.value =dfSpd;
 clse.min=1;
