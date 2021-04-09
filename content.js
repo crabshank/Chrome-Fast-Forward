@@ -6,11 +6,9 @@ var bdkCol2="#f0f0f080";
 var dfSpd=2.2;
 var dfStp=0.1;
 var mbMde=false;
-var lowest=0;
-var rightest=0;
 
 var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; flex-direction: row !important; left: 0.102em !important;";
-var sDivsCSS2="";
+
 
 function getAncestors(el){
 	firstParent=el;
@@ -31,17 +29,20 @@ function findInst(v){
 	return null;
 }
 
-function def_retCSS(i){
-
+function positionBar(i){
 let vrct=i.video.getBoundingClientRect();
 let sdrct=i.sdivs.getBoundingClientRect();
-let tp=vrct.top-sdrct.top+0.102*vrct.height+sdrct.height;
-lowest=(tp>lowest)?tp:lowest;
+let tp=vrct.top-sdrct.top+0.102*vrct.height;
+i.lowest=(tp>i.lowest)?tp:i.lowest;
 let lf=vrct.left+0.001*vrct.width;
-rightest=(lf>rightest)?lf:rightest;
-sDivsCSS2='top: '+lowest+'px !important;  left: '+rightest+'px !important;';
+i.rightest=(lf>i.rightest)?lf:i.rightest;
+i.sDivsCSS2='top: '+i.lowest+'px !important;  left: '+i.rightest+'px !important;';
+i.sdivs.style.cssText=sDivsCSS+i.sDivsCSS2;
+}
+	
+function def_retCSS(i){
 
-i.sdivs.style.cssText = sDivsCSS+sDivsCSS2;
+positionBar(i);
 
 bdkCol=(i.butn.getAttribute("grn_synced")=="true")?"#007500":"buttonface";
 txCol=(i.butn.getAttribute("grn_synced")=="true")?"white":"black";
@@ -56,7 +57,7 @@ i.timer2 = setTimeout(function(){
 i.butn.style.cssText = "line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; min-width: 9ch !important; text-align-last: right !important; "+txCol+" !important";
 i.clse.style.cssText = "line-height: 2ch !important; padding: 2px 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; width: 9ch !important; color: white !important";
 		}else{
-			i.sdivs.style.cssText = sDivsCSS+sDivsCSS2+" opacity: 0 !important";
+			i.sdivs.style.cssText = sDivsCSS+i.sDivsCSS2+" opacity: 0 !important";
 		}
 		
 	}
@@ -194,14 +195,7 @@ i.video.playbackRate=1;
 function play_hdl(event) {
 let i=findInst(event.target);
 if(!!i){
-let vrct=i.video.getBoundingClientRect();
-let sdrct=i.sdivs.getBoundingClientRect();
-let tp=vrct.top-sdrct.top+0.102*vrct.height+sdrct.height;
-lowest=(tp>lowest)?tp:lowest;
-let lf=vrct.left+0.001*vrct.width;
-rightest=(lf>rightest)?lf:rightest;
-sDivsCSS2='top: '+lowest+'px !important;  left: '+rightest+'px !important;';
-i.sdivs.style.cssText=sDivsCSS+sDivsCSS2;
+positionBar(i);
 if(i.pl_e==1){
 if(i.video.readyState>2){
 calcSp(i);
@@ -398,7 +392,7 @@ clse.step=dfStp;
 
 clse.title="Maximum speed when fast forwarding; scroll to change.";
 clse.className = "sync_butn";
-//def_retCSS();
+
 sdivs.appendChild(butn);
 sdivs.appendChild(clse);
 
@@ -423,6 +417,9 @@ obj.pg=0;
 //obj.clk_e=0;
 obj.timer2;
 obj.entered=false;
+obj.lowest=0;
+obj.rightest=0;
+obj.sDivsCSS2="";
 
 global.instances.push(obj);
 def_retCSS(obj);
@@ -445,7 +442,6 @@ sdivs.addEventListener('pointerdown',() => cl_clk(obj));
 butn.addEventListener('pointerdown',() => cl_clk(obj));
 sdivs.addEventListener('mouseenter',() => mouseenter_hdl(obj));
 sdivs.addEventListener('mouseleave',() => mouseleave_hdl(obj));
-vid.addEventListener('play',play_hdl);
 vid.addEventListener('mousemove',mousemove_hdl);
 vid.addEventListener('seeked',seeked_hdl);
 vid.addEventListener('seeking',seeking_hdl);
@@ -457,6 +453,7 @@ function btclk(i) {
 			event.stopPropagation();
 			if(i.ff==-1){
 			chgFlgs(i,true);
+			i.video.addEventListener('play',play_hdl);
 			i.video.addEventListener('progress',progress_hdl);
 			i.video.addEventListener('waiting',waiting_hdl);
 			i.butn.setAttribute("grn_synced", true);
