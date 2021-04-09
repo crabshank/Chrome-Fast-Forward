@@ -391,14 +391,6 @@ let fpt=anc[anc.length-1];
 
 fpt.insertAdjacentElement('beforebegin', sdivs);
 
-sdivs.style.cssText=sDivsCSS;
-		let vrct=vid.getBoundingClientRect();
-let sdrct=sdivs.getBoundingClientRect();
-
-sDivsCSS2='top: '+(vrct.top-sdrct.top+0.102*vrct.height+sdrct.height)+'px !important;  left: '+(vrct.left+0.001*vrct.width)+'px !important;';
-
-sdivs.style.cssText=sDivsCSS+sDivsCSS2;
-
 clse.value =dfSpd;
 clse.min=1;
 clse.max=16;
