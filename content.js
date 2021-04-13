@@ -29,20 +29,31 @@ function findInst(v){
 	return null;
 }
 
-function positionBar(i){
+function positionBar(i,scrl){
+if(scrl){
+i.sdivs.style.cssText=sDivsCSS+'opacity: 0 !important;';
+}
+
 let vrct=i.video.getBoundingClientRect();
 let sdrct=i.sdivs.getBoundingClientRect();
 let tp=vrct.top-sdrct.top+0.102*vrct.height;
-i.lowest=(tp>i.lowest)?tp:i.lowest;
 let lf=vrct.left+0.001*vrct.width;
+
+
+if(scrl){
+i.sDivsCSS2='top: '+tp+'px !important;  left: '+lf+'px !important;';
+}else{
+i.lowest=(tp>i.lowest)?tp:i.lowest;
 i.rightest=(lf>i.rightest)?lf:i.rightest;
 i.sDivsCSS2='top: '+i.lowest+'px !important;  left: '+i.rightest+'px !important;';
+}
+
 i.sdivs.style.cssText=sDivsCSS+i.sDivsCSS2;
 }
 	
 function def_retCSS(i){
 
-positionBar(i);
+positionBar(i,false);
 
 bdkCol=(i.butn.getAttribute("grn_synced")=="true")?"#007500":"buttonface";
 txCol=(i.butn.getAttribute("grn_synced")=="true")?"white":"black";
@@ -195,7 +206,7 @@ i.video.playbackRate=1;
 function play_hdl(event) {
 let i=findInst(event.target);
 if(!!i){
-positionBar(i);
+positionBar(i,false);
 if(i.pl_e==1){
 if(i.video.readyState>2){
 calcSp(i);
@@ -420,9 +431,27 @@ obj.entered=false;
 obj.lowest=0;
 obj.rightest=0;
 obj.sDivsCSS2="";
+obj.sclr=false;
 
 global.instances.push(obj);
+
 def_retCSS(obj);
+
+document.addEventListener("scroll", (event) => {
+	if(!obj.sclr){
+		obj.sclr=true;
+		positionBar(obj,true);
+		obj.sclr=false;
+	}
+}, true);
+document.addEventListener("scroll", (event) => {
+	if(!obj.sclr){
+		obj.sclr=true;
+		positionBar(obj,true);
+		obj.sclr=false;
+	}
+}, false);
+
 butn.addEventListener("click", btclk(obj));	
 sdivs.addEventListener('wheel',(evt) => cl_whl(evt,obj));
 vid.addEventListener('ratechange',ratechange_hdl);
