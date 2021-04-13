@@ -39,15 +39,10 @@ let sdrct=i.sdivs.getBoundingClientRect();
 let tp=vrct.top-sdrct.top+0.102*vrct.height;
 let lf=vrct.left+0.001*vrct.width;
 
+i.lowest=(tp>i.lowest || scrl)?tp:i.lowest;
+i.rightest=(lf>i.rightest || scrl)?lf:i.rightest;
 
-if(scrl){
-i.sDivsCSS2='top: '+tp+'px !important;  left: '+lf+'px !important;';
-}else{
-i.lowest=(tp>i.lowest)?tp:i.lowest;
-i.rightest=(lf>i.rightest)?lf:i.rightest;
 i.sDivsCSS2='top: '+i.lowest+'px !important;  left: '+i.rightest+'px !important;';
-}
-
 i.sdivs.style.cssText=sDivsCSS+i.sDivsCSS2;
 }
 	
