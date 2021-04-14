@@ -43,7 +43,8 @@ i.lowest=(tp>i.lowest || scrl)?tp:i.lowest;
 i.rightest=(lf>i.rightest || scrl)?lf:i.rightest;
 
 i.sDivsCSS2='top: '+i.lowest+'px !important;  left: '+i.rightest+'px !important;';
-i.sdivs.style.cssText=sDivsCSS+i.sDivsCSS2;
+i.sdivs.style.cssText=(scrl)?sDivsCSS+i.sDivsCSS2+'opacity: 0 !important;':sDivsCSS+i.sDivsCSS2;
+
 }
 	
 function def_retCSS(i,bool){
