@@ -7,7 +7,7 @@ var dfSpd=2.2;
 var dfStp=0.1;
 var mbMde=false;
 
-var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; flex-direction: row !important; left: 0.102em !important;";
+var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; flex-direction: row !important;";
 
 
 function getAncestors(el){
@@ -36,13 +36,23 @@ i.sdivs.style.cssText=sDivsCSS+'opacity: 0 !important;';
 
 let vrct=i.video.getBoundingClientRect();
 let sdrct=i.sdivs.getBoundingClientRect();
-let tp=vrct.top-sdrct.top+0.102*vrct.height;
+
 let lf=vrct.left+0.001*vrct.width;
 
-i.lowest=(tp>i.lowest || scrl)?tp:i.lowest;
 i.rightest=(lf>i.rightest || scrl)?lf:i.rightest;
 
+if(i.video.tagName==='AUDIO'){
+	if(vrct.top<sdrct.height){
+		i.sDivsCSS2='top: '+vrct.bottom+'px !important;  left: '+i.rightest+'px !important;';
+	}else{
+		i.sDivsCSS2='top: '+(vrct.top-sdrct.height)+'px !important;  left: '+i.rightest+'px !important;';
+	}
+}else{
+let tp=vrct.top-sdrct.top+0.102*vrct.height;
+i.lowest=(tp>i.lowest || scrl)?tp:i.lowest;
 i.sDivsCSS2='top: '+i.lowest+'px !important;  left: '+i.rightest+'px !important;';
+}
+
 i.sdivs.style.cssText=(scrl)?sDivsCSS+i.sDivsCSS2+'opacity: 0 !important;':sDivsCSS+i.sDivsCSS2;
 
 }
