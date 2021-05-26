@@ -9,18 +9,6 @@ var mbMde=false;
 
 var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; flex-direction: row !important;";
 
-
-function textWidth(el) {
-	let text=el.innerText;
-	let font=getComputedStyle(el).font;
-  let canvas = document.createElement('canvas');
-  let context = canvas.getContext('2d');
-
-  context.font = font || getComputedStyle(document.body).font;
-  
-  return context.measureText(text).width;
-}
-
 function getAncestors(el){
 	firstParent=el;
 	let ancestors=[el];
