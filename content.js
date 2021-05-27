@@ -146,6 +146,7 @@ function calcSp(i){
 				i.t_a=i.video.currentTime;
 			i.clck_a = performance.now();
 		}else{
+			let calcAgain=false;
 			let c_i=i.video.currentTime;
 			i.clck_b = performance.now();
 			for (let k=i.video.buffered.length-1; k>=0; k--){
@@ -175,6 +176,7 @@ function calcSp(i){
 						}
 				}else{
 					i.t_a=c_i;
+					calcAgain=true;
 				}
 				i.clck_a=performance.now();
 				break;
@@ -188,8 +190,11 @@ function calcSp(i){
 			
 			
 
-
 			}
+			if (calcAgain){
+				calcSp(i);
+			}
+			
 		}
 	}
 }
@@ -258,6 +263,7 @@ if(i.skd_e==1){
 t_a=i.video.currentTime;
 if(i.video.readyState<=2){
 i.video.playbackRate=1;
+calcSp(i);
 }
 }
 }
