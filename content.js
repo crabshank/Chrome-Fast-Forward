@@ -192,11 +192,15 @@ function calcSp(i){
 			
 
 			}
-			if (calcAgain){
-				i.clck_a=(recA)?performance.now():i.clck_a;
+			if (calcAgain===true){
+				if(recA===true){
+				   i.clck_a=performance.now();
+				}
 				calcSp(i);
 			}else{
-				i.clck_a=(recA)?performance.now():i.clck_a;
+				if(recA===true){
+				   i.clck_a=performance.now();
+                }
             }
 			
 		}
