@@ -269,9 +269,10 @@ i.entered=false;
 def_retCSS(i,false);
 if(i.skd_e==1){
 t_a=i.video.currentTime;
-if(i.video.readyState<=2){
-i.video.playbackRate=1;
+if(i.video.readyState>2){
 calcSp(i);
+}else{
+i.video.playbackRate=1;
 }
 }
 }
