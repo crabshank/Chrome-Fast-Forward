@@ -176,7 +176,7 @@ function calcSp(i){
 						}else{
 							if((vN<vN1) && (vN>1) && ((vN>i.nxtHi) || (i.nxtHi==1))){
 								i.nxtHi=vN;
-								i.clse.value=vN;
+								i.clse.value=vN.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 2, useGrouping: false});
 							}
 							i.video.playbackRate=vN;
 						}
