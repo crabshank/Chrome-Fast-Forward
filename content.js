@@ -169,10 +169,15 @@ function calcSp(i){
 						i.perSec=(i.pg==2)?lst.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 2, useGrouping: false}):i.perSec;
 						i.t_a=t_i;
 						let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
+						let vN1=vN;
 						vN=Math.min(vN,Math.max(1,lst));
 						if(i.video.playbackRate==vN){
 							i.butn.innerText=(parseFloat(i.perSec)>vN)?"(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 						}else{
+							if((vN<vN1) && (vN>1) && ((vN>i.nxtHi) || (i.nxtHi==1))){
+								i.nxtHi=vN;
+								i.clse.value=vN;
+							}
 							i.video.playbackRate=vN;
 						}
 				}else{
@@ -439,6 +444,7 @@ obj.rc_e=0;
 obj.wh_e=0;
 obj.ip_e=0;
 obj.perSec='';
+obj.nxtHi=1;
 obj.clck_a=-1;
 obj.t_a=0;
 obj.clck_b=0;
