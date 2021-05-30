@@ -171,14 +171,17 @@ function calcSp(i){
 						let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 						let vN1=vN;
 						vN=Math.min(vN,Math.max(1,lst));
-						if(i.video.playbackRate==vN){
-							i.butn.innerText=(parseFloat(i.perSec)>vN)?"(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-						}else{
-							if((vN<vN1) && (vN>1) && ((vN>i.nxtHi) || (i.nxtHi==1))){
-								i.nxtHi=vN;
-								i.clse.value=vN.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 2, useGrouping: false});
+						i.nxtHi+=vN; //+clamped calc speed
+						i.nxtHi_cnt++;
+						i.nxtHi_sp+=vN1; //+clse.value
+						if(vN==vN1){
+							if(i.video.playbackRate==vN){
+								i.butn.innerText=(parseFloat(i.perSec)>vN1)?"(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+							}else{
+								i.video.playbackRate=vN;
 							}
-							i.video.playbackRate=vN;
+						}else{
+							i.video.playbackRate=Math.floor(100*Math.max(1,Math.min(vN1,Math.min(i.nxtHi/i.nxtHi_cnt,i.nxtHi_sp/i.nxtHi_cnt))))*0.01;
 						}
 				}else{
 					calcAgain=true;
@@ -323,6 +326,9 @@ if(i.ip_e==1){
 let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 dfSpd=Math.min(16,Math.max(1,vN));
 i.video.playbackRate=dfSpd;
+i.nxtHi=0;
+i.nxtHi_cnt=0;
+i.nxtHi_sp=0;
 	calcSp(i);
 
 }
@@ -337,6 +343,9 @@ function cl_whl(evt,i) {
 		let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 		dfSpd=(Math.max(1,vN-parseFloat(i.clse.step))).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping:false});
 		i.clse.value=dfSpd;
+		i.nxtHi=0;
+		i.nxtHi_cnt=0;
+		i.nxtHi_sp=0;
 		if(i.wh_e==1){
 		i.video.playbackRate=dfSpd;
 		}
@@ -345,6 +354,9 @@ function cl_whl(evt,i) {
 		let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 		dfSpd=(Math.min(16,vN+parseFloat(i.clse.step))).toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping:false});
 		i.clse.value=dfSpd;
+		i.nxtHi=0;
+		i.nxtHi_cnt=0;
+		i.nxtHi_sp=0;
 		if(i.wh_e==1){
 		i.video.playbackRate=dfSpd;
 		}
@@ -444,7 +456,9 @@ obj.rc_e=0;
 obj.wh_e=0;
 obj.ip_e=0;
 obj.perSec='';
-obj.nxtHi=1;
+obj.nxtHi=0;
+obj.nxtHi_cnt=0;
+obj.nxtHi_sp=0;
 obj.clck_a=-1;
 obj.t_a=0;
 obj.clck_b=0;
