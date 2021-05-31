@@ -178,10 +178,15 @@ function calcSp(i){
 							if(i.video.playbackRate==vN){
 								i.butn.innerText=(parseFloat(i.perSec)>vN1)?"(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 							}else{
-								i.video.playbackRate=vN;
+									i.video.playbackRate=vN;
+									//i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 							}
 						}else{
-							i.video.playbackRate=Math.floor(100*Math.max(1,Math.min(vN1,Math.min(i.nxtHi/i.nxtHi_cnt,i.nxtHi_sp/i.nxtHi_cnt))))*0.01;
+							let avgSp=Math.floor(100*Math.max(1,Math.min(vN1,Math.min(i.nxtHi/i.nxtHi_cnt,i.nxtHi_sp/i.nxtHi_cnt))))*0.01;
+							if(i.video.playbackRate!=avgSp){
+								i.video.playbackRate=avgSp;
+								//i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+							}
 						}
 				}else{
 					calcAgain=true;
