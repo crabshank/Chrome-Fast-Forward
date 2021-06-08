@@ -29,7 +29,7 @@ function findInst(v){
 }
 
 function positionBar(i,scrl){
-if(scrl){
+if(scrl && !mbMde){
 i.sdivs.style.cssText=sDivsCSS+'opacity: 0 !important;';
 }
 
@@ -52,7 +52,7 @@ i.lowest=(tp>i.lowest || scrl)?tp:i.lowest;
 i.sDivsCSS2='top: '+i.lowest+'px !important;  left: '+i.rightest+'px !important;';
 }
 
-i.sdivs.style.cssText=(scrl)?sDivsCSS+i.sDivsCSS2+'opacity: 0 !important;':sDivsCSS+i.sDivsCSS2;
+i.sdivs.style.cssText=(scrl && !mbMde)?sDivsCSS+i.sDivsCSS2+'opacity: 0 !important;':sDivsCSS+i.sDivsCSS2;
 
 }
 	
