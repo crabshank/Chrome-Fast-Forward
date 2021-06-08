@@ -275,6 +275,19 @@ i.entered=false;
 def_retCSS(i,false);
 }
 
+function fsc_hdl(i) {
+let fsOn=document.fullscreen || document.webkitIsFullScreen;
+if(fsOn){
+	i.video.insertAdjacentElement('beforebegin',i.sdivs);
+}else{
+let anc=getAncestors(i.video);
+let fpt=anc[anc.length-1];
+
+fpt.insertAdjacentElement('beforebegin', sdivs);
+}
+def_retCSS(i,true);
+}
+
 function seeked_hdl(event) {
 let i=findInst(event.target);
 if(!!i){
@@ -516,6 +529,8 @@ sdivs.addEventListener('pointerdown',() => cl_clk(obj));
 butn.addEventListener('pointerdown',() => cl_clk(obj));
 sdivs.addEventListener('mouseenter',() => mouseenter_hdl(obj));
 sdivs.addEventListener('mouseleave',() => mouseleave_hdl(obj));
+document.addEventListener('fullscreenchange',() => fsc_hdl(obj));
+document.addEventListener('webkitfullscreenchange',() => fsc_hdl(obj));
 vid.addEventListener('mousemove',mousemove_hdl);
 vid.addEventListener('seeked',seeked_hdl);
 vid.addEventListener('seeking',seeking_hdl);
