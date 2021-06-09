@@ -280,10 +280,15 @@ let fsOn=document.fullscreen || document.webkitIsFullScreen;
 if(fsOn){
 	i.video.insertAdjacentElement('beforebegin',i.sdivs);
 }else{
+/*if(!!i.ances && typeof i.ances!=='undefined'){
+i.ances.insertAdjacentElement('beforebegin', i.sdivs);
+}else{*/
 let anc=getAncestors(i.video);
 let fpt=anc[anc.length-1];
 
-fpt.insertAdjacentElement('beforebegin', sdivs);
+fpt.insertAdjacentElement('beforebegin', i.sdivs);
+/*i.ances.fpt;
+}*/
 }
 def_retCSS(i,true);
 }
@@ -450,6 +455,8 @@ let anc=getAncestors(vid);
 let fpt=anc[anc.length-1];
 
 fpt.insertAdjacentElement('beforebegin', sdivs);
+
+//obj.ances=fpt;
 
 clse.value =dfSpd;
 clse.min=1;
