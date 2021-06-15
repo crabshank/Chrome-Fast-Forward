@@ -313,19 +313,19 @@ def_retCSS(i,false);
 }
 }
 
-function mouseenter_hdl(i) {
+function pointerenter_hdl(i) {
 i.entered=true;
 def_retCSS(i,false);
 }
 
-function mousemove_hdl(event) {
+function pointermove_hdl(event) {
 let i=findInst(event.target);
 if(!!i){
 def_retCSS(i,false);
 }
 }
 
-function mouseleave_hdl(i) {
+function pointerleave_hdl(i) {
 i.entered=false;
 def_retCSS(i,false);
 }
@@ -448,8 +448,21 @@ function cl_whl(evt,i) {
 function cl_clk(i) {
 //event.preventDefault();
 event.stopPropagation();
+if(event.target!==i.clse && event.target!==i.butn && event.target!==i.sdivs){
+	let rectC=i.clse.getBoundingClientRect();
+	let rectB=i.butn.getBoundingClientRect();
+	if(event.pageX >= rectC.left && event.pageX <= rectC.right && event.pageY >= rectC.top && event.pageY <= rectC.bottom){
+		i.clse.focus();
+	}else if(event.pageX >= rectB.left && event.pageX <= rectB.right && event.pageY >= rectB.top && event.pageY <= rectB.bottom){
+		i.butn.click();
+	}
+}
 def_retCSS(i,false);
-//if(clk_e==1){}
+}
+
+function cl_focus(i){
+	event.preventDefault();
+	event.stopPropagation();	
 }
 
 function restore_options()
@@ -553,7 +566,6 @@ obj.lowest=0;
 obj.rightest=0;
 obj.sDivsCSS2="";
 obj.sclr=false;
-
 global.instances.push(obj);
 
 def_retCSS(obj, false);
@@ -584,17 +596,16 @@ clse.addEventListener('change',() => cl_inp(obj));
 clse.addEventListener('click',() => cl_clk(obj));
 sdivs.addEventListener('click',() => cl_clk(obj));
 butn.addEventListener('click',() => cl_clk(obj));
-clse.addEventListener('mousedown',() => cl_clk(obj));
-sdivs.addEventListener('mousedown',() => cl_clk(obj));
-butn.addEventListener('mousedown',() => cl_clk(obj));
+clse.addEventListener('focus',() => cl_focus(obj));
 clse.addEventListener('pointerdown',() => cl_clk(obj));
 sdivs.addEventListener('pointerdown',() => cl_clk(obj));
 butn.addEventListener('pointerdown',() => cl_clk(obj));
-sdivs.addEventListener('mouseenter',() => mouseenter_hdl(obj));
-sdivs.addEventListener('mouseleave',() => mouseleave_hdl(obj));
+sdivs.addEventListener('pointerenter',() => pointerenter_hdl(obj));
+sdivs.addEventListener('pointerleave',() => pointerleave_hdl(obj));
+window.addEventListener('pointerdown',() => cl_clk(obj));
 document.addEventListener('fullscreenchange',() => fsc_hdl(obj));
 document.addEventListener('webkitfullscreenchange',() => fsc_hdl(obj));
-vid.addEventListener('mousemove',mousemove_hdl);
+vid.addEventListener('pointermove',pointermove_hdl);
 vid.addEventListener('seeked',seeked_hdl);
 vid.addEventListener('seeking',seeking_hdl);
 }
@@ -662,7 +673,7 @@ function checker(){
 						i.video.removeEventListener('progress',progress_hdl);
 						i.video.removeEventListener('play',play_hdl);
 						i.video.removeEventListener('waiting',waiting_hdl);
-						i.video.removeEventListener('mousemove',mousemove_hdl);
+						i.video.removeEventListener('pointermove',pointermove_hdl);
 						i.video.removeEventListener('ratechange',ratechange_hdl);
 						i.video.removeEventListener('seeked',seeked_hdl);
 						i.video.removeEventListener('seeking',seeking_hdl);
