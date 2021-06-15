@@ -193,9 +193,9 @@ function timeAhead(i){
 			if(rgs.length>0){
 			let sorted=rgs.sort((a, b) => {return a[0] - b[0];})
 			tot=sorted[0][1]-c_i;
-			for (let i=1; i<sorted.length; i++){
-				if(sorted[i-1][1]==sorted[i][0]){
-					tot+=sorted[i][1]-sorted[i][0];
+			for (let k=1; k<sorted.length; k++){
+				if(sorted[k-1][1]==sorted[k][0]){
+					tot+=sorted[k][1]-sorted[k][0];
 				}else{
 					break;
 				}
