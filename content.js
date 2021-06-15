@@ -184,7 +184,7 @@ function timeAhead(i){
 			for (let k=i.video.buffered.length-1; k>=0; k--){
 			let t_i=i.video.buffered.end(k);
 			let s_i=i.video.buffered.start(k);
-				if(c_i>=s_i){
+				if(c_i>=s_i && t_i>=c_i){
 					rgs.push([s_i,t_i]);
 				}
 			}
