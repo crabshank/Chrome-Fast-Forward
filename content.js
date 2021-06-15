@@ -178,31 +178,44 @@ function elRemover(el){
 }
 
 function timeAhead(i){
-				let c_i=i.video.currentTime;
 				var ldd;
 				var rgs=[];
+				var lastPart=false;
+				let c_i=i.video.currentTime;
 			for (let k=i.video.buffered.length-1; k>=0; k--){
 			let t_i=i.video.buffered.end(k);
 			let s_i=i.video.buffered.start(k);
-				if(c_i>=s_i && t_i>=c_i){
+			
+				if(t_i==i.video.duration && c_i>=s_i){
+					lastPart=true;
+					break;
+				}else if(c_i>=s_i && t_i>=c_i){
 					rgs.push([s_i,t_i]);
 				}
 			}
 			
-			var tot=0;
-			if(rgs.length>0){
-			let sorted=rgs.sort((a, b) => {return a[0] - b[0];})
-			tot=sorted[0][1]-c_i;
-			for (let k=1; k<sorted.length; k++){
-				if(sorted[k-1][1]==sorted[k][0]){
-					tot+=sorted[k][1]-sorted[k][0];
-				}else{
-					break;
+			if(lastPart){
+				ldd='ALL';
+			}else{
+				var tot=0;
+				if(rgs.length>0){
+					
+				let sorted=rgs.sort((a, b) => {return a[0] - b[0];})
+				tot=sorted[0][1]-c_i;
+				
+				for (let k=1; k<sorted.length; k++){
+					if(sorted[k-1][1]==sorted[k][0]){
+						tot+=sorted[k][1]-sorted[k][0];
+					}else{
+						break;
+					}
 				}
+				
+				}
+				
+				ldd=bf_s_hmmss((i.video.playbackRate==0)?0:tot/i.video.playbackRate);
 			}
-			}
-					ldd=bf_s_hmmss((i.video.playbackRate==0)?0:tot/i.video.playbackRate);
-
+			
 			let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 			i.butn.innerText=(parseFloat(i.perSec)>vN)?"(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 	i.butn.innerText+=' [Buffered: '+ldd+']';
