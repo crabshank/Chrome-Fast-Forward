@@ -456,6 +456,9 @@ if(event.target!==i.clse && event.target!==i.butn && event.target!==i.sdivs){
 	}else if(event.pageX >= rectB.left && event.pageX <= rectB.right && event.pageY >= rectB.top && event.pageY <= rectB.bottom){
 		i.butn.click();
 	}
+	i.ignClk=true;
+}else if(i.ignClk){
+	i.ignClk=false;
 }
 def_retCSS(i,false);
 }
@@ -566,6 +569,7 @@ obj.lowest=0;
 obj.rightest=0;
 obj.sDivsCSS2="";
 obj.sclr=false;
+obj.ignClk=false;
 global.instances.push(obj);
 
 def_retCSS(obj, false);
