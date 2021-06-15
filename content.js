@@ -9,6 +9,43 @@ var mbMde=false;
 
 var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; flex-direction: row !important;";
 
+	function cd_s_hmmss(s)
+	{
+
+		var ss = "00";
+		var mm = "00";
+		var hh = "";
+
+		var hours = Math.floor(Math.ceil(s) / 3600);
+		if (hours > 0)
+		{
+			hh = hours + ":";
+		}
+
+		var mins = Math.floor((Math.ceil(s) - hours * 3600) / 60);
+
+		if (hours > 0)
+		{
+			mm = "0" + mins;
+		}
+		else
+		{
+			mm = mins;
+		}
+		var secs = Math.ceil(s - hours * 3600 - mins * 60);
+
+		if (secs < 10)
+		{
+			ss = "0" + secs;
+		}
+		else
+		{
+			ss = secs;
+		}
+
+		return hh + mm + ":" + ss;
+	}
+
 function getAncestors(el){
 	firstParent=el;
 	let ancestors=[el];
@@ -140,6 +177,23 @@ function elRemover(el){
 	}
 }
 
+function timeAhead(i){
+				let c_i=i.video.currentTime;
+				var ldd;
+			for (let k=i.video.buffered.length-1; k>=0; k--){
+			let t_i=i.video.buffered.end(k);
+			let s_i=i.video.buffered.start(k);
+				if(c_i>=s_i && c_i<=t_i){
+					ldd=cd_s_hmmss(t_i-c_i);
+					i.butn.setAttribute('lddAhd',ldd);
+					break;
+				}
+			}
+			let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
+			i.butn.innerText=(parseFloat(i.perSec)>vN)?"(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+	i.butn.innerText+=' ['+i.butn.getAttribute('lddAhd')+' loaded]';
+}
+
 function calcSp(i){
 	if(!i.video.paused){
 		if(i.clck_a==-1){
@@ -218,6 +272,7 @@ function calcSp(i){
 			
 		}
 	}
+	timeAhead(i);
 }
 
 function progress_hdl(event) {
@@ -469,6 +524,7 @@ clse.className = "sync_butn";
 sdivs.appendChild(butn);
 sdivs.appendChild(clse);
 
+butn.setAttribute('lddAhd',0);
 obj.butn=butn;
 obj.clse=clse;
 obj.sdivs=sdivs;
