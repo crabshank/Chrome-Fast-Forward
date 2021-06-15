@@ -198,12 +198,12 @@ function timeAhead(i){
 					break;
 				}
 			}
-					ldd=cd_s_hmmss(tot);
-					i.butn.setAttribute('lddAhd',ldd);
+					ldd=cd_s_hmmss((i.video.playbackRate==0)?0:tot/i.video.playbackRate);
 
 			let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 			i.butn.innerText=(parseFloat(i.perSec)>vN)?"(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-	i.butn.innerText+=' [Buffered: '+i.butn.getAttribute('lddAhd')+']';
+	i.butn.innerText+=' [Buffered: '+ldd+']';
+	i.butn.setAttribute('lddAhd',ldd);
 }
 
 function calcSp(i){
@@ -284,7 +284,7 @@ function calcSp(i){
 			
 		}
 	}
-	timeAhead(i);
+			timeAhead(i);
 }
 
 function progress_hdl(event) {
