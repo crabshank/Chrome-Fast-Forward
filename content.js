@@ -16,13 +16,13 @@ var sDivsCSS="max-width: max-content !important; line-height: 0px !important; pa
 		var mm = "00";
 		var hh = "";
 
-		var hours = Math.floor(Math.ceil(s) / 3600);
+		var hours = Math.max(0,Math.floor(Math.ceil(s) / 3600));
 		if (hours > 0)
 		{
 			hh = hours + ":";
 		}
 
-		var mins = Math.floor((Math.ceil(s) - hours * 3600) / 60);
+		var mins = Math.max(0,Math.floor((Math.ceil(s) - hours * 3600) / 60));
 
 		if (hours > 0 && mins<10)
 		{
@@ -32,7 +32,7 @@ var sDivsCSS="max-width: max-content !important; line-height: 0px !important; pa
 		{
 			mm = mins;
 		}
-		var secs = Math.floor(s - hours * 3600 - mins * 60);
+		var secs = Math.max(0,Math.floor(s - hours * 3600 - mins * 60));
 
 		if (secs < 10)
 		{
@@ -189,14 +189,17 @@ function timeAhead(i){
 				}
 			}
 			
+			var tot=0;
+			if(rgs.length>0){
 			let sorted=rgs.sort((a, b) => {return a[0] - b[0];})
-			var tot=sorted[0][1]-c_i;
+			tot=sorted[0][1]-c_i;
 			for (let i=1; i<sorted.length; i++){
 				if(sorted[i-1][1]==sorted[i][0]){
 					tot+=sorted[i][1]-sorted[i][0];
 				}else{
 					break;
 				}
+			}
 			}
 					ldd=bf_s_hmmss((i.video.playbackRate==0)?0:tot/i.video.playbackRate);
 
