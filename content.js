@@ -24,7 +24,7 @@ var sDivsCSS="max-width: max-content !important; line-height: 0px !important; pa
 
 		var mins = Math.floor((Math.ceil(s) - hours * 3600) / 60);
 
-		if (hours > 0)
+		if (hours > 0 && mins<10)
 		{
 			mm = "0" + mins;
 		}
@@ -191,7 +191,7 @@ function timeAhead(i){
 			}
 			let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 			i.butn.innerText=(parseFloat(i.perSec)>vN)?"(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-	i.butn.innerText+=' ['+i.butn.getAttribute('lddAhd')+' loaded]';
+	i.butn.innerText+=' [Buffered: '+i.butn.getAttribute('lddAhd')+']';
 }
 
 function calcSp(i){
