@@ -180,15 +180,27 @@ function elRemover(el){
 function timeAhead(i){
 				let c_i=i.video.currentTime;
 				var ldd;
+				var rgs=[];
 			for (let k=i.video.buffered.length-1; k>=0; k--){
 			let t_i=i.video.buffered.end(k);
 			let s_i=i.video.buffered.start(k);
-				if(c_i>=s_i && c_i<=t_i){
-					ldd=cd_s_hmmss(t_i-c_i);
-					i.butn.setAttribute('lddAhd',ldd);
+				if(c_i>=s_i){
+					rgs.push([s_i,t_i]);
+				}
+			}
+			
+			let sorted=rgs.sort((a, b) => {return a[0] - b[0];})
+			var tot=sorted[0][1]-c_i;
+			for (let i=1; i<sorted.length; i++){
+				if(sorted[i-1][1]==sorted[i][0]){
+					tot+=sorted[i][1]-sorted[i][0];
+				}else{
 					break;
 				}
 			}
+					ldd=cd_s_hmmss(tot);
+					i.butn.setAttribute('lddAhd',ldd);
+
 			let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 			i.butn.innerText=(parseFloat(i.perSec)>vN)?"(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 	i.butn.innerText+=' [Buffered: '+i.butn.getAttribute('lddAhd')+']';
