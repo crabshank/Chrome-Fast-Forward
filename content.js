@@ -195,7 +195,7 @@ function timeAhead(i){
 			}
 			
 			if(lastPart){
-				ldd='ALL';
+				ldd='END!';
 			}else{
 				var tot=0;
 				if(rgs.length>0){
