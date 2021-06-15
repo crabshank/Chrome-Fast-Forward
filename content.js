@@ -9,7 +9,7 @@ var mbMde=false;
 
 var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; flex-direction: row !important;";
 
-	function cd_s_hmmss(s)
+	function bf_s_hmmss(s)
 	{
 
 		var ss = "00";
@@ -32,7 +32,7 @@ var sDivsCSS="max-width: max-content !important; line-height: 0px !important; pa
 		{
 			mm = mins;
 		}
-		var secs = Math.ceil(s - hours * 3600 - mins * 60);
+		var secs = Math.floor(s - hours * 3600 - mins * 60);
 
 		if (secs < 10)
 		{
@@ -198,7 +198,7 @@ function timeAhead(i){
 					break;
 				}
 			}
-					ldd=cd_s_hmmss((i.video.playbackRate==0)?0:tot/i.video.playbackRate);
+					ldd=bf_s_hmmss((i.video.playbackRate==0)?0:tot/i.video.playbackRate);
 
 			let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 			i.butn.innerText=(parseFloat(i.perSec)>vN)?"(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
