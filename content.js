@@ -9,6 +9,14 @@ var mbMde=false;
 var mbMdeFs=false;
 var bffChk=true;
 
+function unDef(v,d,r){
+	if(typeof r==='undefined'){
+		return (typeof v !=='undefined')?v:d;
+	}else{
+		return (typeof v !=='undefined')?r:d;
+	}
+}
+
 var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; flex-direction: row !important;";
 
 	function bf_s_hmmss(s)
@@ -511,9 +519,11 @@ function restore_options()
 		if (Object.keys(items).length != 0)
 		{
 			//console.log(items);
-			dfSpd = items.defSpd;
-			dfStp = items.defStp;
-			if(items.mbIdx==0){
+			
+			dfSpd =unDef(items.defSpd,2.2,parseFloat(items.defSpd));
+			dfStp =unDef(items.defStp,0.1,parseFloat(items.defStp));
+			
+			if(items.mbIdx==0 || typeof items.mbIdx ==='undefined'){
 				mbMde=false;
 				mbMdeFs=false;
 			}else if(items.mbIdx==1){
@@ -523,7 +533,8 @@ function restore_options()
 				mbMde=false;
 				mbMdeFs=true;
 			}
-			bffChk = items.buffd;
+			
+		bffChk=unDef(items.buffd,true);
 			checker();
 		}
 		else
@@ -538,10 +549,11 @@ function restore_options()
 
 function save_options()
 {
+		chrome.storage.sync.clear(function() {
 	chrome.storage.sync.set(
 	{
-		defSpd: 2.2,
-		defStp: 0.1,
+		defSpd: "2.2",
+		defStp: "0.1",
 		buffd: true,
 		mbIdx: 0
 	}, function()
@@ -549,6 +561,7 @@ function save_options()
 		console.log('Default options saved.');
 		restore_options();
 	});
+		});
 
 }
 
