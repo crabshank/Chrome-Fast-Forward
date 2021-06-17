@@ -6,6 +6,8 @@ var bdkCol2="#f0f0f080";
 var dfSpd=2.2;
 var dfStp=0.1;
 var mbMde=false;
+var mbMdeFs=false;
+var bffChk=true;
 
 var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; flex-direction: row !important;";
 
@@ -66,7 +68,7 @@ function findInst(v){
 }
 
 function positionBar(i,scrl){
-if(scrl && !mbMde){
+if(scrl){
 i.sdivs.style.cssText=sDivsCSS+'opacity: 0 !important;';
 }
 
@@ -89,7 +91,7 @@ i.lowest=(tp>i.lowest || scrl)?tp:i.lowest;
 i.sDivsCSS2='top: '+i.lowest+'px !important;  left: '+i.rightest+'px !important;';
 }
 
-i.sdivs.style.cssText=(scrl && !mbMde)?sDivsCSS+i.sDivsCSS2+'opacity: 0 !important;':sDivsCSS+i.sDivsCSS2;
+i.sdivs.style.cssText=(scrl)?sDivsCSS+i.sDivsCSS2+'opacity: 0 !important;':sDivsCSS+i.sDivsCSS2;
 
 }
 	
@@ -106,7 +108,7 @@ i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !impo
 clearTimeout(i.timer2);
 i.timer2 = setTimeout(function(){
 	if(!i.entered){
-		if(mbMde){
+		if(mbMde || (mbMdeFs && !(document.fullscreen || document.webkitIsFullScreen))){
 i.butn.style.cssText = "min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; text-align-last: right !important; "+txCol+" !important";
 i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !important; line-height: 2ch !important; padding: 2px 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; color: white !important";
 		}else{
@@ -177,7 +179,7 @@ function elRemover(el){
 	}
 }
 
-function timeAhead(i){
+function timeAhead(i, noCalcSp){
 				var ldd;
 				var rgs=[];
 				var lastPart=false;
@@ -217,7 +219,7 @@ function timeAhead(i){
 			}
 			
 			let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
-			i.butn.innerText=(parseFloat(i.perSec)>vN)?"(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+			i.butn.innerText=((parseFloat(i.perSec)>vN) && !noCalcSp)?"[Max: "+i.perSec+"x] "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 	i.butn.innerText+=' [Buffered: '+ldd+']';
 	i.butn.setAttribute('lddAhd',ldd);
 }
@@ -258,7 +260,7 @@ function calcSp(i){
 						i.nxtHi_sp+=vN1; //+clse.value
 						if(vN==vN1){
 							if(i.video.playbackRate==vN){
-								i.butn.innerText=(parseFloat(i.perSec)>vN1)?"(Max: "+i.perSec+"x) "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
+								i.butn.innerText=(parseFloat(i.perSec)>vN1)?"[Max: "+i.perSec+"x] "+i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x":i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 							}else{
 									i.video.playbackRate=vN;
 									//i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
@@ -300,7 +302,7 @@ function calcSp(i){
 			
 		}
 	}
-			timeAhead(i);
+			timeAhead(i,false);
 }
 
 function progress_hdl(event) {
@@ -313,6 +315,8 @@ calcSp(i);
 }else{
 i.video.playbackRate=1;
 }
+}else if(bffChk){
+	timeAhead(i,true);
 }
 }
 }
@@ -327,6 +331,8 @@ calcSp(i);
 }else{
 i.video.playbackRate=1;
 }
+}else if(bffChk){
+	timeAhead(i,true);
 }
 }
 }
@@ -363,15 +369,9 @@ let fsOn=document.fullscreen || document.webkitIsFullScreen;
 if(fsOn){
 	i.video.insertAdjacentElement('beforebegin',i.sdivs);
 }else{
-/*if(!!i.ances && typeof i.ances!=='undefined'){
-i.ances.insertAdjacentElement('beforebegin', i.sdivs);
-}else{*/
 let anc=getAncestors(i.video);
 let fpt=anc[anc.length-1];
-
 fpt.insertAdjacentElement('beforebegin', i.sdivs);
-/*i.ances.fpt;
-}*/
 }
 def_retCSS(i,true);
 }
@@ -388,6 +388,8 @@ calcSp(i);
 }else{
 i.video.playbackRate=1;
 }
+}else if(bffChk){
+	timeAhead(i,true);
 }
 }
 }
@@ -418,6 +420,8 @@ if(i.pg==2 && parseFloat(i.perSec)>vN && i.video.playbackRate==vN){
 if(i.video.readyState>2){
 	calcSp(i);
 }
+}else if(bffChk){
+	timeAhead(i,true);
 }else{
 	i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 }
@@ -436,7 +440,8 @@ i.nxtHi=0;
 i.nxtHi_cnt=0;
 i.nxtHi_sp=0;
 	calcSp(i);
-
+}else if(bffChk){
+	timeAhead(i,true);
 }
 }
 
@@ -503,12 +508,22 @@ function restore_options()
 	}else{
 	chrome.storage.sync.get(null, function(items)
 	{
-		if (Object.keys(items).length !== 0)
+		if (Object.keys(items).length != 0)
 		{
 			//console.log(items);
 			dfSpd = items.defSpd;
 			dfStp = items.defStp;
-			mbMde = items.mob;
+			if(items.mbIdx==0){
+				mbMde=false;
+				mbMdeFs=false;
+			}else if(items.mbIdx==1){
+				mbMde=true;
+				mbMdeFs=true;
+			}else if(items.mbIdx==2){
+				mbMde=false;
+				mbMdeFs=true;
+			}
+			bffChk = items.buffd;
 			checker();
 		}
 		else
@@ -527,7 +542,8 @@ function save_options()
 	{
 		defSpd: 2.2,
 		defStp: 0.1,
-		mob: false,
+		buffd: true,
+		mbIdx: 0
 	}, function()
 	{
 		console.log('Default options saved.');
@@ -640,6 +656,9 @@ document.addEventListener('webkitfullscreenchange',() => fsc_hdl(obj));
 vid.addEventListener('pointermove',pointermove_hdl);
 vid.addEventListener('seeked',seeked_hdl);
 vid.addEventListener('seeking',seeking_hdl);
+vid.addEventListener('play',play_hdl);
+vid.addEventListener('progress',progress_hdl);
+vid.addEventListener('waiting',waiting_hdl);
 }
 
 function btclk(i) {
@@ -648,9 +667,6 @@ function btclk(i) {
 			event.stopPropagation();
 			if(i.ff==-1){
 			chgFlgs(i,true);
-			i.video.addEventListener('play',play_hdl);
-			i.video.addEventListener('progress',progress_hdl);
-			i.video.addEventListener('waiting',waiting_hdl);
 			i.butn.setAttribute("grn_synced", true);
 			let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 			i.video.playbackRate=vN;
