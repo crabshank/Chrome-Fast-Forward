@@ -577,7 +577,6 @@ let clse = document.createElement("input");
 clse.type = "number";
 butn.setAttribute("grn_synced", false);	
 butn.innerText = vid.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x"
-butn.className = "sync_butn";
 
 let anc=getAncestors(vid);
 let fpt=anc[anc.length-1];
@@ -592,7 +591,6 @@ clse.max=16;
 clse.step=dfStp;
 
 clse.title="Maximum speed when fast forwarding; scroll to change.";
-clse.className = "sync_butn";
 
 sdivs.appendChild(butn);
 sdivs.appendChild(clse);
