@@ -8,6 +8,7 @@ var dfStp=0.1;
 var mbMde=false;
 var mbMdeFs=false;
 var bffChk=true;
+var sks=10;
 
 function unDef(v,d,r){
 	if(typeof r==='undefined'){
@@ -111,12 +112,22 @@ bdkCol=(i.butn.getAttribute("grn_synced")=="true")?"#007500":"buttonface";
 txCol=(i.butn.getAttribute("grn_synced")=="true")?"white":"black";
 bdkCol2=(i.butn.getAttribute("grn_synced")=="true")?"#00750080":"#f0f0f080";
 
-i.butn.style.cssText = "min-width: 75px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important; text-align-last: right !important; color: "+txCol+" !important";
-i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !important; line-height: 2ch !important; padding: 2px 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: #f00000 !important; webkit-text-fill-color: #ececec !important;  border-width: 0px !important; border-style: outset !important; border-color: #f00000 !important; color: white !important";
+bdkCol_1="buttonface";
+txCol_1="black";
+bdkCol2_1="#f0f0f080";
+
+let bfStyle="min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol_1+" !important; border-color: "+bdkCol_1+" !important; text-align-last: center !important; color: "+txCol_1+" !important;";
+i.skb.style.cssText=bfStyle;
+i.skf.style.cssText=bfStyle;
+i.butn.style.cssText = "min-width: 75px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important; text-align-last: right !important; color: "+txCol+" !important;";
+i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !important; line-height: 2ch !important; padding: 2px 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: #f00000 !important; webkit-text-fill-color: #ececec !important;  border-width: 0px !important; border-style: outset !important; border-color: #f00000 !important; color: white !important;";
 clearTimeout(i.timer2);
 i.timer2 = setTimeout(function(){
 	if(!i.entered){
 		if(mbMde || (mbMdeFs && !(document.fullscreen || document.webkitIsFullScreen))){
+			let bfStyle2="min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2_1+" !important; border-color: #00000000 !important; text-align-last: center !important; "+txCol_1+" !important";
+i.skb.style.cssText=bfStyle2;
+i.skf.style.cssText=bfStyle2;
 i.butn.style.cssText = "min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; text-align-last: right !important; "+txCol+" !important";
 i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !important; line-height: 2ch !important; padding: 2px 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; color: white !important";
 		}else{
@@ -489,13 +500,19 @@ function cl_whl(evt,i) {
 function cl_clk(i) {
 //event.preventDefault();
 event.stopPropagation();
-if(event.target!==i.clse && event.target!==i.butn && event.target!==i.sdivs){
+if(event.target!==i.skb && event.target!==i.skf &&event.target!==i.clse && event.target!==i.butn && event.target!==i.sdivs){
 	let rectC=i.clse.getBoundingClientRect();
 	let rectB=i.butn.getBoundingClientRect();
+	let rectK=i.skb.getBoundingClientRect();
+	let rectF=i.skf.getBoundingClientRect();
 	if(event.pageX >= rectC.left && event.pageX <= rectC.right && event.pageY >= rectC.top && event.pageY <= rectC.bottom){
 		i.clse.focus();
 	}else if(event.pageX >= rectB.left && event.pageX <= rectB.right && event.pageY >= rectB.top && event.pageY <= rectB.bottom){
 		i.butn.click();
+	}else if(event.pageX >= rectK.left && event.pageX <= rectK.right && event.pageY >= rectK.top && event.pageY <= rectK.bottom){
+		i.skb.click();
+	}else if(event.pageX >= rectF.left && event.pageX <= rectF.right && event.pageY >= rectF.top && event.pageY <= rectF.bottom){
+		i.skf.click();
 	}
 	i.ignClk=true;
 }else if(i.ignClk){
@@ -535,6 +552,8 @@ function restore_options()
 			}
 			
 		bffChk=unDef(items.buffd,true);
+		sks=unDef(items.skamnt,10,parseFloat(items.skamnt));
+		
 			checker();
 		}
 		else
@@ -555,7 +574,8 @@ function save_options()
 		defSpd: "2.2",
 		defStp: "0.1",
 		buffd: true,
-		mbIdx: 0
+		mbIdx: 0,
+		skamnt: "10",
 	}, function()
 	{
 		console.log('Default options saved.');
@@ -571,17 +591,16 @@ var obj={};
 
 obj.video=vid;
 obj.ff=-1;
+let skb = document.createElement("button");
+let skf = document.createElement("button");
 let butn = document.createElement("button");
 let sdivs = document.createElement("div");
 let clse = document.createElement("input");
 clse.type = "number";
 butn.setAttribute("grn_synced", false);	
-butn.innerText = vid.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x"
-
-let anc=getAncestors(vid);
-let fpt=anc[anc.length-1];
-
-fpt.insertAdjacentElement('beforebegin', sdivs);
+skb.innerHTML='-'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 	
+skf.innerHTML='+'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 	
+butn.innerText = vid.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 
 //obj.ances=fpt;
 
@@ -592,13 +611,23 @@ clse.step=dfStp;
 
 clse.title="Maximum speed when fast forwarding; scroll to change.";
 
+sdivs.appendChild(skb);
+sdivs.appendChild(skf);
 sdivs.appendChild(butn);
 sdivs.appendChild(clse);
 
-butn.setAttribute('lddAhd',0);
+let anc=getAncestors(vid);
+let fpt=anc[anc.length-1];
+
+fpt.insertAdjacentElement('beforebegin', sdivs);
+
+obj.skb=skb;
+obj.skf=skf;
 obj.butn=butn;
 obj.clse=clse;
 obj.sdivs=sdivs;
+
+butn.setAttribute('lddAhd',0);
 
 obj.pg_e=0;
 obj.wt_e=0;
@@ -644,6 +673,8 @@ document.addEventListener("scroll", (event) => {
 	}
 }, false);
 
+skb.addEventListener("click", sk_bk(obj));	
+skf.addEventListener("click", sk_fw(obj));	
 butn.addEventListener("click", btclk(obj));	
 sdivs.addEventListener('wheel',(evt) => cl_whl(evt,obj));
 vid.addEventListener('ratechange',ratechange_hdl);
@@ -698,6 +729,21 @@ function btclk(i) {
 			}
 			def_retCSS(i,false);
 		};
+}
+
+function sk_bk(i){
+			return function() {
+	i.video.currentTime=Math.max(0,i.video.currentTime-sks);
+			};
+}
+function sk_fw(i){
+	return function() {
+	if(isFinite(i.video.duration)){
+		i.video.currentTime=Math.min(i.video.duration,i.video.currentTime+sks);
+	}else{
+		i.video.currentTime+=sks;
+	}
+	};
 }
 
 function checker(){

@@ -3,6 +3,7 @@
  var spd=document.getElementById('mxsp');
  var stp=document.getElementById('mxst');
 var visib=document.getElementById('vsb');
+var seeka=document.getElementById('ska');
 
 function unDef(v,d,r){
 	if(typeof r==='undefined'){
@@ -15,13 +16,15 @@ function unDef(v,d,r){
 var saver =function(){
 	 	spd.value=(spd.valueAsNumber>=1 && spd.valueAsNumber<=16)?spd.value:"2.2";
 		stp.value=(stp.valueAsNumber>=0.01 && stp.valueAsNumber<=15)?stp.value:"0.1";
+		seeka.value=(stp.valueAsNumber>=0)?seeka.value:"10";
 			chrome.storage.sync.clear(function() {
 		chrome.storage.sync.set(
 		{
 			defSpd: spd.value,
 			defStp: stp.value,
 			mbIdx: visib.selectedIndex,
-			buffd: bfd.checked
+			buffd: bfd.checked,
+			skamnt: seeka.value,
 		}, function()
 		{
 			let status = document.getElementById('stats');
@@ -48,6 +51,7 @@ function restore_options()
 			stp.value = unDef(items.defStp,"0.1");
 			visib.selectedIndex = unDef(items.mbIdx,0);
 			bfd.checked= unDef(items.buffd,true);
+			seeka.value= unDef(items.skamnt,"10");
 			svbt.onclick = () => saver();
 		}
 		else
@@ -68,7 +72,8 @@ function save_options()
 		defSpd: "2.2",
 		defStp: "0.1",
 		mbIdx: 0,
-		buffd: true
+		buffd: true,
+		skamnt: "10",
 	}, function(){});
 		});
 }
