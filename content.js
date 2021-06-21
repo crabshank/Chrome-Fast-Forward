@@ -125,7 +125,7 @@ clearTimeout(i.timer2);
 i.timer2 = setTimeout(function(){
 	if(!i.entered){
 		if(mbMde || (mbMdeFs && !(document.fullscreen || document.webkitIsFullScreen))){
-			let bfStyle2="min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2_1+" !important; border-color: #00000000 !important; text-align-last: center !important; "+txCol_1+" !important";
+			let bfStyle2="min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2_1+" !important; border-color: #00000000 !important; text-align-last: center !important; "+txCol_1+" !important";
 i.skb.style.cssText=bfStyle2;
 i.skf.style.cssText=bfStyle2;
 i.butn.style.cssText = "min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; text-align-last: right !important; "+txCol+" !important";
