@@ -398,6 +398,9 @@ def_retCSS(i,true);
 function seeked_hdl(event) {
 let i=findInst(event.target);
 if(!!i){
+i.cmu_sk=0;
+i.skb.innerHTML='-'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 	
+i.skf.innerHTML='+'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 
 i.entered=false;
 def_retCSS(i,false);
 if(i.skd_e==1){
@@ -626,7 +629,7 @@ obj.skf=skf;
 obj.butn=butn;
 obj.clse=clse;
 obj.sdivs=sdivs;
-
+obj.cmu_sk=0;
 butn.setAttribute('lddAhd',0);
 
 obj.pg_e=0;
@@ -734,6 +737,17 @@ function btclk(i) {
 function sk_bk(i){
 			return function() {
 	i.video.currentTime=Math.max(0,i.video.currentTime-sks);
+	i.cmu_sk-=sks;
+	if(i.cmu_sk<-1*sks){
+		i.skf.innerHTML='+'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 
+	i.skb.innerHTML=i.cmu_sk.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 
+	}else if(i.cmu_sk>sks){
+	i.skb.innerHTML='-'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 
+	i.skf.innerHTML='+'+i.cmu_sk.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 
+	}else{
+		i.skb.innerHTML='-'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 	
+i.skf.innerHTML='+'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 
+}
 			};
 }
 function sk_fw(i){
@@ -743,6 +757,17 @@ function sk_fw(i){
 	}else{
 		i.video.currentTime+=sks;
 	}
+	i.cmu_sk+=sks;
+	if(i.cmu_sk>sks){
+	i.skb.innerHTML='-'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 
+	i.skf.innerHTML='+'+i.cmu_sk.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 
+	}else if(i.cmu_sk<-1*sks){
+		i.skf.innerHTML='+'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 
+	i.skb.innerHTML=i.cmu_sk.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 
+	}else{
+		i.skb.innerHTML='-'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 	
+i.skf.innerHTML='+'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 
+}
 	};
 }
 
