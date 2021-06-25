@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Fast forward",
   "options_page":  "options.html",
-  "version": "2.71",
+  "version": "2.72",
   "content_scripts": [
     {
 	      "all_frames": true,

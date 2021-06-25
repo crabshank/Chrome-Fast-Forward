@@ -814,6 +814,8 @@ function checker(){
 					finally{
 					elRemover(inst.butn);
 					elRemover(inst.clse);
+					elRemover(inst.skf);
+					elRemover(inst.skb);
 					elRemover(inst.sdivs);
 					global.instances=removeEls(inst,global.instances);
 					}
