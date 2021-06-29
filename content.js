@@ -37,6 +37,7 @@ function findIndexTotalInsens(string, substring, index) {
 
 function blacklistMatch(array, t) {
     var found = false;
+	var blSite='';
     if (!((array.length == 1 && array[0] == "") || (array.length == 0))) {
         ts = t.toLocaleLowerCase();
         for (var i = 0; i < array.length; i++) {
@@ -70,11 +71,12 @@ function blacklistMatch(array, t) {
                 }
 
             }
+            blSite = (found) ? array[i] : blSite;
             i = (found) ? array.length - 1 : i;
         }
     }
     //console.log(found);
-    return found;
+    return [found,blSite];
 
 }
 
@@ -631,7 +633,8 @@ function restore_options()
 		bffChk=unDef(items.buffd,true);
 		sks=unDef(items.skamnt,10,parseFloat(items.skamnt));
 		blacklist=unDef(items.bList.split('\n').join('').split(','),"");
-			if(!isCurrentSiteBlacklisted()){
+		var isBl=isCurrentSiteBlacklisted();
+			if(!isBl[0]){
 			checker();
 			
 		if(typeof observer ==="undefined" && typeof timer ==="undefined"){
@@ -658,7 +661,7 @@ function restore_options()
 	}
 
 			}else{
-				console.warn('Current site is blacklisted from speed controller.');
+				console.warn('Current site is blacklisted from speed controller ("'+isBl[1]+'")' );
 			}
 		}
 		else
