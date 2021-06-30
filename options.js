@@ -117,6 +117,8 @@ function restore_options()
 			bfd.checked= unDef(items.buffd,true);
 			seeka.value= unDef(items.skamnt,"10");
 			blklst.value= unDef(items.bList,"");
+blklst.style.height = 'inherit';
+blklst.style.height = (blklst.scrollHeight+7)+"px";
 			svbt.onclick = () => saver();
 		}
 		else
