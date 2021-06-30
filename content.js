@@ -85,15 +85,6 @@ var isCurrentSiteBlacklisted = function()
 		return blacklistMatch(blacklist, window.location.href);
 };
 
-
-function unDef(v,d,r){
-	if(typeof r==='undefined'){
-		return (typeof v !=='undefined')?v:d;
-	}else{
-		return (typeof v !=='undefined')?r:d;
-	}
-}
-
 var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; flex-direction: row !important;";
 
 	function bf_s_hmmss(s)
@@ -616,8 +607,15 @@ function restore_options()
 		{
 			//console.log(items);
 			
-			dfSpd =unDef(items.defSpd,2.2,parseFloat(items.defSpd));
-			dfStp =unDef(items.defStp,0.1,parseFloat(items.defStp));
+
+		if(!!items.defSpd && typeof  items.defSpd!=='undefined'){
+			dfSpd=parseFloat(items.defSpd);
+		}
+			
+
+		if(!!items.defStp && typeof  items.defStp!=='undefined'){
+			dfStp=parseFloat(items.defStp);
+		}
 			
 			if(items.mbIdx==0 || typeof items.mbIdx ==='undefined'){
 				mbMde=false;
@@ -630,9 +628,18 @@ function restore_options()
 				mbMdeFs=true;
 			}
 			
-		bffChk=unDef(items.buffd,true);
-		sks=unDef(items.skamnt,10,parseFloat(items.skamnt));
-		blacklist=unDef(items.bList.split('\n').join('').split(','),"");
+		if(!!items.buffd && typeof  items.buffd!=='undefined'){
+			bffChk=items.buffd;
+		}	
+		
+		if(!!items.skamnt && typeof  items.skamnt!=='undefined'){
+			sks=parseFloat(items.skamnt);
+		}
+		
+		if(!!items.bList && typeof  items.bList!=='undefined'){
+			blacklist=items.bList.split('\n').join('').split(',');
+		}
+		
 		var isBl=isCurrentSiteBlacklisted();
 			if(!isBl[0]){
 			checker();
