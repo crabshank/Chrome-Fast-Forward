@@ -289,9 +289,12 @@ function calcSp(i,noAdj){
 			
 			if(lastPart){
 					i.ldd='END';
+					if(!noAdj){
 					let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 						i.video.playbackRate=vN;		
+					}
 						i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x  [Buffered: "+i.ldd+"]";
+					
 			}else{
 					var tot=0;
 					if(rgs.length>0){
