@@ -82,7 +82,6 @@ var saver =function(){
 			defSpd: spd.value,
 			defStp: stp.value,
 			mbIdx: visib.selectedIndex,
-			buffd: bfd.checked,
 			skamnt: seeka.value,
 			bList: blklst.value
 		}, function()
@@ -114,7 +113,6 @@ function restore_options()
 			spd.value = unDef(items.defSpd,"2.2");
 			stp.value = unDef(items.defStp,"0.1");
 			visib.selectedIndex = unDef(items.mbIdx,0);
-			bfd.checked= unDef(items.buffd,true);
 			seeka.value= unDef(items.skamnt,"10");
 			blklst.value= unDef(items.bList,"");
 blklst.style.height = 'inherit';
@@ -139,7 +137,6 @@ function save_options()
 		defSpd: "2.2",
 		defStp: "0.1",
 		mbIdx: 0,
-		buffd: true,
 		skamnt: "10",
 		bList: ""
 	}, function(){});
