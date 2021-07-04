@@ -775,6 +775,7 @@ function btclk(i) {
 			i.butn.innerText="1x";
 			i.butn.setAttribute("grn_synced", false);	
 			i.ff=0;
+			i.lddArr=[];
 			}
 			def_retCSS(i,false);
 		};
