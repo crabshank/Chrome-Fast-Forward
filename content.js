@@ -10,11 +10,6 @@ var mbMdeFs=false;
 var sks=10;
 var blacklist='';
 
-function median(arr){
-	 arr = arr.sort((a, b) => a - b);
-    return (arr[arr.length - 1 >> 1] + arr[arr.length >> 1]) / 2;
-}
-
 function removeEls(d, array){
 	var newArray = [];
 	for (let i = 0; i < array.length; i++)
@@ -315,16 +310,19 @@ function calcSp(i,noAdj){
 					
 					if(!noAdj){
 						lddRaw=(i.video.playbackRate==0)?tot:tot/i.video.playbackRate;
+						let prev_mx=(i.lddArr.length==0)?lddRaw:Math.max(...i.lddArr);
 						i.lddArr.push(lddRaw);
-						let mdian=median(i.lddArr);
-						while(i.lddArr.length>19){ //keep last 19 buffered times and the median so far
-							i.lddArr.shift();
-						}
-							i.lddArr.unshift(mdian);
-
 						let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
-						let outSp=(mdian==0)?1:Math.floor(100*(tot/mdian))*0.01;
-						outSp=Math.max(1,Math.min(outSp,vN));		
+						let outSp=vN;
+						if(lddRaw>prev_mx){
+							i.lddArr=[];
+						}else{
+								//let mx=Math.max(...i.lddArr);
+								let mn=Math.min(...i.lddArr);
+								let rng=prev_mx-mn;
+								let rng_norm=(prev_mx==0)?1:rng/prev_mx;
+								let outSp=Math.floor(100*((1-rng_norm)*vN+rng_norm))*0.01;	
+					}
 						if(outSp==i.video.playbackRate){
 							lddRaw=(i.video.playbackRate==0)?tot:tot/i.video.playbackRate;
 							i.ldd=bf_s_hmmss(lddRaw);
@@ -332,7 +330,8 @@ function calcSp(i,noAdj){
 						}else{
 							lddRaw=tot/outSp;
 							i.ldd=bf_s_hmmss(lddRaw);
-							i.video.playbackRate=outSp;		
+							i.video.playbackRate=outSp;
+							i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x  [Buffered: "+i.ldd+"]";
 						}
 					}else{
 					lddRaw=(i.video.playbackRate==0)?tot:tot/i.video.playbackRate;
@@ -455,13 +454,13 @@ let i=findInst(event.target);
 if(!!i){
 if(i.rc_e==1){
 let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
-i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x  [Buffered: "+i.ldd+"]";
+i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 if(i.video.readyState>2){
 	calcSp(i,false);
 }
 }else{
 	calcSp(i,true);
-	i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x  [Buffered: "+i.ldd+"]";
+	i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 }
 }
 }
