@@ -314,7 +314,9 @@ function calcSp(i,noAdj){
 						i.lddArr.push(lddRaw);
 						let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 						let outSp=vN;
-						if(lddRaw>prev_mx){
+						if(tot<=1){
+						 outSp=1;
+						}else if(lddRaw>prev_mx){
 							i.lddArr=[];
 						}else{
 								//let mx=Math.max(...i.lddArr);
