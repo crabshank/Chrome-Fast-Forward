@@ -321,7 +321,7 @@ function calcSp(i,noAdj){
 								let mn=Math.min(...i.lddArr);
 								let rng=prev_mx-mn;
 								let rng_norm=(prev_mx==0)?1:rng/prev_mx;
-								let outSp=Math.floor(100*((1-rng_norm)*vN+rng_norm))*0.01;	
+								let outSp=Math.min(Math.floor(100*((1-rng_norm)*vN+rng_norm))*0.01,Math.min(vN,Math.max(tot,1)));
 					}
 						if(outSp==i.video.playbackRate){
 							lddRaw=(i.video.playbackRate==0)?tot:tot/i.video.playbackRate;
