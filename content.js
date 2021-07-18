@@ -315,7 +315,7 @@ function calcSp(i,noAdj){
 						let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 						let outSp=vN;
 						if(lddRaw<=1){
-						 outSp=Math.min(vN,Math.max(tot,1));
+						 outSp=Math.min(vN,Math.max(Math.floor(100*tot)*0.01,1));
 						}else if(lddRaw>prev_mx){
 							i.lddArr=[];
 						}else{
@@ -323,7 +323,7 @@ function calcSp(i,noAdj){
 								let mn=Math.min(...i.lddArr);
 								let rng=prev_mx-mn;
 								let rng_norm=(prev_mx==0)?1:rng/prev_mx;
-								let outSp=Math.min(Math.floor(100*((1-rng_norm)*vN+rng_norm))*0.01,Math.min(vN,Math.max(tot,1)));
+								let outSp=Math.min(Math.floor(100*((1-rng_norm)*vN+rng_norm))*0.01,Math.min(vN,Math.max(Math.floor(100*tot)*0.01,1)));
 					}
 						if(outSp==i.video.playbackRate){
 							lddRaw=(i.video.playbackRate==0)?tot:tot/i.video.playbackRate;
