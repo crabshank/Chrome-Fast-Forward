@@ -659,7 +659,7 @@ butn.innerText = vid.playbackRate.toLocaleString('en-GB', {minimumFractionDigits
 
 //obj.ances=fpt;
 
-clse.value =dfSpd;
+clse.value =dfSpd.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping:false});
 clse.min=1;
 clse.max=16;
 clse.step=dfStp;
