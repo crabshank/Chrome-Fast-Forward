@@ -322,7 +322,7 @@ function calcSp(i,noAdj){
 								//let mx=Math.max(...i.lddArr);
 								let mn=Math.min(...i.lddArr);
 								let rng=prev_mx-mn;
-								let rng_norm=(prev_mx==0)?1:rng/prev_mx;
+								let rng_norm=(prev_mx==0)?1:Math.sqrt(rng/prev_mx);
 								let outSp=Math.min(Math.floor(100*((1-rng_norm)*vN+rng_norm))*0.01,Math.min(vN,Math.max(Math.floor(100*tot)*0.01,1)));
 					}
 						if(outSp==i.video.playbackRate){
