@@ -308,22 +308,26 @@ function calcSp(i,noAdj){
 					}
 		
 					
-					if(!noAdj){
+
 						lddRaw=(i.video.playbackRate==0)?tot:tot/i.video.playbackRate;
+					if(!noAdj && ( (!i.video.paused) ||  (i.video.paused && lddRaw<2))){
 						let prev_mx=(i.lddArr.length==0)?lddRaw:Math.max(...i.lddArr);
 						i.lddArr.push(lddRaw);
 						let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 						let outSp=vN;
-						if(lddRaw<=1){
-						 outSp=Math.min(vN,Math.max(Math.floor(100*tot)*0.01,1));
-						}else if(lddRaw>prev_mx){
-							i.lddArr=[];
-						}else{
-								//let mx=Math.max(...i.lddArr);
-								let mn=Math.min(...i.lddArr);
-								let rng=prev_mx-mn;
-								let rng_norm=(prev_mx==0)?1:Math.sqrt(rng/prev_mx);
-								let outSp=Math.min(Math.floor(100*((1-rng_norm)*vN+rng_norm))*0.01,Math.min(vN,Math.max(Math.floor(100*tot)*0.01,1)));
+						if(lddRaw!=2){
+							//50*tot=(1/2)*100*tot ; for >= 2 real secs loaded
+							if(lddRaw<2){
+							 outSp=Math.min(vN,Math.max(Math.floor(50*tot)*0.01,1));
+							}else if(lddRaw>prev_mx){
+								i.lddArr=[];
+							}else{
+									//let mx=Math.max(...i.lddArr);
+									let mn=Math.min(...i.lddArr);
+									let rng=prev_mx-mn;
+									let rng_norm=(prev_mx==0)?1:Math.sqrt(rng/prev_mx);
+									let outSp=Math.min(Math.floor(100*((1-rng_norm)*vN+rng_norm))*0.01,Math.min(vN,Math.max(Math.floor(50*tot)*0.01,1)));
+						}
 					}
 						if(outSp==i.video.playbackRate){
 							lddRaw=(i.video.playbackRate==0)?tot:tot/i.video.playbackRate;
