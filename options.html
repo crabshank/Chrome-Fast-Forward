@@ -44,6 +44,12 @@ Default step: <input type="number" id="mxst" min="0.01" max="15" step="0.01" val
   <option>Always visible when not fullscreen, auto-disappears when fullscreen</option>
 </select><br>
 Seconds to seek (buttons): <input type="number" id="ska" min="0" step="1" value="10" style="width: 9ch;"></input><br>
+% to seek (buttons): <input type="number" id="skp" min="0" step="1" value="4" style="width: 9ch;"></input><br>
+<label for="sorp">Seeking preference:</label>
+<select id="sorp">
+  <option>Prefer seconds</option>
+  <option>Prefer %</option>
+</select><br>
 <span>Blacklisted Sites (enter domain names separated by commas; use asterisks with slashes):</span><br>
 <textarea id="blacklist"></textarea><br>
 <div id="stats"></div>

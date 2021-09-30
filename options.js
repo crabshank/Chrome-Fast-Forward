@@ -4,6 +4,8 @@
  var stp=document.getElementById('mxst');
 var visib=document.getElementById('vsb');
 var seeka=document.getElementById('ska');
+var seekp=document.getElementById('skp');
+var scorpr=document.getElementById('sorp');
 var blklst=document.getElementById('blacklist');
 
 blklst.oninput=function () {
@@ -34,7 +36,8 @@ function unDef(v,d,r){
 var saver =function(){
 	 	spd.value=(spd.valueAsNumber>=1 && spd.valueAsNumber<=16)?spd.value:"2.2";
 		stp.value=(stp.valueAsNumber>=0.01 && stp.valueAsNumber<=15)?stp.value:"0.1";
-		seeka.value=(stp.valueAsNumber>=0)?seeka.value:"10";
+		seeka.value=(seeka.valueAsNumber>=0)?seeka.value:"10";
+		seekp.value=(seekp.valueAsNumber>=0)?seekp.value:"4";
 		
 	let lstChk = blklst.value.split(',');
 	let validate = true;
@@ -83,6 +86,8 @@ var saver =function(){
 			defStp: stp.value,
 			mbIdx: visib.selectedIndex,
 			skamnt: seeka.value,
+			skamntpc: seekp.value,
+			secprc: scorpr.selectedIndex,
 			bList: blklst.value
 		}, function()
 		{
@@ -114,6 +119,8 @@ function restore_options()
 			stp.value = unDef(items.defStp,"0.1");
 			visib.selectedIndex = unDef(items.mbIdx,0);
 			seeka.value= unDef(items.skamnt,"10");
+			seekp.value= unDef(items.skamntpc,"4");
+			scorpr.selectedIndex = unDef(items.secprc,0);
 			blklst.value= unDef(items.bList,"");
 blklst.style.height = 'inherit';
 blklst.style.height = (blklst.scrollHeight+7)+"px";
@@ -138,6 +145,8 @@ function save_options()
 		defStp: "0.1",
 		mbIdx: 0,
 		skamnt: "10",
+		skamntpc: "4",
+		secprc: 0,
 		bList: ""
 	}, function(){});
 		});
