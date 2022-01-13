@@ -10,6 +10,7 @@ var mbMdeFs=false;
 var sks=10;
 var skp=4;
 var blacklist='';
+var sk_buff=false;
 var prefPerc=false;
 
 function removeEls(d, array){
@@ -185,8 +186,17 @@ txCol_1="black";
 bdkCol2_1="#f0f0f080";
 
 let bfStyle="min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol_1+" !important; border-color: "+bdkCol_1+" !important; text-align-last: center !important; color: "+txCol_1+" !important;";
+
 i.skb.style.cssText=bfStyle;
 i.skf.style.cssText=bfStyle;
+
+i.skb_l.style.cssText=bfStyle;
+i.skf_l.style.cssText=bfStyle;
+if(!sk_buff){
+	i.skb_l.style.setProperty('display', 'none','important');
+	i.skf_l.style.setProperty('display', 'none','important');
+}
+
 i.butn.style.cssText = "min-width: 75px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important; text-align-last: right !important; color: "+txCol+" !important;";
 i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !important; line-height: 2ch !important; padding: 2px 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: #f00000 !important; webkit-text-fill-color: #ececec !important;  border-width: 0px !important; border-style: outset !important; border-color: #f00000 !important; color: white !important;";
 clearTimeout(i.timer2);
@@ -194,8 +204,10 @@ i.timer2 = setTimeout(function(){
 	if(!i.entered){
 		if(mbMde || (mbMdeFs && !(document.fullscreen || document.webkitIsFullScreen))){
 			let bfStyle2="min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2_1+" !important; border-color: #00000000 !important; text-align-last: center !important; color: "+txCol_1+" !important";
+i.skb_l.style.cssText=bfStyle2;
 i.skb.style.cssText=bfStyle2;
 i.skf.style.cssText=bfStyle2;
+i.skf_l.style.cssText=bfStyle2;
 i.butn.style.cssText = "min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; text-align-last: right !important; color: "+txCol+" !important";
 i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !important; line-height: 2ch !important; padding: 2px 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; color: white !important";
 		}else{
@@ -525,6 +537,8 @@ if(event.target!==i.skb && event.target!==i.skf &&event.target!==i.clse && event
 	let rectB=i.butn.getBoundingClientRect();
 	let rectK=i.skb.getBoundingClientRect();
 	let rectF=i.skf.getBoundingClientRect();
+	let rectKL=i.skb_l.getBoundingClientRect();
+	let rectFL=i.skf_l.getBoundingClientRect();
 	if(event.pageX >= rectC.left && event.pageX <= rectC.right && event.pageY >= rectC.top && event.pageY <= rectC.bottom){
 		i.clse.focus();
 	}else if(event.pageX >= rectB.left && event.pageX <= rectB.right && event.pageY >= rectB.top && event.pageY <= rectB.bottom){
@@ -533,6 +547,10 @@ if(event.target!==i.skb && event.target!==i.skf &&event.target!==i.clse && event
 		i.skb.click();
 	}else if(event.pageX >= rectF.left && event.pageX <= rectF.right && event.pageY >= rectF.top && event.pageY <= rectF.bottom){
 		i.skf.click();
+	}else if(event.pageX >= rectKL.left && event.pageX <= rectKL.right && event.pageY >= rectKL.top && event.pageY <= rectKL.bottom){
+		i.skb_l.click();
+	}else if(event.pageX >= rectFL.left && event.pageX <= rectFL.right && event.pageY >= rectFL.top && event.pageY <= rectFL.bottom){
+		i.skf_l.click();
 	}
 	i.ignClk=true;
 }else if(i.ignClk){
@@ -580,8 +598,11 @@ function restore_options()
 			
 			if(!(items.secprc==0 || typeof items.secprc ==='undefined')){
 				prefPerc=true;
-			}
+			}	
 
+			if(!!items.skbcbx && typeof items.skbcbx !=='undefined'){
+				sk_buff=items.skbcbx;
+			}
 
 		if(!!items.skamnt && typeof  items.skamnt!=='undefined'){
 			sks=parseFloat(items.skamnt);
@@ -663,17 +684,24 @@ var obj={};
 
 obj.video=vid;
 obj.ff=-1;
+
 let skb = document.createElement("button");
 let skf = document.createElement("button");
 let butn = document.createElement("button");
 let sdivs = document.createElement("div");
 let clse = document.createElement("input");
+let skb_l = document.createElement("button");
+let skf_l = document.createElement("button");
+
 clse.type = "number";
 butn.setAttribute("grn_synced", false);	
 skb.innerHTML=(prefPerc && isFinite(vid.duration))?'-'+skp.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'%':'-'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 	
 skf.innerHTML=(prefPerc && isFinite(vid.duration))?'+'+skp.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'%':'+'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 	
 butn.innerText = vid.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
-
+skb_l.innerHTML="↶";
+skb_l.title="Skip to start of previous buffered range";
+skf_l.innerHTML="↷";
+skf_l.title="Skip to start of next buffered range";
 //obj.ances=fpt;
 
 clse.value =dfSpd.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping:false});
@@ -687,14 +715,18 @@ sdivs.appendChild(skb);
 sdivs.appendChild(skf);
 sdivs.appendChild(butn);
 sdivs.appendChild(clse);
+sdivs.appendChild(skb_l);
+sdivs.appendChild(skf_l);
 
 let anc=getAncestors(vid);
 let fpt=anc[anc.length-1];
 
 fpt.insertAdjacentElement('beforebegin', sdivs);
 
+obj.skb_l=skb_l;
 obj.skb=skb;
 obj.skf=skf;
+obj.skf_l=skf_l;
 obj.butn=butn;
 obj.clse=clse;
 obj.sdivs=sdivs;
@@ -743,6 +775,8 @@ document.addEventListener("scroll", (event) => {
 skb.addEventListener("click", sk_bk(obj));	
 skf.addEventListener("click", sk_fw(obj));	
 butn.addEventListener("click", btclk(obj));	
+skb_l.addEventListener("click", sk_l_bk(obj));	
+skf_l.addEventListener("click", sk_l_fw(obj));	
 sdivs.addEventListener('wheel',(evt) => cl_whl(evt,obj));
 vid.addEventListener('ratechange',ratechange_hdl);
 
@@ -836,6 +870,7 @@ function sk_bk(i){
 
 			};
 }
+
 function sk_fw(i){
 	return function() {
 			if(prefPerc){
@@ -892,6 +927,88 @@ function sk_fw(i){
 			}
 
 	};
+}
+
+function sk_l_bk(i){
+	return function() {
+				let under_half=false;
+				
+				if(isFinite(i.video.duration)){
+					under_half=(i.video.currentTime<0.5*i.video.duration)?true:false;
+				}
+				
+				if(under_half){
+					let c_i=i.video.currentTime;
+					for (let k=0, len=i.video.buffered.length; k<len; k++){
+						let t_i=i.video.buffered.end(k);
+						let s_i=i.video.buffered.start(k);
+						
+							if(s_i<=c_i && t_i>= c_i){
+								if(k==0){
+									i.video.currentTime=s_i;
+								}else{
+										i.video.currentTime=i.video.buffered.start(k-1);
+								}
+								break;
+							}
+					}		
+				}else{
+						let c_i=i.video.currentTime;
+						for (let k=i.video.buffered.length-1; k>=0; k--){
+						let t_i=i.video.buffered.end(k);
+						let s_i=i.video.buffered.start(k);
+						
+							if(s_i<=c_i && t_i>= c_i){
+								if(k==0){
+									i.video.currentTime=s_i;
+								}else{
+										i.video.currentTime=i.video.buffered.start(k-1);
+								}
+								break;
+							}
+					}
+					
+				}
+	}
+}
+
+function sk_l_fw(i){
+	return function() {	
+	let under_half=false;
+				
+				if(isFinite(i.video.duration)){
+					under_half=(i.video.currentTime<0.5*i.video.duration)?true:false;
+				}
+				
+				if(under_half){
+					let c_i=i.video.currentTime;
+					for (let k=0, len=i.video.buffered.length; k<len; k++){
+						let t_i=i.video.buffered.end(k);
+						let s_i=i.video.buffered.start(k);
+						
+							if(s_i<=c_i && t_i>= c_i){
+								if(k<len-1){
+										i.video.currentTime=i.video.buffered.start(k+1);
+								}
+								break;
+							}
+					}		
+				}else{
+						let c_i=i.video.currentTime;
+						for (let len=i.video.buffered.length, k=len-1; k>=0; k--){
+						let t_i=i.video.buffered.end(k);
+						let s_i=i.video.buffered.start(k);
+						
+							if(s_i<=c_i && t_i>= c_i){
+								if(k<len-1){
+										i.video.currentTime=i.video.buffered.start(k+1);
+								}
+								break;
+							}
+					}
+					
+				}
+	}
 }
 
 function checker(){

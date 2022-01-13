@@ -6,6 +6,7 @@ var visib=document.getElementById('vsb');
 var seeka=document.getElementById('ska');
 var seekp=document.getElementById('skp');
 var scorpr=document.getElementById('sorp');
+var sk_buff_cbx=document.getElementById('sk_buff');
 var blklst=document.getElementById('blacklist');
 
 blklst.oninput=function () {
@@ -88,6 +89,7 @@ var saver =function(){
 			skamnt: seeka.value,
 			skamntpc: seekp.value,
 			secprc: scorpr.selectedIndex,
+			skbcbx: sk_buff_cbx.checked,
 			bList: blklst.value
 		}, function()
 		{
@@ -121,6 +123,7 @@ function restore_options()
 			seeka.value= unDef(items.skamnt,"10");
 			seekp.value= unDef(items.skamntpc,"4");
 			scorpr.selectedIndex = unDef(items.secprc,0);
+			sk_buff_cbx.checked = unDef(items.skbcbx,false);
 			blklst.value= unDef(items.bList,"");
 blklst.style.height = 'inherit';
 blklst.style.height = (blklst.scrollHeight+7)+"px";
@@ -147,6 +150,7 @@ function save_options()
 		skamnt: "10",
 		skamntpc: "4",
 		secprc: 0,
+		skbcbx: false,
 		bList: ""
 	}, function(){});
 		});
