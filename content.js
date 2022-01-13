@@ -208,6 +208,11 @@ i.skb_l.style.cssText=bfStyle2;
 i.skb.style.cssText=bfStyle2;
 i.skf.style.cssText=bfStyle2;
 i.skf_l.style.cssText=bfStyle2;
+if(!sk_buff){
+	i.skb_l.style.setProperty('display', 'none','important');
+	i.skf_l.style.setProperty('display', 'none','important');
+}
+
 i.butn.style.cssText = "min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; text-align-last: right !important; color: "+txCol+" !important";
 i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !important; line-height: 2ch !important; padding: 2px 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; color: white !important";
 		}else{
@@ -537,8 +542,7 @@ if(event.target!==i.skb && event.target!==i.skf &&event.target!==i.clse && event
 	let rectB=i.butn.getBoundingClientRect();
 	let rectK=i.skb.getBoundingClientRect();
 	let rectF=i.skf.getBoundingClientRect();
-	let rectKL=i.skb_l.getBoundingClientRect();
-	let rectFL=i.skf_l.getBoundingClientRect();
+
 	if(event.pageX >= rectC.left && event.pageX <= rectC.right && event.pageY >= rectC.top && event.pageY <= rectC.bottom){
 		i.clse.focus();
 	}else if(event.pageX >= rectB.left && event.pageX <= rectB.right && event.pageY >= rectB.top && event.pageY <= rectB.bottom){
@@ -547,11 +551,16 @@ if(event.target!==i.skb && event.target!==i.skf &&event.target!==i.clse && event
 		i.skb.click();
 	}else if(event.pageX >= rectF.left && event.pageX <= rectF.right && event.pageY >= rectF.top && event.pageY <= rectF.bottom){
 		i.skf.click();
-	}else if(event.pageX >= rectKL.left && event.pageX <= rectKL.right && event.pageY >= rectKL.top && event.pageY <= rectKL.bottom){
-		i.skb_l.click();
-	}else if(event.pageX >= rectFL.left && event.pageX <= rectFL.right && event.pageY >= rectFL.top && event.pageY <= rectFL.bottom){
-		i.skf_l.click();
+	}else if(sk_buff){
+		let rectKL=i.skb_l.getBoundingClientRect();
+		let rectFL=i.skf_l.getBoundingClientRect();
+		if(event.pageX >= rectKL.left && event.pageX <= rectKL.right && event.pageY >= rectKL.top && event.pageY <= rectKL.bottom){
+			i.skb_l.click();
+		}else if(event.pageX >= rectFL.left && event.pageX <= rectFL.right && event.pageY >= rectFL.top && event.pageY <= rectFL.bottom){
+			i.skf_l.click();
+		}
 	}
+	
 	i.ignClk=true;
 }else if(i.ignClk){
 	i.ignClk=false;
