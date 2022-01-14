@@ -185,16 +185,21 @@ bdkCol_1="buttonface";
 txCol_1="black";
 bdkCol2_1="#f0f0f080";
 
-let bfStyle="min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol_1+" !important; border-color: "+bdkCol_1+" !important; text-align-last: center !important; color: "+txCol_1+" !important;";
+let bfStyle="min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol_1+" !important; border-color: "+bdkCol_1+" !important; text-align-last: center !important; color: "+txCol_1+" !important;";
 
-i.skb.style.cssText=bfStyle;
-i.skf.style.cssText=bfStyle;
+let ds_i=" display: initial !important;";
+let ds_n=" display: none !important;";
 
-i.skb_l.style.cssText=bfStyle;
-i.skf_l.style.cssText=bfStyle;
+i.skb.style.cssText=bfStyle+ds_i;
+i.skf.style.cssText=bfStyle+ds_i;
+
+
 if(!sk_buff){
-	i.skb_l.style.setProperty('display', 'none','important');
-	i.skf_l.style.setProperty('display', 'none','important');
+	i.skb_l.style.cssText=bfStyle+ds_n;
+	i.skf_l.style.cssText=bfStyle+ds_n;
+}else{
+	i.skb_l.style.cssText=bfStyle+ds_i;
+	i.skf_l.style.cssText=bfStyle+ds_i;
 }
 
 i.butn.style.cssText = "min-width: 75px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important; text-align-last: right !important; color: "+txCol+" !important;";
@@ -203,14 +208,17 @@ clearTimeout(i.timer2);
 i.timer2 = setTimeout(function(){
 	if(!i.entered){
 		if(mbMde || (mbMdeFs && !(document.fullscreen || document.webkitIsFullScreen))){
-			let bfStyle2="min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2_1+" !important; border-color: #00000000 !important; text-align-last: center !important; color: "+txCol_1+" !important";
-i.skb_l.style.cssText=bfStyle2;
-i.skb.style.cssText=bfStyle2;
-i.skf.style.cssText=bfStyle2;
-i.skf_l.style.cssText=bfStyle2;
+			let bfStyle2="min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2_1+" !important; border-color: #00000000 !important; text-align-last: center !important; color: "+txCol_1+" !important";
+
+i.skb.style.cssText=bfStyle2+ds_i;
+i.skf.style.cssText=bfStyle2+ds_i;
+
 if(!sk_buff){
-	i.skb_l.style.setProperty('display', 'none','important');
-	i.skf_l.style.setProperty('display', 'none','important');
+	i.skb_l.style.cssText=bfStyle2+ds_n;
+	i.skf_l.style.cssText=bfStyle2+ds_n;
+}else{
+	i.skb_l.style.cssText=bfStyle2+ds_i;
+	i.skf_l.style.cssText=bfStyle2+ds_i;
 }
 
 i.butn.style.cssText = "min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; text-align-last: right !important; color: "+txCol+" !important";
