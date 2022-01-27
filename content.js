@@ -1,4 +1,4 @@
-var global={instances:[]};
+var global={instances:[], monitored:[]};
 
 var bdkCol="buttonface";
 var txCol="black";
@@ -12,18 +12,6 @@ var skp=4;
 var blacklist='';
 var sk_buff=false;
 var prefPerc=false;
-
-function removeEls(d, array){
-	var newArray = [];
-	for (let i = 0; i < array.length; i++)
-	{
-		if (array[i] != d)
-		{
-			newArray.push(array[i]);
-		}
-	}
-	return newArray;
-}
 
 function findIndexTotalInsens(string, substring, index) {
     string = string.toLocaleLowerCase();
@@ -136,13 +124,14 @@ function getAncestors(el){
 	return ancestors;
 }
 
-function findInst(v){
-	for(let i=0; i<global.instances.length; i++){
-		if (global.instances[i].video===v){
-			return global.instances[i];
-		}
+function findInst(v, mon){
+	if(!mon){
+		let arrChk=global.instances.filter((i)=>{return i.video===v;});
+		return (arrChk.length>0)?arrChk[0]:null;
+	}else{
+		let arrChk=global.monitored.filter((m)=>{return m===v;});
+		return (arrChk.length>0)?arrChk[0]:null;
 	}
-	return null;
 }
 
 function positionBar(i,scrl){
@@ -263,24 +252,12 @@ function get_src(vid){
 }
 
 function checkInclude(arr,el){
-	let inside=false;
-	for (let i = arr.length-1; i >= 0; i--) {
-		if(arr[i]===el){
-			inside=true;
-			break;
-		}
-	}
-	return inside;
+	let arrChk=arr.filter((a)=>{return a===el});
+	return (arrChk.length>0)?true:false;
 }
 
 function removeEls(d, array) {
-    var newArray = [];
-    for (let i = 0; i < array.length; i++) {
-        if (array[i] != d) {
-            newArray.push(array[i]);
-        }
-    }
-    return newArray;
+    return array.filter((a)=>{return a!=d});
 }
 
 function elRemover(el){
@@ -379,9 +356,8 @@ function calcSp(i,noAdj){
 
 }
 
-
 function progress_hdl(event) {
-let i=findInst(event.target);
+let i=findInst(event.target,false);
 if(!!i){
 if(i.pg_e==1){
 if(i.video.readyState>2){
@@ -396,8 +372,17 @@ i.video.playbackRate=1;
 }
 }
 
+function progress_hdl_chk(event) {
+let i=findInst(event.target,true);
+if(!!i){
+if(i.readyState>2){
+checker();
+}
+}
+}
+
 function play_hdl(event) {
-let i=findInst(event.target);
+let i=findInst(event.target,false);
 if(!!i){
 def_retCSS(i,false);
 if(i.pl_e==1){
@@ -413,7 +398,7 @@ i.video.playbackRate=1;
 }
 
 function waiting_hdl(event) {
-let i=findInst(event.target);
+let i=findInst(event.target,false);
 if(!!i){
 if(i.wt_e==1){
 i.video.playbackRate=1;
@@ -428,7 +413,7 @@ def_retCSS(i,false);
 }
 
 function pointermove_hdl(event) {
-let i=findInst(event.target);
+let i=findInst(event.target,false);
 if(!!i){
 def_retCSS(i,false);
 }
@@ -452,7 +437,7 @@ def_retCSS(i,true);
 }
 
 function seeked_hdl(event) {
-let i=findInst(event.target);
+let i=findInst(event.target,false);
 if(!!i){
 i.cmu_sk=0;
 i.skb.innerHTML=(prefPerc && isFinite(i.video.duration))?'-'+skp.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'%':'-'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 	
@@ -472,7 +457,7 @@ i.video.playbackRate=1;
 }
 
 function seeking_hdl(event) {
-let i=findInst(event.target);
+let i=findInst(event.target,false);
 if(!!i){
 i.entered=true;
 def_retCSS(i,false);
@@ -483,7 +468,7 @@ i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDi
 }
 
 function ratechange_hdl(event) {
-let i=findInst(event.target);
+let i=findInst(event.target,false);
 if(!!i){
 if(i.rc_e==1){
 let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
@@ -1033,25 +1018,41 @@ function checker(){
 			...document.getElementsByTagName('video'),
 			...document.getElementsByTagName('audio')
 			];
-			
+
 			for (let j=0; j<DOMvids.length; j++){
-				let found=false;
+				let found=(global.monitored.includes(DOMvids[j]))?true:false;
+				let instVid=global.instances.map((i)=>{return i.video;});
 				
-				for (let k=0; k<global.instances.length; k++){
-					if(DOMvids[j]===global.instances[k].video){
-						k=global.instances.length-1;
-						found=true;
-					}
+				if(!found){
+					let found=(instVid.includes(DOMvids[j]))?true:false;
 				}
+		
+				if(!found){
+					global.monitored.push(DOMvids[j]);
+					DOMvids[j].addEventListener('progress',progress_hdl_chk);
+				}
+				
+				found=(instVid.includes(DOMvids[j]))?true:false;
 				
 				if(!found){
 					 if(eligVid(DOMvids[j])){
+						 if(global.monitored.includes(DOMvids[j])){
+							 DOMvids[j].removeEventListener('progress',progress_hdl_chk);
+							 global.monitored=removeEls(DOMvids[j],global.monitored);
+						 }
 						 creator(DOMvids[j]);
 					 }
 				}
 				
 			}
 			
+			for(let n=0; n<global.monitored.length; n++){
+				let vid=global.monitored[n];
+				if(!checkInclude(DOMvids,vid)){
+					global.monitored=removeEls(vid,global.monitored);
+				}
+			}
+
 			for(let n=0; n<global.instances.length; n++){
 				let inst=global.instances[n];
 				if(!checkInclude(DOMvids,inst.video) || !eligVid(inst.video)){
