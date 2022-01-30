@@ -92,7 +92,7 @@ var sDivsCSS="max-width: max-content !important; line-height: 0px !important; pa
 
 		var mins = Math.max(0,Math.floor((Math.ceil(s) - hours * 3600) / 60));
 
-		if ((hours > 0 && mins<10) || (z))
+		if ((hours > 0 && mins<10) || (z && mins<10))
 		{
 			mm = "0" + mins;
 		}
@@ -134,7 +134,7 @@ function findInst(v, mon){
 	}
 }
 
-function positionBar(i,scrl){
+function positionBar(i,scrl, showPrg){
 if(scrl){
 i.sdivs.style.cssText=sDivsCSS+'opacity: 0 !important;';
 }
@@ -165,12 +165,18 @@ sdrct=i.sdivs.getBoundingClientRect();
 i.cvs.style.setProperty('width',((sdrct.width>vrct.width)?sdrct.width:(vrct.right-sdrct.left))+'px','important');
 i.cvs.style.setProperty('height',(sdrct.height)+'px','important');
 i.cvs.style.setProperty('margin-top','1px','important');
-i.cvs.style.setProperty('display','initial','important');
+
+if(scrl || !showPrg){
+	 	i.cvs.style.setProperty('opacity',0,'important');
+}else{
+		i.cvs.style.setProperty('display','initial','important');
+		 i.cvs.style.setProperty('opacity',0.64,'important');
+}
 }
 	
-function def_retCSS(i,bool){
+function def_retCSS(i,bool, showPrg){
 
-positionBar(i,bool);
+positionBar(i,bool, showPrg);
 
 bdkCol=(i.butn.getAttribute("grn_synced")=="true")?"#007500":"buttonface";
 txCol=(i.butn.getAttribute("grn_synced")=="true")?"white":"black";
@@ -450,7 +456,7 @@ checker();
 function play_hdl(event) {
 let i=findInst(event.target,false);
 if(!!i){
-def_retCSS(i,false);
+def_retCSS(i,false,true);
 if(i.pl_e==1){
 if(i.video.readyState>2){
 calcSp(i,false);
@@ -468,26 +474,26 @@ let i=findInst(event.target,false);
 if(!!i){
 if(i.wt_e==1){
 i.video.playbackRate=1;
-def_retCSS(i,false);
+def_retCSS(i,false,true);
 }
 }
 }
 
 function pointerenter_hdl(i) {
 i.entered=true;
-def_retCSS(i,false);
+def_retCSS(i,false,true);
 }
 
 function pointermove_hdl(event) {
 let i=findInst(event.target,false);
 if(!!i){
-def_retCSS(i,false);
+def_retCSS(i,false,false);
 }
 }
 
 function pointerleave_hdl(i) {
 i.entered=false;
-def_retCSS(i,false);
+def_retCSS(i,false,true);
 }
 
 function fsc_hdl(i) {
@@ -509,7 +515,7 @@ i.cmu_sk=0;
 i.skb.innerHTML=(prefPerc && isFinite(i.video.duration))?'-'+skp.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'%':'-'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 	
 i.skf.innerHTML=(prefPerc && isFinite(i.video.duration))?'+'+skp.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'%':'+'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 	
 i.entered=false;
-def_retCSS(i,false);
+def_retCSS(i,false,true);
 if(i.skd_e==1){
 if(i.video.readyState>2){
 calcSp(i,false);
@@ -526,7 +532,7 @@ function seeking_hdl(event) {
 let i=findInst(event.target,false);
 if(!!i){
 i.entered=true;
-def_retCSS(i,false);
+def_retCSS(i,false,true);
 /*if(i.skd_e==1){
 i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
 }*/
@@ -552,7 +558,7 @@ if(i.video.readyState>2){
 function cl_inp(i) {
 //event.preventDefault();
 event.stopPropagation();
-def_retCSS(i,false);
+def_retCSS(i,false,true);
 if(i.ip_e==1){
 let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 dfSpd=Math.min(16,Math.max(1,vN));
@@ -568,7 +574,7 @@ i.lddArr=[];
 function cl_whl(evt,i) {
 	evt.preventDefault();
 	evt.stopPropagation();
-	def_retCSS(i,false);
+	def_retCSS(i,false,true);
 	if(evt.target !== i.cvs){
 		if(evt.deltaY>0){
 		let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
@@ -628,7 +634,7 @@ if(event.target!==i.skb && event.target!==i.skf &&event.target!==i.clse && event
 }else if(i.ignClk){
 	i.ignClk=false;
 }
-def_retCSS(i,false);
+def_retCSS(i,false,true);
 }
 
 function cl_focus(i){
@@ -912,7 +918,7 @@ function btclk(i) {
 			i.ff=0;
 			i.lddArr=[];
 			}
-			def_retCSS(i,false);
+			def_retCSS(i,false,true);
 		};
 }
 
@@ -1097,7 +1103,7 @@ function sk_l_fw(i){
 }
 
 function cvs_hdl(e,i,m){
-	i.cvs.style.setProperty('opacity',1,'important');
+	i.cvs.style.setProperty('opacity',0.84,'important');
 	let s=parseFloat(i.cvs.getAttribute('start'));
 	let t=parseFloat(i.cvs.getAttribute('end'));
 	let l=e.offsetX/e.target.scrollWidth;
