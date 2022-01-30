@@ -298,13 +298,13 @@ function drawBuffered(i){
 			var canvasHeight = i.cvs.scrollHeight;
 			i.cvs.width =canvasWidth;
 			i.cvs.height =canvasHeight;
-			ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 			var iData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
 			var pixels = iData.data;
 			
 	if(isFinite(i.video.duration)){
 		i.cvs.setAttribute('start', 0);
 		i.cvs.setAttribute('end', i.video.duration);
+		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 			for (let k=len-1; k>=0; k--){
 				let t_i=i.video.buffered.end(k);
 				let s_i=i.video.buffered.start(k);
@@ -324,6 +324,7 @@ function drawBuffered(i){
 						let earliest=Math.min(i.video.buffered.start(0), c_i);
 						i.cvs.setAttribute('start', earliest);
 						i.cvs.setAttribute('end', latest);
+						ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 						for (let k=len-1; k>=0; k--){
 							let t_i=i.video.buffered.end(k);
 							let s_i=i.video.buffered.start(k);
