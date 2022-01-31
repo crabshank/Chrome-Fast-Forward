@@ -75,7 +75,7 @@ var isCurrentSiteBlacklisted = function()
 		return blacklistMatch(blacklist, window.location.href);
 };
 
-var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: table !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important;";
+var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: inline-flex !important; flex-wrap: wrap !important; visibility: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important;";
 
 	function bf_s_hmmss(s, z)
 	{
@@ -302,6 +302,9 @@ function drawBuffered(i){
 			ctx.globalCompositeOperation = "source-over";
 			var canvasWidth = i.cvs.scrollWidth;
 			var canvasHeight = i.cvs.scrollHeight;
+			
+			if(canvasWidth>0 && canvasHeight>0){
+			
 			i.cvs.width =canvasWidth;
 			i.cvs.height =canvasHeight;
 			var iData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
@@ -345,6 +348,7 @@ function drawBuffered(i){
 					}
 					ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 					ctx.putImageData(iData, 0, 0);
+	}
 			
 }
 }
@@ -1121,17 +1125,25 @@ function cvs_hdl(e,i,m){
 			}
 		},1250);
 	}else{
-	i.entered_cvs=true;
-	i.cvs.style.setProperty('opacity',0.84,'important');
+		if(m==1 || m==2){
+			i.entered_cvs=true;
+			i.cvs.style.setProperty('opacity',0.84,'important');
+					clearTimeout(i.timer3);
+		i.timer3 = setTimeout(function(){
+					i.cvs.style.setProperty('opacity',(i.entered || i.entered_cvs ? 0.64 : 0),'important');
+		},3000);
+		}
 	let s=parseFloat(i.cvs.getAttribute('start'));
 	let t=parseFloat(i.cvs.getAttribute('end'));
 	let l=e.offsetX/e.target.scrollWidth;
 	let time=(1-l)*s+l*t;
-	i.cvs.title=bf_s_hmmss(time,true);
-	if((m==0) || (m>=1 && e.buttons!=0)){
-		i.video.currentTime=time;
+	if(!isNaN(time) && isFinite(time)){
+		i.cvs.title=bf_s_hmmss(time,true);
+		if((m==0) || (m>=1 && e.buttons!=0)){
+			i.video.currentTime=time;
+		}
 	}
-	}
+}
 }
 
 function cvs_whl(e,i){
