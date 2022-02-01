@@ -1139,7 +1139,7 @@ function cvs_hdl(e,i,m){
 	let s=parseFloat(i.cvs.getAttribute('start'));
 	let t=parseFloat(i.cvs.getAttribute('end'));
 	let l;
-	if(!!i.obscPrg){
+	if(Object.keys(i.obscPrg).length>0){
 		l=(i.obscPrg.x-i.obscPrg.l)/i.obscPrg.w;
 		i.obscPrg={};
 	}else{
