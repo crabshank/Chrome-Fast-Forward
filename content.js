@@ -204,7 +204,7 @@ if(!sk_buff){
 }
 
 i.butn.style.cssText = "min-width: 75px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important;";
-i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !important; line-height: 2ch !important; padding: 2px 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: #f00000 !important; webkit-text-fill-color: #ececec !important;  border-width: 0px !important; border-style: outset !important; border-color: #f00000 !important; float: initial !important; color: white !important;";
+i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !important; line-height: 2ch !important; padding: 0.175ch 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: #f00000 !important; webkit-text-fill-color: #ececec !important;  border-width: 0px !important; border-style: outset !important; border-color: #f00000 !important; float: initial !important; color: white !important;";
 
 clearTimeout(i.timer3);
 i.timer3 = setTimeout(function(){
@@ -231,7 +231,7 @@ if(!sk_buff){
 }
 
 i.butn.style.cssText = "min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important";
-i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !important; line-height: 2ch !important; padding: 2px 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; float: initial !important; color: white !important";
+i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !important; line-height: 2ch !important; padding: 0.175ch 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; float: initial !important; color: white !important";
 		}else{
 			i.sdivs.style.cssText = sDivsCSS+i.sDivsCSS2+" opacity: 0 !important";
 		}
@@ -319,12 +319,19 @@ function drawBuffered(i){
 				let prp=canvasWidth/i.video.duration;
 				let xds=Math.ceil(s_i*prp);
 				let xdt=Math.floor(t_i*prp);
+				let c_i=i.video.currentTime;
+				let xdc=(c_i>=s_i && c_i<=t_i)?Math.ceil(c_i*prp):-1;
 				for (let y=canvasHeight-1; y>=0; y--){
 				for (let x=xds; x<=xdt; x++){
-				setPix(pixels, x, y, 144,67,204, canvasWidth);
+					if(xdc!=-1 && x>=xdc && x<=xdt){
+						setPix(pixels, x, y, 0,171,14, canvasWidth);
+					}else{
+						setPix(pixels, x, y, 144,67,204, canvasWidth);
+					}
 				}
 				}
-			}			
+			}	
+			
 					}else{
 						
 						let c_i=i.video.currentTime;
@@ -339,12 +346,18 @@ function drawBuffered(i){
 							let prp=canvasWidth/(latest-earliest)
 							let xds=Math.ceil((s_i-earliest)*prp);
 							let xdt=Math.floor((t_i-earliest)*prp);
+							let c_i=i.video.currentTime;
+							let xdc=(c_i>=s_i && c_i<=t_i)?Math.ceil((c_i-earliest)*prp):-1;
 							for (let y=canvasHeight-1; y>=0; y--){
 							for (let x=xds; x<=xdt; x++){
-							setPix(pixels, x, y, 144,67,204, canvasWidth);
-							}
+								if(xdc!=-1 && x>=xdc && x<=xdt){
+									setPix(pixels, x, y, 0,171,14, canvasWidth);
+								}else{
+									setPix(pixels, x, y, 144,67,204, canvasWidth);
+								}
 							}
 						}	
+					}
 					}
 					ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 					ctx.putImageData(iData, 0, 0);
