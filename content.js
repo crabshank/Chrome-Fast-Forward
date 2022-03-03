@@ -137,12 +137,12 @@ function findInst(v, mon){
 function positionBar(i,scrl, showPrg){
 if(scrl){
 i.sdivs.style.cssText=sDivsCSS+'opacity: 0 !important;';
+i.cvs.style.setProperty('opacity',0,'important');
+i.faded=true;
 }
 
-i.cvs.style.setProperty('display','none','important');
-
 let vrct=i.video.getBoundingClientRect();
-let sdrct=i.sdivs.getBoundingClientRect();
+let sdrct=i.bdivs.getBoundingClientRect();
 
 let lf=vrct.left+0.001*vrct.width;
 
@@ -161,7 +161,11 @@ i.sDivsCSS2='top: '+i.lowest+'px !important;  left: '+i.rightest+'px !important;
 }
 
 i.sdivs.style.cssText=(scrl)?sDivsCSS+i.sDivsCSS2+'opacity: 0 !important;':sDivsCSS+i.sDivsCSS2;
-sdrct=i.sdivs.getBoundingClientRect();
+i.faded=(scrl)?true:false;
+if(scrl){
+i.cvs.style.setProperty('opacity',0,'important');
+}
+sdrct=i.bdivs.getBoundingClientRect();
 i.cvs.style.setProperty('width',((sdrct.width>vrct.width)?sdrct.width:(vrct.right-sdrct.left))+'px','important');
 i.cvs.style.setProperty('height',(sdrct.height)+'px','important');
 i.cvs.style.setProperty('margin-top','1px','important');
@@ -169,8 +173,10 @@ i.cvs.style.setProperty('margin-top','1px','important');
 if(scrl || !showPrg){
 	 	i.cvs.style.setProperty('opacity',0,'important');
 }else{
-		i.cvs.style.setProperty('display','initial','important');
-		 i.cvs.style.setProperty('opacity',0.64,'important');
+		//i.cvs.style.setProperty('display','initial','important');
+		if(!i.faded){
+			i.cvs.style.setProperty('opacity',0.64,'important');
+		}
 }
 }
 	
@@ -209,12 +215,13 @@ i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !impo
 clearTimeout(i.timer3);
 i.timer3 = setTimeout(function(){
 	if(!i.entered_cvs){
-			i.cvs.style.setProperty('opacity',(i.entered ? 0.64 : 0),'important');
+			i.cvs.style.setProperty('opacity',(i.faded ? 0 : 0.64),'important');
 	}
 },1250);
 	
 	clearTimeout(i.timer2);
 i.timer2 = setTimeout(function(){
+			i.faded=true;
 	if(!i.entered){
 		if(mbMde || (mbMdeFs && !(document.fullscreen || document.webkitIsFullScreen))){
 			let bfStyle2="min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2_1+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol_1+" !important; font-size: unset !important; border-radius: 0% !important;";
@@ -232,8 +239,10 @@ if(!sk_buff){
 
 i.butn.style.cssText = "min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important;";
 i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !important; line-height: 2ch !important; padding: 0.175ch 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; float: initial !important; color: white !important; font-size: unset !important; border-radius: 0% !important;";
+i.cvs.style.setProperty('opacity',0,'important');
 		}else{
 			i.sdivs.style.cssText = sDivsCSS+i.sDivsCSS2+" opacity: 0 !important";
+			i.cvs.style.setProperty('opacity',0,'important');
 		}
 	}
 }, 3000);
@@ -792,6 +801,8 @@ let skb = document.createElement("button");
 let skf = document.createElement("button");
 let butn = document.createElement("button");
 let sdivs = document.createElement("div");
+let bdivs = document.createElement("div");
+bdivs.style.cssText="padding: 0px !important; border-bottom-width: 0px !important; border-left-width: 0px !important; border-right-width: 0px !important; border-top-width: 0px!important; line-height: 0px !important; margin: 0px !important; max-width: max-content !important;";
 let clse = document.createElement("input");
 let skb_l = document.createElement("button");
 let skf_l = document.createElement("button");
@@ -815,12 +826,13 @@ clse.step=dfStp;
 
 clse.title="Maximum speed when fast forwarding; scroll to change.";
 
-sdivs.appendChild(skb);
-sdivs.appendChild(skf);
-sdivs.appendChild(butn);
-sdivs.appendChild(clse);
-sdivs.appendChild(skb_l);
-sdivs.appendChild(skf_l);
+bdivs.appendChild(skb);
+bdivs.appendChild(skf);
+bdivs.appendChild(butn);
+bdivs.appendChild(clse);
+bdivs.appendChild(skb_l);
+bdivs.appendChild(skf_l);
+sdivs.appendChild(bdivs);
 sdivs.appendChild(document.createElement("br"));
 sdivs.appendChild(cvs);
 
@@ -841,6 +853,7 @@ obj.skf_l=skf_l;
 obj.cvs=cvs;
 obj.butn=butn;
 obj.clse=clse;
+obj.bdivs=bdivs;
 obj.sdivs=sdivs;
 obj.cmu_sk=0;
 butn.setAttribute('lddAhd',0);
@@ -861,6 +874,7 @@ obj.pg=0;
 obj.timer2;
 obj.entered=false;
 obj.entered_cvs=false;
+obj.faded=false;
 obj.lowest=0;
 obj.rightest=0;
 obj.sDivsCSS2="";
@@ -896,22 +910,18 @@ cvs.addEventListener("pointermove", (evt) =>cvs_hdl(evt,obj,1));
 cvs.addEventListener("pointerenter", (evt) =>cvs_hdl(evt,obj,2));
 cvs.addEventListener("pointerleave", (evt) =>cvs_hdl(evt,obj,3));
 cvs.addEventListener("wheel", (evt) =>cvs_whl(evt,obj));
-sdivs.addEventListener('wheel',(evt) => cl_whl(evt,obj));
+bdivs.addEventListener('wheel',(evt) => cl_whl(evt,obj));
 vid.addEventListener('ratechange',ratechange_hdl);
 
 clse.addEventListener('keyup',() => cl_inp(obj));
 clse.addEventListener('keydown',() => cl_inp(obj));
 clse.addEventListener('change',() => cl_inp(obj));
 clse.addEventListener('change',() => cl_inp(obj));
-/*clse.addEventListener('click',() => cl_clk(obj));
-sdivs.addEventListener('click',() => cl_clk(obj));
-butn.addEventListener('click',() => cl_clk(obj));*/
+
 clse.addEventListener('focus',() => cl_focus(obj));
-/*clse.addEventListener('pointerdown',() => cl_clk(obj));
-sdivs.addEventListener('pointerdown',() => cl_clk(obj));
-butn.addEventListener('pointerdown',() => cl_clk(obj));*/
-sdivs.addEventListener('pointerenter',() => pointerenter_hdl(obj));
-sdivs.addEventListener('pointerleave',() => pointerleave_hdl(obj));
+
+bdivs.addEventListener('pointerenter',() => pointerenter_hdl(obj));
+bdivs.addEventListener('pointerleave',() => pointerleave_hdl(obj));
 window.addEventListener('pointerdown',() => cl_clk(obj));
 document.addEventListener('fullscreenchange',() => fsc_hdl(obj));
 document.addEventListener('webkitfullscreenchange',() => fsc_hdl(obj));
@@ -1138,16 +1148,18 @@ function cvs_hdl(e,i,m){
 		clearTimeout(i.timer3);
 		i.timer3 = setTimeout(function(){
 			if(!i.entered_cvs){
-					i.cvs.style.setProperty('opacity',(i.entered ? 0.64 : 0),'important');
+					i.cvs.style.setProperty('opacity',(i.entered && !i.faded ? 0.64 : 0),'important');
 			}
 		},1250);
 	}else{
 		if(m==1 || m==2){
 			i.entered_cvs=true;
-			i.cvs.style.setProperty('opacity',0.84,'important');
+			if(!i.faded){
+				i.cvs.style.setProperty('opacity',0.84,'important');
+			}
 					clearTimeout(i.timer3);
 		i.timer3 = setTimeout(function(){
-					i.cvs.style.setProperty('opacity',(i.entered || i.entered_cvs ? 0.64 : 0),'important');
+					i.cvs.style.setProperty('opacity',((i.entered || i.entered_cvs) && !i.faded  ? 0.64 : 0),'important');
 		},3000);
 		}
 	let s=parseFloat(i.cvs.getAttribute('start'));
@@ -1241,6 +1253,7 @@ function checker(){
 					elRemover(inst.skf);
 					elRemover(inst.skb);
 					elRemover(inst.cvs);
+					elRemover(inst.bdivs);
 					elRemover(inst.sdivs);
 					global.instances=removeEls(inst,global.instances);
 					}
