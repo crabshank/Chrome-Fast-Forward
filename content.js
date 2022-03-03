@@ -215,7 +215,7 @@ i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !impo
 clearTimeout(i.timer3);
 i.timer3 = setTimeout(function(){
 	if(!i.entered_cvs){
-			i.cvs.style.setProperty('opacity',(i.faded ? 0 : 0.64),'important');
+			i.cvs.style.setProperty('opacity',(i.entered ? 0.64 : 0),'important');
 	}
 },1250);
 	
