@@ -885,6 +885,22 @@ global.instances.push(obj);
 
 def_retCSS(obj, false);
 
+window.addEventListener("wheel", (event) => {
+	if(!obj.sclr){
+		obj.sclr=true;
+		def_retCSS(obj,true);
+		obj.sclr=false;
+	}
+}, true);
+
+window.addEventListener("wheel", (event) => {
+	if(!obj.sclr){
+		obj.sclr=true;
+		def_retCSS(obj,true);
+		obj.sclr=false;
+	}
+}, false);
+
 document.addEventListener("scroll", (event) => {
 	if(!obj.sclr){
 		obj.sclr=true;
