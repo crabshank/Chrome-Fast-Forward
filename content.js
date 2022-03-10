@@ -1198,6 +1198,8 @@ function cvs_hdl(e,i,m){
 }
 
 function cvs_whl(e,i){
+	e.preventDefault();
+	e.stopPropagation();
 	if (e.deltaY < 0)
 	{
 		i.skf.click();
