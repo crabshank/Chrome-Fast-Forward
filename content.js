@@ -538,7 +538,7 @@ let anc=getAncestors(i.video);
 let fpt=anc[anc.length-1];
 fpt.insertAdjacentElement('beforebegin', i.sdivs);
 }
-def_retCSS(i,true);
+def_retCSS(i,true,true);
 }
 
 function seeked_hdl(event) {
@@ -883,12 +883,12 @@ obj.ignClk=false;
 obj.obscPrg={};
 global.instances.push(obj);
 
-def_retCSS(obj, false);
+def_retCSS(obj, true, true);
 
 window.addEventListener("wheel", (event) => {
 	if(!obj.sclr){
 		obj.sclr=true;
-		def_retCSS(obj,true);
+		def_retCSS(obj,true, false);
 		obj.sclr=false;
 	}
 }, true);
@@ -896,7 +896,7 @@ window.addEventListener("wheel", (event) => {
 window.addEventListener("wheel", (event) => {
 	if(!obj.sclr){
 		obj.sclr=true;
-		def_retCSS(obj,true);
+		def_retCSS(obj,true,false);
 		obj.sclr=false;
 	}
 }, false);
@@ -904,14 +904,14 @@ window.addEventListener("wheel", (event) => {
 document.addEventListener("scroll", (event) => {
 	if(!obj.sclr){
 		obj.sclr=true;
-		def_retCSS(obj,true);
+		def_retCSS(obj,true,false);
 		obj.sclr=false;
 	}
 }, true);
 document.addEventListener("scroll", (event) => {
 	if(!obj.sclr){
 		obj.sclr=true;
-		def_retCSS(obj,true);
+		def_retCSS(obj,true,false);
 		obj.sclr=false;
 	}
 }, false);
