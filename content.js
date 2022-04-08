@@ -13,38 +13,6 @@ var blacklist='';
 var sk_buff=false;
 var prefPerc=false;
 
-function getAncestors(el){
-	firstParent=el;
-	let ancestors=[el];
-	let end=false;
-	let shadow=false;
-	while(!end){
-		if(!!firstParent.parentElement && typeof firstParent.parentElement!=='undefined'){
-			if(firstParent.parentElement.tagName==='BODY' || firstParent.parentElement.tagName==='HEAD' || firstParent.parentElement.tagName==='HTML'){
-				end=true;
-			}else{
-				firstParent=firstParent.parentElement;
-			}
-		}else if(!!firstParent.parentNode && typeof firstParent.parentNode!=='undefined'){
-				firstParent=firstParent.parentNode;
-		}else if(!!firstParent.host && typeof firstParent.host!=='undefined'){
-				firstParent=firstParent.host;
-		}
-		if(!end){
-			ancestors.push(firstParent);
-		}
-	}
-	let out=[];
-	for(let i=ancestors.length-1; i>=0; i--){
-		if(!!ancestors[i].shadowRoot && typeof ancestors[i].shadowRoot !=='undefined'){
-			i=0;
-		}else{
-			out.unshift(ancestors[i]);
-		}
-	}
-	return out;
-}
-
 function getTagNameShadow(docm, tgn){
 	var shrc=[];
 	var out=[];
@@ -121,6 +89,37 @@ function absBoundingClientRect(el){
 	r.bottom+=scrollTop;
 	
 	return r;
+}
+
+function getAncestors(el){
+	firstParent=el;
+	let ancestors=[el];
+	let end=false;
+	let shadow=false;
+	while(!end){
+		if(!!firstParent.parentElement && typeof firstParent.parentElement!=='undefined'){
+			if(firstParent.parentElement.tagName==='BODY' || firstParent.parentElement.tagName==='HEAD' || firstParent.parentElement.tagName==='HTML'){
+				end=true;
+			}else{
+				firstParent=firstParent.parentElement;
+			}
+		}else if(!!firstParent.parentNode && typeof firstParent.parentNode!=='undefined'){
+				firstParent=firstParent.parentNode;
+		}else if(!!firstParent.host && typeof firstParent.host!=='undefined'){
+				firstParent=firstParent.host;
+		}
+		if(!end){
+			ancestors.push(firstParent);
+		}
+	}
+	let out=[];
+	for(let i=ancestors.length-1; i>=0; i--){
+		out.unshift(ancestors[i]);
+		if(!!ancestors[i].shadowRoot && typeof ancestors[i].shadowRoot !=='undefined'){
+			i=0;
+		}
+	}
+	return out;
 }
 
 function findIndexTotalInsens(string, substring, index) {
