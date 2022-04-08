@@ -17,6 +17,7 @@ function getAncestors(el){
 	firstParent=el;
 	let ancestors=[el];
 	let end=false;
+	let shadow=false;
 	while(!end){
 		if(!!firstParent.parentElement && typeof firstParent.parentElement!=='undefined'){
 			if(firstParent.parentElement.tagName==='BODY' || firstParent.parentElement.tagName==='HEAD' || firstParent.parentElement.tagName==='HTML'){
@@ -33,7 +34,15 @@ function getAncestors(el){
 			ancestors.push(firstParent);
 		}
 	}
-	return ancestors;
+	let out=[];
+	for(let i=ancestors.length-1; i>=0; i--){
+		if(!!ancestors[i].shadowRoot && typeof ancestors[i].shadowRoot !=='undefined'){
+			i=0;
+		}else{
+			out.unshift(ancestors[i]);
+		}
+	}
+	return out;
 }
 
 function getTagNameShadow(docm, tgn){
