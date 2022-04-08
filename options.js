@@ -131,9 +131,7 @@ blklst.style.height = (blklst.scrollHeight+7)+"px";
 		}
 		else
 		{
-
 			save_options();
-			restore_options();
 		}
 	});
 	}
@@ -152,7 +150,9 @@ function save_options()
 		secprc: 0,
 		skbcbx: false,
 		bList: ""
-	}, function(){});
+	}, function(){
+		restore_options();
+	});
 		});
 }
 
