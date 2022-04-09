@@ -71,12 +71,15 @@ function absBoundingClientRect(el){
 					}
 				}
 	
-	let r=el.getBoundingClientRect();
-	
-	r.left+=scrollLeft;
-	r.right+=scrollLeft;
-	r.top+=scrollTop;
-	r.bottom+=scrollTop;
+	const rct=el.getBoundingClientRect();
+	let r={};
+
+	r.left=rct.left+scrollLeft;
+	r.right=rct.right+scrollLeft;
+	r.top=rct.top+scrollTop;
+	r.bottom=rct.bottom+scrollTop;
+	r.height=rct.height;
+	r.width=rct.width;
 	
 	return r;
 }
