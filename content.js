@@ -14,36 +14,28 @@ var sk_buff=false;
 var prefPerc=false;
 
 function getTagNameShadow(docm, tgn){
-	var shrc=[];
-	var out=[];
-	
-		let allNodes=[...docm.querySelectorAll('*')];
-		let srCnt=0;
-		
-		while(srCnt<allNodes.length){ //1st round
-			if(!!allNodes[srCnt] && typeof allNodes[srCnt] !=='undefined' && allNodes[srCnt].tagName===tgn){
-				out.push(allNodes[srCnt]);
-			}
-			
-			if(!!allNodes[srCnt].shadowRoot && typeof allNodes[srCnt].shadowRoot !=='undefined'){
-				let c=allNodes[srCnt].shadowRoot.children;
-				shrc.push(...c);
-			}
-			srCnt++;
+var shrc=[docm];
+var out=[];
+var shrc_l=1;
+
+let srCnt=0;
+
+while(srCnt<shrc_l){
+	allNodes=[shrc[srCnt],...shrc[srCnt].querySelectorAll('*')];
+	for(let i=0, len=allNodes.length; i<len; i++){
+		if(!!allNodes[i] && typeof allNodes[i] !=='undefined' && allNodes[i].tagName===tgn){
+			out.push(allNodes[i]);
 		}
-		
-		srCnt=0;
-		let srCnt_l=shrc.length;
-		
-		while(srCnt<srCnt_l){ //2nd round
-			if(!!shrc[srCnt].shadowRoot && typeof shrc[srCnt].shadowRoot !=='undefined'){
-				let c=shrc[srCnt].shadowRoot.children;
-				shrc.push(...c);
-				srCnt_l+=c.length;
-			}
-			srCnt++;
+
+		if(!!allNodes[i].shadowRoot && typeof allNodes[i].shadowRoot !=='undefined'){
+			let c=allNodes[i].shadowRoot.children;
+			shrc.push(...c);
 		}
-	
+	}
+	srCnt++;
+	shrc_l=shrc.length;
+}
+	shrc=shrc.slice(1);
 	let srv=shrc.filter((c)=>{return c.tagName===tgn;});
 	out.push(...srv);
 	
