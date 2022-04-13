@@ -88,7 +88,6 @@ function getAncestors(el){
 	firstParent=el;
 	let ancestors=[el];
 	let end=false;
-	let shadow=false;
 	while(!end){
 		if(!!firstParent.parentElement && typeof firstParent.parentElement!=='undefined'){
 			if(firstParent.parentElement.tagName==='BODY' || firstParent.parentElement.tagName==='HEAD' || firstParent.parentElement.tagName==='HTML'){
@@ -100,6 +99,13 @@ function getAncestors(el){
 				firstParent=firstParent.parentNode;
 		}else if(!!firstParent.host && typeof firstParent.host!=='undefined'){
 				firstParent=firstParent.host;
+		}else{
+			end=true;
+			console.groupCollapsed("'getAncestors(el)...' hit dead end: ");
+			console.log(el);
+			console.log("Above element's ancestry could only go back as far as: ");
+			console.log(firstParent);
+			console.groupEnd();
 		}
 		if(!end){
 			ancestors.push(firstParent);
