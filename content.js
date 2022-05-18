@@ -84,9 +84,10 @@ function absBoundingClientRect(el){
 	return r;
 }
 
-function getAncestors(el){
+function getAncestors(el, elementsOnly, elToHTML, notInShadow){
 	firstParent=el;
 	let ancestors=[el];
+	let outAncestors=[];
 	let end=false;
 	while(!end){
 		if(!!firstParent.parentElement && typeof firstParent.parentElement!=='undefined'){
@@ -101,24 +102,38 @@ function getAncestors(el){
 				firstParent=firstParent.host;
 		}else{
 			end=true;
-			console.groupCollapsed("'getAncestors(el)...' hit dead end: ");
-			console.log(el);
-			console.log("Above element's ancestry could only go back as far as: ");
-			console.log(firstParent);
-			console.groupEnd();
 		}
 		if(!end){
-			ancestors.push(firstParent);
+			if(!elementsOnly || (elementsOnly && firstParent.nodeType==1)){
+				if(elToHTML){
+					ancestors.push(firstParent);
+				}else{
+					ancestors.unshift(firstParent);
+				}
+			}
 		}
 	}
-	let out=[];
-	for(let i=ancestors.length-1; i>=0; i--){
-		out.unshift(ancestors[i]);
-		if(!!ancestors[i].shadowRoot && typeof ancestors[i].shadowRoot !=='undefined'){
-			i=0;
+	
+	if(notInShadow){
+		if(elToHTML){
+			for(let i=ancestors.length-1; i>=0; i--){
+				outAncestors.unshift(ancestors[i]);
+				if(!!ancestors[i].shadowRoot && typeof ancestors[i].shadowRoot !=='undefined'){
+					i=0;
+				}
+			}
+		}else{
+			for(let i=0, len=ancestors.length; i<len; i++){
+				outAncestors.push(ancestors[i]);
+				if(!!ancestors[i].shadowRoot && typeof ancestors[i].shadowRoot !=='undefined'){
+					i=len-1;
+				}
+			}
 		}
+	}else{
+		outAncestors=ancestors;
 	}
-	return out;
+	return outAncestors;
 }
 
 function findIndexTotalInsens(string, substring, index) {
@@ -352,7 +367,6 @@ function chgFlgs(i,on){
 		    i.rc_e=(on)?1:0;
 			i.wh_e=(on)?1:0;
 			i.ip_e=(on)?1:0;
-			i.pg=(on)?1:0;
 }
 			
 
@@ -561,7 +575,21 @@ let i=findInst(event.target,false);
 if(!!i){
 if(i.pg_e==1){
 if(i.video.readyState>2){
-i.pg=1;
+calcSp(i,false);
+}else{
+i.video.playbackRate=1;
+}
+}else{
+	calcSp(i,true);
+}
+}
+}
+
+function ended_hdl(event) {
+let i=findInst(event.target,false);
+if(!!i){
+if(i.pg_e==1){
+if(i.video.readyState>2){
 calcSp(i,false);
 }else{
 i.video.playbackRate=1;
@@ -629,7 +657,7 @@ let fsOn=document.fullscreen || document.webkitIsFullScreen;
 if(fsOn){
 	i.video.insertAdjacentElement('beforebegin',i.sdivs);
 }else{
-let anc=getAncestors(i.video);
+let anc=getAncestors(i.video,true,true,true);
 let fpt=anc[anc.length-1];
 fpt.insertAdjacentElement('beforebegin', i.sdivs);
 }
@@ -937,7 +965,7 @@ cvs.style.setProperty('visibility','visible','important');
 cvs.style.setProperty('float','initial','important');
 cvs.style.setProperty('border-radius','0%','important');
 
-let anc=getAncestors(vid);
+let anc=getAncestors(vid,true,true,true);
 let fpt=anc[anc.length-1];
 
 fpt.insertAdjacentElement('beforebegin', sdivs);
@@ -963,9 +991,7 @@ obj.wh_e=0;
 obj.ip_e=0;
 obj.ldd='';
 obj.lddArr=[];
-obj.pg_e=0;
 obj.wh_e=0;
-obj.pg=0;
 //obj.clk_e=0;
 obj.timer2;
 obj.entered=false;
@@ -1043,6 +1069,7 @@ vid.addEventListener('seeking',seeking_hdl);
 vid.addEventListener('play',play_hdl);
 vid.addEventListener('progress',progress_hdl);
 vid.addEventListener('waiting',waiting_hdl);
+vid.addEventListener('ended',ended_hdl);
 }
 
 function btclk(i) {
@@ -1322,6 +1349,7 @@ function checker(){
 		
 				if(!found){
 					global.monitored.push(DOMvids[j]);
+					DOMvids[j].addEventListener('loadeddata',progress_hdl_chk);
 					DOMvids[j].addEventListener('progress',progress_hdl_chk);
 				}
 				
@@ -1330,6 +1358,7 @@ function checker(){
 				if(!found){
 					 if(eligVid(DOMvids[j])){
 						 if(global.monitored.includes(DOMvids[j])){
+							 DOMvids[j].removeEventListener('loadeddata',progress_hdl_chk);
 							 DOMvids[j].removeEventListener('progress',progress_hdl_chk);
 							 global.monitored=removeEls(DOMvids[j],global.monitored);
 						 }
@@ -1357,6 +1386,7 @@ function checker(){
 						i.video.removeEventListener('ratechange',ratechange_hdl);
 						i.video.removeEventListener('seeked',seeked_hdl);
 						i.video.removeEventListener('seeking',seeking_hdl);
+						i.video.removeEventListener('ended',ended_hdl);
 					}
 					catch(err){
 						;
