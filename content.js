@@ -1056,9 +1056,10 @@ document.addEventListener("scroll", (event) => {
 	}
 }, false);
 
+
 skb.addEventListener("click", sk_bk(obj));	
 skf.addEventListener("click", sk_fw(obj));	
-butn.addEventListener("click",(evt)=>btclk(evt,obj));	
+butn.addEventListener("click", btclk(obj));	
 skb_l.addEventListener("click", sk_l_bk(obj));	
 skf_l.addEventListener("click", sk_l_fw(obj));	
 cvs.addEventListener("click", (evt) =>cvs_hdl(evt,obj,0));
@@ -1090,7 +1091,8 @@ vid.addEventListener('waiting',waiting_hdl);
 vid.addEventListener('ended',ended_hdl);
 }
 
-function btclk(event,i) {
+function btclk(i) {
+		return function() {
 			event.preventDefault();
 			event.stopPropagation();
 			if(i.ff==-1){
@@ -1115,6 +1117,7 @@ function btclk(event,i) {
 			i.lddArr=[];
 			}
 			def_retCSS(i,false,true);
+		};
 }
 
 function sk_bk(i){
