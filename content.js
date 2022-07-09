@@ -1093,6 +1093,7 @@ vid.addEventListener('ended',ended_hdl);
 
 function btclk(i) {
 		return function() {
+			if(!!event && typeof event !=='undefined'){
 			event.preventDefault();
 			event.stopPropagation();
 			if(i.ff==-1){
@@ -1117,6 +1118,7 @@ function btclk(i) {
 			i.lddArr=[];
 			}
 			def_retCSS(i,false,true);
+			}
 		};
 }
 
