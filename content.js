@@ -270,10 +270,14 @@ i.top=(vrct.top+0.102*vrct.height);
 i.sDivsCSS2='top: '+i.top+'px !important;  left: '+i.right+'px !important;';
 }
 
-i.sdivs.style.cssText=(scrl)?sDivsCSS+i.sDivsCSS2+'opacity: 0 !important;':sDivsCSS+i.sDivsCSS2;
-i.faded=(scrl)?true:false;
+
 if(scrl){
+i.sdivs.style.cssText=sDivsCSS+i.sDivsCSS2+'opacity: 0 !important;';
+i.faded=true;
 i.cvs.style.setProperty('opacity',0,'important');
+}else{
+i.sdivs.style.cssText=sDivsCSS+i.sDivsCSS2;
+i.faded=false;
 }
 sdrct=absBoundingClientRect(i.bdivs);
 i.cvs.style.setProperty('width',((sdrct.width>vrct.width)?sdrct.width:vrct.width)+'px','important');
@@ -283,9 +287,11 @@ i.cvs.style.setProperty('margin-top','1px','important');
 if(scrl || !showPrg){
 	 	i.cvs.style.setProperty('opacity',0,'important');
 }else{
-		//i.cvs.style.setProperty('display','initial','important');
 		if(!i.faded){
-			i.cvs.style.setProperty('opacity',0.64,'important');
+			if(i.bufEnd){
+				drawBuffered(i);
+				}
+				i.cvs.style.setProperty('opacity',0.64,'important');
 		}
 }
 }
@@ -325,7 +331,14 @@ i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !impo
 clearTimeout(i.timer3);
 i.timer3 = setTimeout(function(){
 	if(!i.entered_cvs){
-			i.cvs.style.setProperty('opacity',(i.entered ? 0.64 : 0),'important');
+			if(i.entered){
+							if(i.bufEnd){
+									drawBuffered(i);
+								}
+								i.cvs.style.setProperty('opacity',0.64,'important');
+							}else{
+								i.cvs.style.setProperty('opacity',0,'important');
+							}
 	}
 },1250);
 	
@@ -503,6 +516,7 @@ function calcSp(i,noAdj){
 			}
 			
 			if(lastPart){
+				i.bufEnd=true;
 					i.ldd='END';
 					if(!noAdj){
 					let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
@@ -511,6 +525,7 @@ function calcSp(i,noAdj){
 						i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x  [Buffered: "+i.ldd+"]";
 					
 			}else{
+				i.bufEnd=false;
 					var tot=0;
 					if(rgs.length>0){
 						
@@ -630,7 +645,9 @@ let i=findInst(event.target,false);
 if(!!i){
 if(i.wt_e==1){
 i.video.playbackRate=1;
+if(i.video.paused){
 def_retCSS(i,false,true);
+}
 }
 }
 }
@@ -1002,6 +1019,7 @@ obj.right=0;
 obj.sDivsCSS2="";
 obj.sclr=false;
 obj.ignClk=false;
+obj.bufEnd=false;
 obj.obscPrg={};
 global.instances.push(obj);
 
@@ -1040,7 +1058,7 @@ document.addEventListener("scroll", (event) => {
 
 skb.addEventListener("click", sk_bk(obj));	
 skf.addEventListener("click", sk_fw(obj));	
-butn.addEventListener("click", btclk(obj));	
+butn.addEventListener("click",(evt)=>btclk(evt,obj));	
 skb_l.addEventListener("click", sk_l_bk(obj));	
 skf_l.addEventListener("click", sk_l_fw(obj));	
 cvs.addEventListener("click", (evt) =>cvs_hdl(evt,obj,0));
@@ -1072,8 +1090,7 @@ vid.addEventListener('waiting',waiting_hdl);
 vid.addEventListener('ended',ended_hdl);
 }
 
-function btclk(i) {
-		return function() {
+function btclk(event,i) {
 			event.preventDefault();
 			event.stopPropagation();
 			if(i.ff==-1){
@@ -1098,7 +1115,6 @@ function btclk(i) {
 			i.lddArr=[];
 			}
 			def_retCSS(i,false,true);
-		};
 }
 
 function sk_bk(i){
@@ -1287,18 +1303,36 @@ function cvs_hdl(e,i,m){
 		clearTimeout(i.timer3);
 		i.timer3 = setTimeout(function(){
 			if(!i.entered_cvs){
-					i.cvs.style.setProperty('opacity',(i.entered && !i.faded ? 0.64 : 0),'important');
+					if(i.entered && !i.faded){
+							if(i.bufEnd){
+									drawBuffered(i);
+								}
+								i.cvs.style.setProperty('opacity',0.64,'important');
+							}else{
+								i.cvs.style.setProperty('opacity',0,'important');
+							}
+					
 			}
 		},1250);
 	}else{
 		if(m==1 || m==2){
 			i.entered_cvs=true;
 			if(!i.faded){
+				if(i.bufEnd){
+					drawBuffered(i);
+					}
 				i.cvs.style.setProperty('opacity',0.84,'important');
 			}
 					clearTimeout(i.timer3);
 		i.timer3 = setTimeout(function(){
-					i.cvs.style.setProperty('opacity',((i.entered || i.entered_cvs) && !i.faded  ? 0.64 : 0),'important');
+						if((i.entered || i.entered_cvs) && !i.faded){
+							if(i.bufEnd){
+									drawBuffered(i);
+								}
+								i.cvs.style.setProperty('opacity',0.64,'important');
+							}else{
+								i.cvs.style.setProperty('opacity',0,'important');
+							}
 		},3000);
 		}
 	let s=parseFloat(i.cvs.getAttribute('start'));
