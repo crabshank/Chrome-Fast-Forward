@@ -788,7 +788,6 @@ function cl_clk(i) {
 //event.preventDefault();
 event.stopPropagation();
 let b_pass=true;
-let ct=false;
 	if(event.target===i.clse){
 		i.clse.focus();
 		b_pass=false;
@@ -830,43 +829,33 @@ let ct=false;
 	
 		if(event.pageX >= rectC.left && event.pageX <= rectC.right && event.pageY >= rectC.top && event.pageY <= rectC.bottom){
 			i.clse.focus();
-			ct=true;
 		}else if(event.pageX >= rectB.left && event.pageX <= rectB.right && event.pageY >= rectB.top && event.pageY <= rectB.bottom){
 			//i.butn.click();
 			btclk(i);
-			ct=true;
 		}else if(event.pageX >= rectK.left && event.pageX <= rectK.right && event.pageY >= rectK.top && event.pageY <= rectK.bottom){
 			//i.skb.click();
 			sk_bk(i);
-			ct=true;
 		}else if(event.pageX >= rectF.left && event.pageX <= rectF.right && event.pageY >= rectF.top && event.pageY <= rectF.bottom){
 			//i.skf.click();
 			sk_fw(i);
-			ct=true;
 		}else if(event.pageX >= rectV.left && event.pageX <= rectV.right && event.pageY >= rectV.top && event.pageY <= rectV.bottom){
 			i.obscPrg={x: event.pageX, l: rectV.left, w:rectV.width}
 			//i.cvs.click();
 			cvs_hdl(event,i,4);
-			ct=true;
 		}else if(sk_buff){
 			let rectKL=absBoundingClientRect(i.skb_l);
 			let rectFL=absBoundingClientRect(i.skf_l);
 			if(event.pageX >= rectKL.left && event.pageX <= rectKL.right && event.pageY >= rectKL.top && event.pageY <= rectKL.bottom){
 				//i.skb_l.click();
 				sk_l_bk(i);
-				ct=true;
 			}else if(event.pageX >= rectFL.left && event.pageX <= rectFL.right && event.pageY >= rectFL.top && event.pageY <= rectFL.bottom){
 				//i.skf_l.click();
 				sk_l_fw(i);
-				ct=true;
 			}
 		}
 }
 
 def_retCSS(i,false,true);
-if (b_pass && !ct && i.clse.matches(':focus')){
-	i.clse.blur();
-}
 }
 
 function cl_focus(i){
@@ -1418,6 +1407,11 @@ function cvs_hdl(e,i,m){
 		l=e.offsetX/e.target.scrollWidth;
 	}
 	let time=(1-l)*s+l*t;
+	let vt=(!isNaN(time) && isFinite(time))?true:false;
+	if(vt){
+		i.cvs.title=bf_s_hmmss(time,true);
+	}
+	
 	if((m==0) || (m>=1 && m<=3 && e.buttons!=0) || (m==4)){
 					let c_pass=false;
 					if(i.c_vis==null){					
@@ -1428,10 +1422,10 @@ function cvs_hdl(e,i,m){
 					}else{
 						i.c_vis=null;
 					}
-	if(!isNaN(time) && isFinite(time) && c_pass){
-		i.cvs.title=bf_s_hmmss(time,true);
-					i.video.currentTime=time;
-	}
+					
+			if(c_pass && vt){
+				i.video.currentTime=time;
+			}
 		}
 	}
 }
