@@ -12,6 +12,7 @@ var skp=4;
 var blacklist='';
 var sk_buff=false;
 var prefPerc=false;
+var cvs_clk=0;
 
 function getTagNameShadow(docm, tgn){
 var shrc=[docm];
@@ -781,6 +782,32 @@ function cl_whl(evt,i) {
 	}
 }
 
+function cl_dbl_clk(i) {
+	
+	i.s_vis=chkVis(i,false); //null -> true/false
+	i.c_vis=chkVis(i,true);	
+	let rectV=absBoundingClientRect(i.cvs);
+//event.preventDefault();
+event.stopPropagation();
+let b_pass=true;
+
+ if(event.target===i.cvs){
+		i.obscPrg={x: event.pageX, l: rectV.left, w:rectV.width}
+		//i.cvs.click();
+		cvs_hdl(event,i,4);
+		b_pass=false;
+}
+	
+if(b_pass){ //button not clicked directly
+	if(event.pageX >= rectV.left && event.pageX <= rectV.right && event.pageY >= rectV.top && event.pageY <= rectV.bottom){
+		i.obscPrg={x: event.pageX, l: rectV.left, w:rectV.width}
+		//i.cvs.click();
+			cvs_hdl(event,i,4);
+	}
+}
+	
+}
+
 function cl_clk(i) {
 	i.s_vis=chkVis(i,false); //null -> true/false
 	i.c_vis=chkVis(i,true);	
@@ -807,7 +834,7 @@ let ct=false;
 	}else if(event.target===i.cvs){
 		i.obscPrg={x: event.pageX, l: rectV.left, w:rectV.width}
 		//i.cvs.click();
-		cvs_hdl(event,i,4);
+		cvs_hdl(event,i, (cvs_clk==0 ? 4 : 5) );
 		b_pass=false;
 	}else if(sk_buff){
 		if(event.target===i.skb_l){
@@ -846,7 +873,7 @@ let ct=false;
 		}else if(event.pageX >= rectV.left && event.pageX <= rectV.right && event.pageY >= rectV.top && event.pageY <= rectV.bottom){
 			i.obscPrg={x: event.pageX, l: rectV.left, w:rectV.width}
 			//i.cvs.click();
-			cvs_hdl(event,i,4);
+				cvs_hdl(event,i,(cvs_clk==0 ? 4 : 5));
 			ct=true;
 		}else if(sk_buff){
 			let rectKL=absBoundingClientRect(i.skb_l);
@@ -908,6 +935,10 @@ function restore_options()
 			
 			if(!(items.secprc==0 || typeof items.secprc ==='undefined')){
 				prefPerc=true;
+			}				
+			
+			if(!(items.cvsClk==0 || typeof items.cvsClk ==='undefined')){
+				cvs_clk=parseInt(items.cvsClk);
 			}	
 
 			if(!!items.skbcbx && typeof items.skbcbx !=='undefined'){
@@ -976,6 +1007,7 @@ function save_options()
 		skamnt: "10",
 		skamntpc: "4",
 		secprc: 0,
+		cvsClk: 0,
 		bList: ""
 	}, function()
 	{
@@ -1138,6 +1170,11 @@ clse.addEventListener('focus',() => cl_focus(obj));
 
 bdivs.addEventListener('pointerenter',(evt) => pointerenter_hdl(evt,obj));
 bdivs.addEventListener('pointerleave',(evt) => pointerleave_hdl(evt,obj));
+
+if(cvs_clk==1){
+	window.addEventListener('dblclick',() => cl_dbl_clk(obj));
+}
+
 window.addEventListener('pointerdown',() => cl_clk(obj));
 document.addEventListener('fullscreenchange',() => fsc_hdl(obj));
 document.addEventListener('webkitfullscreenchange',() => fsc_hdl(obj));
@@ -1423,7 +1460,7 @@ function cvs_hdl(e,i,m){
 		i.cvs.title=bf_s_hmmss(time,true);
 	}
 	
-	if((m==0) || (m>=1 && m<=3 && e.buttons!=0) || (m==4)){
+	if((m==0) || (m>=1 && m<=3 && e.buttons!=0 && cvs_clk<1 ) || (m==4)){
 					let c_pass=false;
 					if(i.c_vis==null){					
 						c_pass=chkVis(i,true);
