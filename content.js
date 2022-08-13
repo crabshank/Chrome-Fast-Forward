@@ -185,8 +185,10 @@ function blacklistMatch(array, t) {
                 }
 
             }
-            blSite = (found) ? array[i] : blSite;
-            i = (found) ? array.length - 1 : i;
+            if(found){
+				blSite = array[i];
+				i = array.length - 1;
+			}
         }
     }
     //console.log(found);
