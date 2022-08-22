@@ -1218,17 +1218,20 @@ function btclk(i) {
 			}
 }
 
-function sk_bk(i){
+function sk_bk(i, bypss){
+					let bps=(typeof bypss!=='undefined' && bypss)?true:false;
 					let s_pass=false;
-					if(i.s_vis==null){
-						s_pass=chkVis(i,false);
-					}else if(i.s_vis==true){
-						i.s_vis=null;
-						s_pass=true;
-					}else{
-						i.s_vis=null;
+					if(!bps){
+						if(i.s_vis==null){
+							s_pass=chkVis(i,false);
+						}else if(i.s_vis==true){
+							i.s_vis=null;
+							s_pass=true;
+						}else{
+							i.s_vis=null;
+						}
 					}
-				if(s_pass){
+				if(s_pass || bps){
 					if(prefPerc && isFinite(i.video.duration)){
 						i.video.currentTime=Math.max(0,i.video.currentTime-0.01*skp*i.video.duration);
 						i.cmu_sk=i.cmu_sk-skp;
@@ -1263,17 +1266,20 @@ function sk_bk(i){
 			}
 }
 
-function sk_fw(i){
-			let s_pass=false;
-					if(i.s_vis==null){
-						s_pass=chkVis(i,false);
-					}else if(i.s_vis==true){
-						i.s_vis=null;
-						s_pass=true;
-					}else{
-						i.s_vis=null;
+function sk_fw(i, bypss){
+			let bps=(typeof bypss!=='undefined' && bypss)?true:false;
+					let s_pass=false;
+					if(!bps){
+						if(i.s_vis==null){
+							s_pass=chkVis(i,false);
+						}else if(i.s_vis==true){
+							i.s_vis=null;
+							s_pass=true;
+						}else{
+							i.s_vis=null;
+						}
 					}
-				if(s_pass){
+		if(s_pass || bps){
 			if(prefPerc){
 				if(isFinite(i.video.duration)){
 					i.video.currentTime=Math.min(i.video.duration,i.video.currentTime+0.01*skp*i.video.duration);
@@ -1485,11 +1491,13 @@ function cvs_whl(e,i){
 	e.stopPropagation();
 	if (e.deltaY < 0)
 	{
-		i.skf.click();
+		//i.skf.click();
+		sk_fw(i,true);
 	}
 	if (e.deltaY > 0)
 	{
-		i.skb.click();
+		//i.skb.click();
+		sk_bk(i,true);
 	}
 }
 
