@@ -266,6 +266,8 @@ let sdrct=absBoundingClientRect(i.bdivs);
 
 i.right=vrct.left+0.001*vrct.width;
 
+
+
 if(i.video.tagName==='AUDIO'){
 	if(vrct.top<2*sdrct.height+0.102*vrct.height){
 		i.sDivsCSS2='top: '+(vrct.bottom+0.102*vrct.height)+'px !important;  left: '+i.right+'px !important;';
@@ -273,7 +275,18 @@ if(i.video.tagName==='AUDIO'){
 		i.sDivsCSS2='top: '+(vrct.top-2*sdrct.height-0.102*vrct.height)+'px !important;  left: '+i.right+'px !important;';
 	}
 }else{
-i.top=(vrct.top+0.102*vrct.height);
+	let vdc=i.video.ownerDocument;
+	let vdcf=vdc.fullscreenElement;
+	i.top=0.102*vrct.height;
+	if(	!(		vdc.fullscreen===true &&
+					!!vdcf &&
+					(	vdcf.clientHeight === i.video.clientHeight ||
+						absBoundingClientRect(vdcf).top === vrct.top ) &&
+					getAncestors(i.video, false, true, false).includes(vdcf)
+				)
+		){
+			i.top+=vrct.top;
+		}
 i.sDivsCSS2='top: '+i.top+'px !important;  left: '+i.right+'px !important;';
 }
 
