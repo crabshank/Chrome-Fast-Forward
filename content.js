@@ -85,36 +85,64 @@ function absBoundingClientRect(el){
 	return r;
 }
 
-function getAncestors(el, elementsOnly, elToHTML, notInShadow){
-	firstParent=el;
-	let ancestors=[el];
-	let outAncestors=[];
+function getParent(el,elementsOnly,doc_head_body){
+if(!!el && typeof el!=='undefined'){
+	let out=null;
+	let curr=el;
 	let end=false;
+	
 	while(!end){
-		if(!!firstParent.parentElement && typeof firstParent.parentElement!=='undefined'){
-			if(firstParent.parentElement.tagName==='BODY' || firstParent.parentElement.tagName==='HEAD' || firstParent.parentElement.tagName==='HTML'){
+		if(!!curr.parentNode && typeof curr.parentNode!=='undefined'){
+			out=curr.parentNode;
+			curr=out;
+			end=(elementsOnly && out.nodeType!=1)?false:true;
+		}else if(!!curr.parentElement && typeof curr.parentElement!=='undefined'){
+				out=curr.parentElement;
 				end=true;
-			}else{
-				firstParent=firstParent.parentElement;
-			}
-		}else if(!!firstParent.parentNode && typeof firstParent.parentNode!=='undefined'){
-				firstParent=firstParent.parentNode;
-		}else if(!!firstParent.host && typeof firstParent.host!=='undefined'){
-				firstParent=firstParent.host;
+				curr=out;
+		}else if(!!curr.host && typeof curr.host!=='undefined'){
+				out=curr.host;
+				end=(elementsOnly && out.nodeType!=1)?false:true;
+				curr=out;
 		}else{
+			out=null;
 			end=true;
 		}
-		if(!end){
-			if(!elementsOnly || (elementsOnly && firstParent.nodeType==1)){
-				if(elToHTML){
-					ancestors.push(firstParent);
-				}else{
-					ancestors.unshift(firstParent);
-				}
+	}
+	
+	if(out!==null){
+		if(!doc_head_body){
+			if(out.nodeName==='BODY' || out.nodeName==='HEAD' || out.nodeName==='HTML'){
+				out=null;
 			}
 		}
 	}
 	
+	return out;
+}else{
+	return null;
+}
+}
+
+function getAncestors(el, elementsOnly, elToHTML, doc_head_body, notInShadow){
+	let curr=el;
+	let ancestors=[el];
+	let outAncestors=[];
+	let end=false;
+	
+	while(!end){
+		let p=getParent(curr,elementsOnly,doc_head_body);
+		if(p!==null){
+			if(elToHTML){
+				ancestors.push(p);
+			}else{
+				ancestors.unshift(p)
+			}
+			curr=p;
+		}else{
+			end=true;
+		}
+	}
 	if(notInShadow){
 		if(elToHTML){
 			for(let i=ancestors.length-1; i>=0; i--){
@@ -135,6 +163,23 @@ function getAncestors(el, elementsOnly, elToHTML, notInShadow){
 		outAncestors=ancestors;
 	}
 	return outAncestors;
+}
+
+function hasAncestor(el,p){
+	let out=false;
+	let curr=el;
+	let end=false;
+	while(!end){
+		let r=getParent(curr,false,true);
+		curr=r;
+		if(r===null){
+			end=true;
+		}else if(r===p){
+			out=true;
+			end=true;
+		}
+	}
+	return out;
 }
 
 function findIndexTotalInsens(string, substring, index) {
@@ -266,8 +311,6 @@ let sdrct=absBoundingClientRect(i.bdivs);
 
 i.right=vrct.left+0.001*vrct.width;
 
-
-
 if(i.video.tagName==='AUDIO'){
 	if(vrct.top<2*sdrct.height+0.102*vrct.height){
 		i.sDivsCSS2='top: '+(vrct.bottom+0.102*vrct.height)+'px !important;  left: '+i.right+'px !important;';
@@ -278,12 +321,15 @@ if(i.video.tagName==='AUDIO'){
 	let vdc=i.video.ownerDocument;
 	let vdcf=vdc.fullscreenElement;
 	i.top=0.102*vrct.height;
-	if(	!(		vdc.fullscreen===true &&
-					!!vdcf &&
-					(	vdcf.clientHeight === i.video.clientHeight ||
-						absBoundingClientRect(vdcf).top === vrct.top ) &&
-					getAncestors(i.video, false, true, false).includes(vdcf)
-				)
+	if(	!(	vdc.fullscreen===true &&
+				  !!vdcf &&
+				  ( vdcf===i.video ||
+				  	( hasAncestor(i.video,vdcf) &&
+							( vdcf.clientHeight===i.video.clientHeight ||
+							   absBoundingClientRect(vdcf).top===vrct.top )
+					   )
+					)
+			)
 		){
 			i.top+=vrct.top;
 		}
@@ -698,7 +744,7 @@ let fsOn=document.fullscreen || document.webkitIsFullScreen;
 if(fsOn){
 	i.video.insertAdjacentElement('beforebegin',i.sdivs);
 }else{
-let anc=getAncestors(i.video,true,true,true);
+let anc=getAncestors(i.video, true, true, false, true);
 let fpt=anc[anc.length-1];
 fpt.insertAdjacentElement('beforebegin', i.sdivs);
 }
@@ -1087,7 +1133,7 @@ cvs.style.setProperty('visibility','visible','important');
 cvs.style.setProperty('float','initial','important');
 cvs.style.setProperty('border-radius','0%','important');
 
-let anc=getAncestors(vid,true,true,true);
+let anc=getAncestors(obj.video, true, true, false, true);
 let fpt=anc[anc.length-1];
 
 fpt.insertAdjacentElement('beforebegin', sdivs);
