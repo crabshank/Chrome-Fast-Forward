@@ -1024,16 +1024,26 @@ function restore_options()
 			
 		if(typeof observer ==="undefined" && typeof timer ==="undefined"){
 			var timer;
+			var timer_tm=null;
 		const observer = new MutationObserver((mutations) =>
 		{
-			if (timer)
-			{
+			if(timer){
 				clearTimeout(timer);
+				if(performance.now()-timer_tm>=1350){
+					checker();
+					timer_tm=performance.now();
+				}
 			}
+			
 			timer = setTimeout(() =>
 			{
 				checker();
+				timer_tm=performance.now();
 			}, 150);
+			
+			if(timer_tm ===null){
+				timer_tm=performance.now();
+			}
 		});
 
 
