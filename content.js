@@ -246,7 +246,7 @@ var isCurrentSiteBlacklisted = function()
 		return blacklistMatch(blacklist, window.location.href);
 };
 
-var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: table !important; visibility: initial !important; float: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; flex-flow: column nowrap !important; justify-content: flex-start !important; align-items: stretch !important; align-content: flex-start !important; gap: 0px 0px !important; visibility: initial !important; float: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 
 	function bf_s_hmmss(s, z)
 	{
@@ -1101,7 +1101,7 @@ let skf = document.createElement("button");
 let butn = document.createElement("button");
 let sdivs = document.createElement("div");
 let bdivs = document.createElement("div");
-bdivs.style.cssText="padding: 0px !important; border-bottom-width: 0px !important; border-left-width: 0px !important; border-right-width: 0px !important; border-top-width: 0px!important; line-height: 0px !important; margin: 0px !important; max-width: max-content !important; user-select: none !important;";
+bdivs.style.cssText="padding: 0px !important; border-bottom-width: 0px !important; border-left-width: 0px !important; border-right-width: 0px !important; border-top-width: 0px!important; line-height: 0px !important; margin: 0px !important; max-width: max-content !important; user-select: none !important; display: flex !important; flex-flow: row wrap !important; justify-content: flex-start !important; align-items: stretch !important; align-content: flex-start !important; gap: 0px 0px !important;";
 let clse = document.createElement("input");
 let skb_l = document.createElement("button");
 let skf_l = document.createElement("button");
