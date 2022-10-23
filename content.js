@@ -14,31 +14,62 @@ var sk_buff=false;
 var prefPerc=false;
 var cvs_clk=0;
 
-function getTagNameShadow(docm, tgn){
+function keepMatchesShadow(els,slc,isNodeName){
+   if(slc===false){
+      return els;
+   }else{
+      let out=[];
+   for(let i=0, len=els.length; i<len; i++){
+      let n=els[i];
+           if(isNodeName){
+	            if((n.nodeName.toLocaleLowerCase())===slc){
+	                out.push(n);
+	            }
+           }else{ //selector
+	               if(!!n.matches && typeof n.matches!=='undefined' && n.matches(slc)){
+	                  out.push(n);
+	               }
+           }
+   	}
+   	return out;
+   	}
+}
+
+function getMatchingNodesShadow(docm, slc, isNodeName, onlyShadowRoots){
+slc=(isNodeName && slc!==false)?(slc.toLocaleLowerCase()):slc;
 var shrc=[docm];
 var shrc_l=1;
-
+var out=[];
 let srCnt=0;
 
 while(srCnt<shrc_l){
-	allNodes=[shrc[srCnt],...shrc[srCnt].querySelectorAll('*')];
-	for(let i=0, len=allNodes.length; i<len; i++){
-		if(!!allNodes[i] && typeof allNodes[i] !=='undefined' && allNodes[i].tagName===tgn && i>0){
-			shrc.push(allNodes[i]);
-		}
-
-		if(!!allNodes[i].shadowRoot && typeof allNodes[i].shadowRoot !=='undefined'){
-			let c=allNodes[i].shadowRoot.children;
-			shrc.push(...c);
-		}
+	let curr=shrc[srCnt];
+	let sh=(!!curr.shadowRoot && typeof curr.shadowRoot !=='undefined')?true:false;
+	let nk=keepMatchesShadow([curr],slc,isNodeName);
+	let nk_l=nk.length;
+	
+	if( !onlyShadowRoots && nk_l>0){  
+		out.push(...nk);
 	}
+	
+	shrc.push(...curr.childNodes);
+	
+	if(sh){
+		   let cs=curr.shadowRoot;
+		   let csc=[...cs.childNodes];
+			   if(onlyShadowRoots){
+			      if(nk_l>0){
+			       out.push({root:nk[0], childNodes:csc});
+			      }
+			   }
+			   shrc.push(...csc);
+	}
+
 	srCnt++;
 	shrc_l=shrc.length;
 }
-	shrc=shrc.slice(1);
-	let out=shrc.filter((c)=>{return c.tagName===tgn;});
-	
-	return out;
+
+return out;
 }
 
 function absBoundingClientRect(el){
@@ -287,10 +318,10 @@ var sDivsCSS="max-width: max-content !important; line-height: 0px !important; pa
 
 function findInst(v, mon){
 	if(!mon){
-		let arrChk=global.instances.filter((i)=>{return i.video===v;});
+		let arrChk=global.instances.filter((i)=>{return i.video.isSameNode(v);});
 		return (arrChk.length>0)?arrChk[0]:null;
 	}else{
-		let arrChk=global.monitored.filter((m)=>{return m===v;});
+		let arrChk=global.monitored.filter((m)=>{return m.isSameNode(v);});
 		return (arrChk.length>0)?arrChk[0]:null;
 	}
 }
@@ -323,7 +354,7 @@ if(i.video.tagName==='AUDIO'){
 	i.top=0.102*vrct.height;
 	if(	!(	vdc.fullscreen===true &&
 				  !!vdcf &&
-				  ( vdcf===i.video ||
+				  ( vdcf.isSameNode(i.video) ||
 				  	( hasAncestor(i.video,vdcf) &&
 							( vdcf.clientHeight===i.video.clientHeight ||
 							   absBoundingClientRect(vdcf).top===vrct.top )
@@ -468,12 +499,12 @@ function get_src(vid){
 }
 
 function checkInclude(arr,el){
-	let arrChk=arr.filter((a)=>{return a===el});
+	let arrChk=arr.filter((a)=>{return a.isSameNode(el);});
 	return (arrChk.length>0)?true:false;
 }
 
 function removeEls(d, array) {
-    return array.filter((a)=>{return a!=d});
+    return array.filter((a)=>{return a!==d});
 }
 
 function elRemover(el){
@@ -495,7 +526,7 @@ function setPix(pixels, x, y, r, g, b, width) {
 function drawBuffered(i){
 	var len=i.video.buffered.length;
 	if(len>0){
-			var ctx = i.cvs.getContext('2d');
+			var ctx = i.cvs.getContext('2d', {willReadFrequently: true});
 			ctx.globalCompositeOperation = "source-over";
 			var canvasWidth = i.cvs.scrollWidth;
 			var canvasHeight = i.cvs.scrollHeight;
@@ -1572,8 +1603,8 @@ function cvs_whl(e,i){
 
 function checker(){
 			let DOMvids=[
-				...getTagNameShadow(document,'VIDEO'),
-				...getTagNameShadow(document,'AUDIO')
+				...getMatchingNodesShadow(document,'VIDEO',true,false),
+				...getMatchingNodesShadow(document,'AUDIO',true,false)
 			];
 
 			for (let j=0; j<DOMvids.length; j++){
