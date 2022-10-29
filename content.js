@@ -277,6 +277,14 @@ var isCurrentSiteBlacklisted = function()
 		return blacklistMatch(blacklist, window.location.href);
 };
 
+function forcePlaybackRate(i,noAdj){
+	if(noAdj!==true){
+		let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
+			i.video.playbackRate=vN;		
+	}
+	i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x  [Buffered: "+i.ldd+"]";
+}
+
 var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; flex-flow: column nowrap !important; justify-content: flex-start !important; align-items: stretch !important; align-content: flex-start !important; gap: 0px 0px !important; visibility: initial !important; float: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 
 	function bf_s_hmmss(s, z)
@@ -405,7 +413,7 @@ bdkCol_1="buttonface";
 txCol_1="black";
 bdkCol2_1="#f0f0f080";
 
-let bfStyle="min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol_1+" !important; border-color: "+bdkCol_1+" !important; float: initial !important; text-align-last: center !important; color: "+txCol_1+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+let bfStyle="min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol_1+" !important; border-color: "+bdkCol_1+" !important; float: initial !important; text-align-last: center !important; color: "+txCol_1+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 
 let ds_i=" display: initial !important;";
 let ds_n=" display: none !important;";
@@ -422,14 +430,15 @@ if(!sk_buff){
 	i.skf_l.style.cssText=bfStyle+ds_i;
 }
 
-i.butn.style.cssText = "min-width: 75px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
-i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !important; line-height: 2ch !important; padding: 0.175ch 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: #f00000 !important; webkit-text-fill-color: #ececec !important;  border-width: 0px !important; border-style: outset !important; border-color: #f00000 !important; float: initial !important; color: white !important; font-size: unset !important; border-radius: 0% !important;";
+i.butn.style.cssText = "min-width: 75px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+i.clse.style.cssText = "-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color:  #f00000 !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
 
 clearTimeout(i.timer3);
 i.timer3 = setTimeout(function(){
 	if(!i.entered_cvs){
 			if(i.entered){
 							if(i.bufEnd){
+									forcePlaybackRate(i);
 									drawBuffered(i);
 								}
 								i.cvs.style.setProperty('opacity',0.64,'important');
@@ -444,7 +453,7 @@ i.timer2 = setTimeout(function(){
 			i.faded=true;
 	if(!i.entered){
 		if(mbMde || (mbMdeFs && !(document.fullscreen || document.webkitIsFullScreen))){
-			let bfStyle2="min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2_1+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol_1+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+			let bfStyle2="min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2_1+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol_1+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 
 i.skb.style.cssText=bfStyle2+ds_i;
 i.skf.style.cssText=bfStyle2+ds_i;
@@ -457,8 +466,10 @@ if(!sk_buff){
 	i.skf_l.style.cssText=bfStyle2+ds_i;
 }
 
-i.butn.style.cssText = "min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0 0.25ch 0 0 !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
-i.clse.style.cssText = "max-width: max-content !important; min-width: 75px !important; line-height: 2ch !important; padding: 0.175ch 0 2px 4px !important; display: initial !important; visibility: initial !important; background-color: rgb(240 0 0 / 50%) !important; webkit-text-fill-color: #ececec !important; border-width: 0px !important; border-style: outset !important; border-color: rgb(0 0 0 / 0.04) !important; float: initial !important; color: white !important; font-size: unset !important; border-radius: 0% !important;";
+i.butn.style.cssText = "min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+i.clse.style.cssText ="-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color: rgba(240, 0, 0, 0.5) !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
+
+
 i.cvs.style.setProperty('opacity',0,'important');
 		}else{
 			i.sdivs.style.cssText = sDivsCSS+i.sDivsCSS2+" opacity: 0 !important";
@@ -615,12 +626,7 @@ function calcSp(i,noAdj){
 			if(lastPart){
 				i.bufEnd=true;
 					i.ldd='END';
-					if(!noAdj){
-					let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
-						i.video.playbackRate=vN;		
-					}
-						i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x  [Buffered: "+i.ldd+"]";
-					
+					forcePlaybackRate(i,noAdj);
 			}else{
 				i.bufEnd=false;
 					var tot=0;
@@ -1523,6 +1529,7 @@ function cvs_hdl(e,i,m){
 			if(!i.entered_cvs){
 					if(i.entered && !i.faded){
 							if(i.bufEnd){
+									forcePlaybackRate(i);
 									drawBuffered(i);
 								}
 								i.cvs.style.setProperty('opacity',0.64,'important');
@@ -1537,6 +1544,7 @@ function cvs_hdl(e,i,m){
 			i.entered_cvs=true;
 			if(!i.faded){
 				if(i.bufEnd){
+					forcePlaybackRate(i);
 					drawBuffered(i);
 					}
 				i.cvs.style.setProperty('opacity',0.84,'important');
@@ -1545,6 +1553,7 @@ function cvs_hdl(e,i,m){
 		i.timer3 = setTimeout(function(){
 						if((i.entered || i.entered_cvs) && !i.faded){
 							if(i.bufEnd){
+									forcePlaybackRate(i);
 									drawBuffered(i);
 								}
 								i.cvs.style.setProperty('opacity',0.64,'important');
