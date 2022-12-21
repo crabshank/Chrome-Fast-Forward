@@ -1187,10 +1187,14 @@ cvs.style.setProperty('visibility','visible','important');
 cvs.style.setProperty('float','initial','important');
 cvs.style.setProperty('border-radius','0%','important');
 
-let anc=getAncestors(obj.video, true, true, false, true);
-let fpt=anc[anc.length-1];
 
-fpt.insertAdjacentElement('beforebegin', sdivs);
+if(document.fullscreen || document.webkitIsFullScreen){
+	i.video.insertAdjacentElement('beforebegin',i.sdivs);
+}else{
+	let anc=getAncestors(obj.video, true, true, false, true);
+	let fpt=anc[anc.length-1];
+	fpt.insertAdjacentElement('beforebegin', sdivs);
+}
 
 obj.skb_l=skb_l;
 obj.skb=skb;
