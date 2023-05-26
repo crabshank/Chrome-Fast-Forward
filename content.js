@@ -570,44 +570,50 @@ function drawBuffered(i){
 				let xdt=Math.floor(t_i*prp);
 				let c_i=i.video.currentTime;
 				let xdc=(c_i>=s_i && c_i<=t_i)?Math.ceil(c_i*prp):-1;
-				for (let y=canvasHeight-1; y>=0; y--){
 				for (let x=xds; x<=xdt; x++){
-					if(xdc!=-1 && x>=xdc && x<=xdt){
-						setPix(pixels, x, y, 0,171,14, canvasWidth);
+					let grn=(xdc!=-1 && x>=xdc && x<=xdt)?true:false;
+					if(grn===true){
+						for (let y=canvasHeight-1; y>=0; y--){
+							setPix(pixels, x, y, 0,171,14, canvasWidth);
+						}
 					}else{
-						setPix(pixels, x, y, 144,67,204, canvasWidth);
+						for (let y=canvasHeight-1; y>=0; y--){
+							setPix(pixels, x, y, 144,67,204, canvasWidth);
+						}
 					}
-				}
 				}
 			}	
 			
-					}else{
-						
-						let c_i=i.video.currentTime;
-						let latest=Math.max(i.video.buffered.end(len-1), c_i);
-						let earliest=Math.min(i.video.buffered.start(0), c_i);
-						i.cvs.setAttribute('start', earliest);
-						i.cvs.setAttribute('end', latest);
-						ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-						for (let k=len-1; k>=0; k--){
-							let t_i=i.video.buffered.end(k);
-							let s_i=i.video.buffered.start(k);
-							let prp=canvasWidth/(latest-earliest)
-							let xds=Math.ceil((s_i-earliest)*prp);
-							let xdt=Math.floor((t_i-earliest)*prp);
-							let c_i=i.video.currentTime;
-							let xdc=(c_i>=s_i && c_i<=t_i)?Math.ceil((c_i-earliest)*prp):-1;
-							for (let y=canvasHeight-1; y>=0; y--){
-							for (let x=xds; x<=xdt; x++){
-								if(xdc!=-1 && x>=xdc && x<=xdt){
-									setPix(pixels, x, y, 0,171,14, canvasWidth);
-								}else{
-									setPix(pixels, x, y, 144,67,204, canvasWidth);
-								}
-							}
-						}	
+	}else{
+		
+		let c_i=i.video.currentTime;
+		let latest=Math.max(i.video.buffered.end(len-1), c_i);
+		let earliest=Math.min(i.video.buffered.start(0), c_i);
+		i.cvs.setAttribute('start', earliest);
+		i.cvs.setAttribute('end', latest);
+		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+		for (let k=len-1; k>=0; k--){
+			let t_i=i.video.buffered.end(k);
+			let s_i=i.video.buffered.start(k);
+			let prp=canvasWidth/(latest-earliest)
+			let xds=Math.ceil((s_i-earliest)*prp);
+			let xdt=Math.floor((t_i-earliest)*prp);
+			let c_i=i.video.currentTime;
+			let xdc=(c_i>=s_i && c_i<=t_i)?Math.ceil((c_i-earliest)*prp):-1;
+			for (let x=xds; x<=xdt; x++){
+				let grn=(xdc!=-1 && x>=xdc && x<=xdt)?true:false;
+				if(grn===true){
+					for (let y=canvasHeight-1; y>=0; y--){
+						setPix(pixels, x, y, 0,171,14, canvasWidth);
 					}
+				}else{
+					for (let y=canvasHeight-1; y>=0; y--){
+						setPix(pixels, x, y, 144,67,204, canvasWidth);
 					}
+				}
+			}
+		}
+	}
 					ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 					ctx.putImageData(iData, 0, 0);
 	}
