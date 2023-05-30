@@ -910,7 +910,7 @@ function cl_whl(evt,i) {
 	}
 }
 
-function cl_dbl_clk(i) {
+function cl_dbl_clk(i,dbl) {
 	
 	i.s_vis=chkVis(i,false); //null -> true/false
 	i.c_vis=chkVis(i,true);	
@@ -920,6 +920,13 @@ let b_pass=true;
 
  if(event.target===i.cvs){
 		event.stopPropagation();
+		if(cvs_clk>1){
+			cvs_clkd=false;
+		}else if(dbl!==true){
+			cvs_clkd=true;
+		}else{
+			cvs_clkd=false;
+		}
 		i.obscPrg={x: event.pageX, l: rectV.left, w:rectV.width}
 		//i.cvs.click();
 		cvs_hdl(event,i,4);
@@ -929,6 +936,13 @@ let b_pass=true;
 if(b_pass){ //button not clicked directly
 	if(event.pageX >= rectV.left && event.pageX <= rectV.right && event.pageY >= rectV.top && event.pageY <= rectV.bottom){
 		event.stopPropagation();
+		if(cvs_clk>1){
+			cvs_clkd=false;
+		}else if(dbl!==true){
+			cvs_clkd=true;
+		}else{
+			cvs_clkd=false;
+		}
 		i.obscPrg={x: event.pageX, l: rectV.left, w:rectV.width}
 		//i.cvs.click();
 			cvs_hdl(event,i,4);
@@ -961,11 +975,6 @@ let ct=false;
 		sk_fw(i);
 		b_pass=false;
 	}else if(event.target===i.cvs){
-		if(cvs_clk>1){
-			cvs_clkd=false;
-		}else{
-			cvs_clkd=true;
-		}
 		b_pass=false;
 	}else if(sk_buff){
 		if(event.target===i.skb_l){
@@ -1002,11 +1011,6 @@ let ct=false;
 			sk_fw(i);
 			ct=true;
 		}else if(event.pageX >= rectV.left && event.pageX <= rectV.right && event.pageY >= rectV.top && event.pageY <= rectV.bottom){
-				if(cvs_clk>1){
-					cvs_clkd=false;
-				}else{
-					cvs_clkd=true;
-				}
 				ct=true;
 		}else if(sk_buff){
 			let rectKL=absBoundingClientRect(i.skb_l);
@@ -1333,7 +1337,7 @@ bdivs.addEventListener('pointerleave',(evt) => pointerleave_hdl(evt,obj));
 if(cvs_clk==0){
 	window.addEventListener('pointerdown',() => cl_dbl_clk(obj));
 }else if(cvs_clk==1){
-	window.addEventListener('dblclick',() => cl_dbl_clk(obj));
+	window.addEventListener('dblclick',() => cl_dbl_clk(obj,true));
 }
 
 window.addEventListener('pointerdown',() => cl_clk(obj));
