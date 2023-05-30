@@ -916,10 +916,10 @@ function cl_dbl_clk(i) {
 	i.c_vis=chkVis(i,true);	
 	let rectV=absBoundingClientRect(i.cvs);
 //event.preventDefault();
-event.stopPropagation();
 let b_pass=true;
 
  if(event.target===i.cvs){
+		event.stopPropagation();
 		i.obscPrg={x: event.pageX, l: rectV.left, w:rectV.width}
 		//i.cvs.click();
 		cvs_hdl(event,i,4);
@@ -928,6 +928,7 @@ let b_pass=true;
 	
 if(b_pass){ //button not clicked directly
 	if(event.pageX >= rectV.left && event.pageX <= rectV.right && event.pageY >= rectV.top && event.pageY <= rectV.bottom){
+		event.stopPropagation();
 		i.obscPrg={x: event.pageX, l: rectV.left, w:rectV.width}
 		//i.cvs.click();
 			cvs_hdl(event,i,4);
