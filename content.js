@@ -970,9 +970,8 @@ function cl_clk(i) {
 }
 
 function cl_ptUp(i) {
-	cvs_clkd=false;
-	justUp=true;
 	if(event.target!==i.cvs){
+		justUp=true;
 		i.entered_cvs=false;
 		clearTimeout(i.timer3);
 		i.timer3 = setTimeout(function(){
