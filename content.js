@@ -1283,35 +1283,43 @@ global.instances.push(obj);
 
 def_retCSS(obj, true, true);
 
-window.addEventListener("wheel", (event) => {
+function wdw(event){
 	if(!obj.sclr){
 		obj.sclr=true;
-		def_retCSS(obj,true, false);
+		let scl=true;
+		let rectV=absBoundingClientRect(obj.cvs);
+		//event.preventDefault();
+		let b_pass=true;
+
+		 if(event.target===obj.cvs){
+				scl=false;
+				b_pass=false;
+		}
+		
+		if(b_pass){ //button not clicked directly
+			if(event.pageX >= rectV.left && event.pageX <= rectV.right && event.pageY >= rectV.top && event.pageY <= rectV.bottom){
+				scl=false;
+			}
+		}
+		
+		def_retCSS(obj,scl,false);
 		obj.sclr=false;
 	}
+}
+
+window.addEventListener("wheel", (event) => {
+	 wdw(event);
 }, true);
 
 window.addEventListener("wheel", (event) => {
-	if(!obj.sclr){
-		obj.sclr=true;
-		def_retCSS(obj,true,false);
-		obj.sclr=false;
-	}
+	wdw(event);
 }, false);
 
 document.addEventListener("scroll", (event) => {
-	if(!obj.sclr){
-		obj.sclr=true;
-		def_retCSS(obj,true,false);
-		obj.sclr=false;
-	}
+	wdw(event);
 }, true);
 document.addEventListener("scroll", (event) => {
-	if(!obj.sclr){
-		obj.sclr=true;
-		def_retCSS(obj,true,false);
-		obj.sclr=false;
-	}
+	wdw(event);
 }, false);
 
 
