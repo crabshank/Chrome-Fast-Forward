@@ -16,64 +16,82 @@ var cvs_clk=0;
 var cvs_clkd=false;
 var justUp=false;
 
-function keepMatchesShadow(els,slc,isNodeName){
-   if(slc===false){
+function keepMatchesShadow(els,slcArr,isNodeName){
+   if(slcArr[0]===false){
       return els;
    }else{
-      let out=[];
-   for(let i=0, len=els.length; i<len; i++){
-      let n=els[i];
-           if(isNodeName){
-	            if((n.nodeName.toLocaleLowerCase())===slc){
-	                out.push(n);
-	            }
-           }else{ //selector
-	               if(!!n.matches && typeof n.matches!=='undefined' && n.matches(slc)){
-	                  out.push(n);
-	               }
-           }
-   	}
-   	return out;
+		let out=[];
+		for(let i=0, len=els.length; i<len; i++){
+		  let n=els[i];
+				for(let k=0, len_k=slcArr.length; k<len_k; k++){
+					let sk=slcArr[k];
+					if(isNodeName){
+						if((n.nodeName.toLocaleLowerCase())===sk){
+							out.push(n);
+						}
+					}else{ //selector
+						   if(!!n.matches && typeof n.matches!=='undefined' && n.matches(sk)){
+							  out.push(n);
+						   }
+					}
+				}
+		}
+		return out;
    	}
 }
 
 function getMatchingNodesShadow(docm, slc, isNodeName, onlyShadowRoots){
-slc=(isNodeName && slc!==false)?(slc.toLocaleLowerCase()):slc;
-var shrc=[docm];
-var shrc_l=1;
-var out=[];
-let srCnt=0;
+	let slcArr=[];
+	if(typeof(slc)==='string'){
+		slc=(isNodeName && slc!==false)?(slc.toLocaleLowerCase()):slc;
+		slcArr=[slc];
+	}else if(typeof(slc[0])!=='undefined'){
+		for(let i=0, len=slc.length; i<len; i++){
+			let s=slc[i];
+			slcArr.push((isNodeName && slc!==false)?(s.toLocaleLowerCase()):s)
+		}
+	}else{
+		slcArr=[slc];
+	}
+	var shrc=[docm];
+	var shrc_l=1;
+	var out=[];
+	let srCnt=0;
 
-while(srCnt<shrc_l){
-	let curr=shrc[srCnt];
-	let sh=(!!curr.shadowRoot && typeof curr.shadowRoot !=='undefined')?true:false;
-	let nk=keepMatchesShadow([curr],slc,isNodeName);
-	let nk_l=nk.length;
-	
-	if( !onlyShadowRoots && nk_l>0){  
-		out.push(...nk);
-	}
-	
-	for(let i=0, len=curr.childNodes.length; i<len; i++){
-		shrc.push(curr.childNodes[i]);
-	}
-	
-	if(sh){
-		   let cs=curr.shadowRoot;
-		   let csc=[...cs.childNodes];
+	while(srCnt<shrc_l){
+		let curr=shrc[srCnt];
+		let sh=(!!curr.shadowRoot && typeof curr.shadowRoot !=='undefined')?true:false;
+		let nk=keepMatchesShadow([curr],slcArr,isNodeName);
+		let nk_l=nk.length;
+		
+		if( !onlyShadowRoots && nk_l>0){
+			for(let i=0; i<nk_l; i++){
+				out.push(nk[i]);
+			}
+		}
+		
+		for(let i=0, len=curr.childNodes.length; i<len; i++){
+			shrc.push(curr.childNodes[i]);
+		}
+		
+		if(sh){
+			   let cs=curr.shadowRoot;
+			   let csc=[...cs.childNodes];
 			   if(onlyShadowRoots){
-			      if(nk_l>0){
-			       out.push({root:nk[0], childNodes:csc});
-			      }
+				  if(nk_l>0){
+				   out.push({root:nk[0], childNodes:csc});
+				  }
 			   }
-			   shrc.push(...csc);
+				for(let i=0, len=csc.length; i<len; i++){
+					shrc.push(csc[i]);
+				}
+		}
+
+		srCnt++;
+		shrc_l=shrc.length;
 	}
-
-	srCnt++;
-	shrc_l=shrc.length;
-}
-
-return out;
+	
+	return out;
 }
 
 function absBoundingClientRect(el){
@@ -1717,10 +1735,7 @@ function cvs_whl(e,i){
 }
 
 function checker(){
-			let DOMvids=[
-				...getMatchingNodesShadow(document,'VIDEO',true,false),
-				...getMatchingNodesShadow(document,'AUDIO',true,false)
-			];
+			let DOMvids=getMatchingNodesShadow(document,['VIDEO','AUDIO'],true,false);
 
 			for (let j=0; j<DOMvids.length; j++){
 				let found=(global.monitored.includes(DOMvids[j]))?true:false;
