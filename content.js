@@ -307,7 +307,7 @@ function forcePlaybackRate(i,noAdj){
 		i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x  [Buffered: "+i.ldd+"]";
 }
 
-var sDivsCSS="max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; flex-flow: column nowrap !important; justify-content: flex-start !important; align-items: stretch !important; align-content: flex-start !important; gap: 0px 0px !important; visibility: initial !important; float: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+var sDivsCSS="all: initial !important;max-width: max-content !important; line-height: 0px !important; padding: 0px !important; display: flex !important; flex-flow: column nowrap !important; justify-content: flex-start !important; align-items: stretch !important; align-content: flex-start !important; gap: 0px 0px !important; visibility: initial !important; float: initial !important; z-index: "+Number.MAX_SAFE_INTEGER+" !important; position: absolute !important; background-color: transparent !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 
 	function bf_s_hmmss(s, z)
 	{
@@ -451,7 +451,7 @@ bdkCol_1="buttonface";
 txCol_1="black";
 bdkCol2_1="#f0f0f080";
 
-let bfStyle="min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol_1+" !important; border-color: "+bdkCol_1+" !important; float: initial !important; text-align-last: center !important; color: "+txCol_1+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+let bfStyle="min-width: 42px !important; line-height: 1.91ch !important;all: initial !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol_1+" !important; border-color: "+bdkCol_1+" !important; float: initial !important; text-align-last: center !important; color: "+txCol_1+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 
 let ds_i=" display: initial !important;";
 let ds_n=" display: none !important;";
@@ -468,8 +468,8 @@ if(!sk_buff){
 	i.skf_l.style.cssText=bfStyle+ds_i;
 }
 
-i.butn.style.cssText = "min-width: 75px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
-i.clse.style.cssText = "-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color:  #f00000 !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
+i.butn.style.cssText = "min-width: 75px !important; line-height: 1.91ch !important;all: initial !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+i.clse.style.cssText = "-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;all: initial !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color:  #f00000 !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
 
 clearTimeout(i.timer3);
 i.timer3 = setTimeout(function(){
@@ -494,7 +494,7 @@ i.timer2 = setTimeout(function(){
 			i.faded=true;
 	if(!i.entered){
 		if(mbMde || (mbMdeFs && !(document.fullscreen || document.webkitIsFullScreen))){
-			let bfStyle2="min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2_1+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol_1+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+			let bfStyle2="min-width: 42px  !important; line-height: 1.91ch !important;all: initial !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2_1+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol_1+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 
 i.skb.style.cssText=bfStyle2+ds_i;
 i.skf.style.cssText=bfStyle2+ds_i;
@@ -507,8 +507,8 @@ if(!sk_buff){
 	i.skf_l.style.cssText=bfStyle2+ds_i;
 }
 
-i.butn.style.cssText = "min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
-i.clse.style.cssText ="-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color: rgba(240, 0, 0, 0.5) !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
+i.butn.style.cssText = "min-width: 75px  !important; line-height: 1.91ch !important;all: initial !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+i.clse.style.cssText ="-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;all: initial !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color: rgba(240, 0, 0, 0.5) !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
 
 if(cvs_clkd===false && !i.entered_cvs){
 	i.cvs.style.setProperty('opacity',0,'important');
@@ -1217,12 +1217,12 @@ let skf = document.createElement("button");
 let butn = document.createElement("button");
 let sdivs = document.createElement("div");
 let bdivs = document.createElement("div");
-bdivs.style.cssText="padding: 0px !important; border-bottom-width: 0px !important; border-left-width: 0px !important; border-right-width: 0px !important; border-top-width: 0px!important; line-height: 0px !important; margin: 0px !important; max-width: max-content !important; user-select: none !important; display: flex !important; flex-flow: row wrap !important; justify-content: flex-start !important; align-items: stretch !important; align-content: flex-start !important; gap: 0px 0px !important;";
+bdivs.style.cssText="all: initial !important;padding: 0px !important; border-bottom-width: 0px !important; border-left-width: 0px !important; border-right-width: 0px !important; border-top-width: 0px!important; line-height: 0px !important; margin: 0px !important; max-width: max-content !important; user-select: none !important; display: flex !important; flex-flow: row wrap !important; justify-content: flex-start !important; align-items: stretch !important; align-content: flex-start !important; gap: 0px 0px !important;";
 let clse = document.createElement("input");
 let skb_l = document.createElement("button");
 let skf_l = document.createElement("button");
 let prgBarTime = document.createElement("div");
-prgBarTime.style.cssText="text-align-last: left !important; min-width: 4.84ch !important; line-height: 1.91ch !important; transform: translate(0px, 0.06ch) !important;padding: 0.05ch 0.25ch 0.05ch 0.44ch !important;visibility: initial !important;border-width: 2px !important;border-style: outset !important;background-color: rgb(43 43 43 / 50%) !important;border-color: rgba(0, 0, 0, 0) !important;float: initial !important;color: white !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;";
+prgBarTime.style.cssText="text-align-last: left !important; min-width: 4.84ch !important; line-height: 1.91ch !important;all: initial !important; transform: translate(0px, 0.06ch) !important;padding: 0.05ch 0.25ch 0.05ch 0.44ch !important;visibility: initial !important;border-width: 2px !important;border-style: outset !important;background-color: rgb(43 43 43 / 50%) !important;border-color: rgba(0, 0, 0, 0) !important;float: initial !important;color: white !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;";
 let cvs = document.createElement("canvas");
 
 clse.type = "number";
