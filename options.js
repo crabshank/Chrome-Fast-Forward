@@ -10,6 +10,10 @@ var c_clk=document.getElementById('cclk');
 var sk_buff_cbx=document.getElementById('sk_buff');
 var blklst=document.getElementById('blacklist');
 
+var vfBar=document.getElementById('vfBar');
+var fMtx=document.getElementById('fMtx');
+fMtx.checked=true;
+
 blklst.oninput=function () {
 blklst.style.height = 'inherit';
 blklst.style.height = (blklst.scrollHeight+7)+"px";
@@ -92,6 +96,8 @@ var saver =function(){
 			secprc: scorpr.selectedIndex,
 			cvsClk: c_clk.selectedIndex,
 			skbcbx: sk_buff_cbx.checked,
+			vidFilts: vfBar.checked,
+			custMtx: fMtx.checked,
 			bList: blklst.value
 		}, function()
 		{
@@ -127,6 +133,8 @@ function restore_options()
 			scorpr.selectedIndex = unDef(items.secprc,0);
 			c_clk.selectedIndex = unDef(items.cvsClk,0);
 			sk_buff_cbx.checked = unDef(items.skbcbx,false);
+			vfBar.checked = unDef(items.vidFilts,false);
+			fMtx.checked = unDef(items.custMtx,true);
 			blklst.value= unDef(items.bList,"");
 blklst.style.height = 'inherit';
 blklst.style.height = (blklst.scrollHeight+7)+"px";
@@ -153,6 +161,8 @@ function save_options()
 		secprc: 0,
 		cvsClk: 0,
 		skbcbx: false,
+		vidFilts: false,
+		custMtx: true,
 		bList: ""
 	}, function(){
 		restore_options();

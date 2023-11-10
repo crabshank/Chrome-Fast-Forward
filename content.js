@@ -16,6 +16,36 @@ var cvs_clk=0;
 var cvs_clkd=false;
 var justUp=false;
 
+var doWB=false;
+var WB_defMtx,WB_defMtx_JSON,WB_defMtx_flat;
+
+var clrMtrx_tag2,svg_blob2 ,svg_url2,WB_defMtx_blob2;
+
+	let clrMtrx_tag=`<svg xmlns="http://www.w3.org/2000/svg">
+	<filter id="clrMtrx_svg">
+		<feColorMatrix type="matrix"
+			values="${WB_defMtx_flat}">
+		</feColorMatrix>
+	</filter>
+</svg>`;
+					
+let svg_blob = new Blob([clrMtrx_tag], { type: 'image/svg+xml' });
+let svg_url = URL.createObjectURL(svg_blob);
+WB_defMtx_blob=svg_url;
+
+function hex2rgb(hex) { //Source: https://stackoverflow.com/a/12342275
+	let h=hex.replace('#', '');
+	h =  h.match(new RegExp('(.{'+h.length/3+'})', 'g'));
+
+	for(let j=0, len_j=h.length; j<len_j; j++){
+		h[j] = parseInt(
+			(h[j].length==1? h[j]+h[j] : h[j])
+			, 16
+		);
+	}
+	return h;
+}
+
 function keepMatchesShadow(els,slcArr,isNodeName){
    if(slcArr[0]===false){
       return els;
@@ -458,7 +488,9 @@ let ds_n=" display: none !important;";
 
 i.skb.style.cssText=bfStyle+ds_i;
 i.skf.style.cssText=bfStyle+ds_i;
-
+if(doWB){
+	i.tglWB.style.cssText=bfStyle+ds_i;
+}
 
 if(!sk_buff){
 	i.skb_l.style.cssText=bfStyle+ds_n;
@@ -498,7 +530,9 @@ i.timer2 = setTimeout(function(){
 
 i.skb.style.cssText=bfStyle2+ds_i;
 i.skf.style.cssText=bfStyle2+ds_i;
-
+if(doWB){
+	i.tglWB.style.cssText=bfStyle2+ds_i;
+}
 if(!sk_buff){
 	i.skb_l.style.cssText=bfStyle2+ds_n;
 	i.skf_l.style.cssText=bfStyle2+ds_n;
@@ -893,6 +927,118 @@ if(i.video.readyState>2){
 }
 }
 
+function showWB(i) {
+	event.stopPropagation();
+	if(i.RGB_divs.getAttribute('isShowing')=='false'){
+		i.RGB_divs.style.setProperty('display','flex','important');
+		i.RGB_divs.setAttribute('isShowing',true);
+	}else{
+		i.RGB_divs.style.setProperty('display','none','important');
+		i.RGB_divs.setAttribute('isShowing',false);
+	}
+	
+}
+
+function colInp_reset(i) {
+	//event.preventDefault();
+	event.stopPropagation();
+	let opt=i.colSel.selectedOptions[0];
+	let val=opt.getAttribute('dft');
+	i.colInp.value=val;
+	opt.setAttribute('curr',val);
+	let pst=opt.getAttribute('postText');
+	opt.textContent =  opt.getAttribute('nm')+' '+opt.getAttribute('preText')+val+pst;
+	opt.title =val+pst.split(')')[0];
+	colInp_inp(i,null,true);
+}
+function colInp_inp(i,b,skp) {
+	if(skp!==true){
+		//event.preventDefault();
+		event.stopPropagation();
+		let opt=i.colSel.selectedOptions[0];
+		let val;
+		if(b!==false){
+			val=i.colInp.value;
+			opt.setAttribute('curr',val);
+		}else{ //sel change
+			i.colInp.min= opt.getAttribute('lw');
+			i.colInp.max= opt.getAttribute('hi');
+			i.colInp.step= opt.getAttribute('stp');
+			val= opt.getAttribute('curr');
+			i.colInp.value=val;
+		}
+		let pst=opt.getAttribute('postText');
+		opt.textContent =  opt.getAttribute('nm')+' '+opt.getAttribute('preText')+val+pst;
+		opt.title =val+pst.split(')')[0];
+	}
+	if(b!==false){
+		
+		
+
+		let outp=JSON.parse(WB_defMtx_JSON);
+		let rgbC=hex2rgb(i.WB_eydrop.value);
+		rgbC=rgbC.map((c)=>{return c/255.0;});
+		let mn=(rgbC[0]+rgbC[1]+rgbC[2])/3.0;
+		let md=(rgbC.toSorted())[1];
+		let mx=Math.max(mn,md);
+	
+		
+		for(let k=0; k<3; k++){ //each output colour
+			let rk=rgbC[k];
+			if(rk!==0){
+				let ncl=mx/rk;
+				for(let j=0; j<5; j++){
+					outp[k][j]=ncl*WB_defMtx[k][j];
+				}
+			}else{
+				for(let j=0; j<4; j++){
+					if(j!==k){
+						outp[k][j]=0;
+					}else{
+						outp[k][j]=1;
+					}
+				}
+				outp[k][4]=1;
+			}
+		}
+		let outp_flatJ=outp.flat().join(',');
+		
+		
+			let clrMtrx_tag2=`<svg xmlns="http://www.w3.org/2000/svg">
+	<filter id="clrMtrx_svg">
+		<feColorMatrix type="matrix"
+			values="${outp_flatJ}">
+		</feColorMatrix>
+	</filter>
+</svg>`;
+					
+let svg_blob2 = new Blob([clrMtrx_tag2], { type: 'image/svg+xml' });
+let svg_url2 = URL.createObjectURL(svg_blob2);
+let WB_defMtx_blob2=svg_url2;
+
+		let flt=[`url('${WB_defMtx_blob2}#clrMtrx_svg')`];
+		let opts=i.colSel.children;
+		for(let j=0, len_j=opts.length;j<len_j; j++ ){
+			let opj=opts[j];
+			 flt.push(opj.getAttribute('nm')+opj.getAttribute('preText')+opj.getAttribute('curr')+opj.getAttribute('postText'));
+		}
+		
+		i.video.style.setProperty('filter',flt.join(' '),'important');
+	}
+}
+
+function WB_inp(i,c) {
+	if(event.type==='input' || c){
+		if(c){
+			i.WB_eydrop.value=c;
+		}
+		i.WB_eydrop_txt.textContent=i.WB_eydrop.value.toLocaleUpperCase();
+		colInp_inp(i);
+	}else{
+		i.video.style.setProperty('filter',`url('${WB_defMtx_blob}#clrMtrx_svg')`,'important');
+	}
+}
+
 function cl_inp(i) {
 //event.preventDefault();
 event.stopPropagation();
@@ -1122,6 +1268,27 @@ function restore_options()
 				sk_buff=items.skbcbx;
 			}
 
+			if(typeof(items.vidFilts)!=='undefined'){
+				if(items.vidFilts==true){
+					doWB=true;
+				}
+			}
+			
+			if(typeof(items.custMtx)!=='undefined'){
+				if(items.custMtx==true){
+					WB_defMtx=[ //original matrix used on videos
+						[1.036,-0.0286,0.0005,0,-0.0041],
+						[-0.1218,1.2056,-0.0745,0,-0.0003],
+						[-0.0147,0.002,1.0219,0,-0.0046],
+						[0,0,0,1,0]
+					];
+				}else{
+					WB_defMtx=[ [1,0,0,0,0],[0,1,0,0,0],[0,0,1,0,0],[0,0,0,1,0] ];
+				}
+				WB_defMtx_JSON=JSON.stringify(WB_defMtx);
+				WB_defMtx_flat=WB_defMtx.flat().join(',');
+			}
+
 		if(!!items.skamnt && typeof  items.skamnt!=='undefined'){
 			sks=parseFloat(items.skamnt);
 		}	
@@ -1195,6 +1362,9 @@ function save_options()
 		skamntpc: "4",
 		secprc: 0,
 		cvsClk: 0,
+		skbcbx: false,
+		vidFilts: false,
+		custMtx: true,
 		bList: ""
 	}, function()
 	{
@@ -1218,6 +1388,60 @@ let butn = document.createElement("button");
 let sdivs = document.createElement("div");
 let bdivs = document.createElement("div");
 bdivs.style.cssText="all: initial !important;font-family: system-ui !important;padding: 0px !important; border-bottom-width: 0px !important; border-left-width: 0px !important; border-right-width: 0px !important; border-top-width: 0px!important; line-height: 0px !important; margin: 0px !important; max-width: max-content !important; user-select: none !important; display: flex !important; flex-flow: row wrap !important; justify-content: flex-start !important; align-items: stretch !important; align-content: flex-start !important; gap: 0px 0px !important;";
+let tglWB,RGB_divs,WB_eydrop,WB_eydrop_div,WB_eydrop_txt,colSel,colInp;
+if(doWB){
+	tglWB = document.createElement("button");
+	tglWB.innerHTML='&#x1F3A8;';
+	tglWB.title='Toggle video filters bar';
+	RGB_divs = document.createElement("div");
+	RGB_divs.style.cssText="all: initial !important;font-family: system-ui !important;padding: 0px !important; border-bottom-width: 0px !important; border-left-width: 0px !important; border-right-width: 0px !important; border-top-width: 0px!important; line-height: 0px !important; margin: 0px !important;user-select: none !important;user-select: none !important; display: none !important; flex-flow: row !important; justify-content: flex-start !important; align-items: stretch !important; align-content: flex-start !important; gap: 0px 0px !important;";
+	RGB_divs.setAttribute('isShowing',false);
+
+
+	colSel= document.createElement("select");
+
+	let setts=[
+		['hue-rotate',0,360,1,0],
+		['saturate',0,5,0.001,1],
+		['contrast',0,10,0.001,1],
+		['brightness',0,10,0.001,1],
+		['invert',0,1,1,0],
+	];
+	setts.forEach(sett => {
+		// Create option element
+		const opt = document.createElement('option');
+		opt.setAttribute('nm',sett[0]);
+		opt.setAttribute('lw',sett[1]);
+		opt.setAttribute('hi',sett[2]);
+		opt.setAttribute('stp',sett[3]);
+		opt.setAttribute('curr',sett[4]);
+		opt.setAttribute('dft',sett[4]);
+		let preTxt='(';
+		opt.setAttribute('preText',preTxt);
+		let isDeg=(sett[0]==='hue-rotate')?'deg)':')';
+		opt.setAttribute('postText',isDeg);
+		opt.style.cssText='color: black;';
+		opt.textContent =sett[0]+' '+preTxt+sett[4]+isDeg;
+		colSel.appendChild(opt);	
+	  });
+	colInp= document.createElement("input");
+	colInp.type="range";
+	colInp.min=0;
+	colInp.max=360;
+	colInp.value=0;
+	colInp.title= 'Double-click to reset to default';
+	colInp.style.cssText="width: -webkit-fill-available !important; vertical-align: middle !important;";
+	RGB_divs.insertAdjacentHTML('beforeend',`<div><input class="col" type="color" style="width: 4.808ch !important; background-color: #000000 !important; border: #000000 !important;" id="vis" value="#ffffff">#FFFFFF</input></div>`);
+	let chn=RGB_divs.childNodes;
+	WB_eydrop_div=chn[0];
+	WB_eydrop_div.title='White balance - Double-click to reset to default';
+	WB_eydrop_div.style.cssText="all: initial !important;display: flex !important;align-items: center !important;background: #000000 !important;width: fit-content !important;padding-right: 0.5ch !important;";
+	chn=WB_eydrop_div.childNodes;
+	WB_eydrop=chn[0];
+	WB_eydrop_txt=chn[1];
+	RGB_divs.appendChild(colSel);
+	RGB_divs.appendChild(colInp);
+}
 let clse = document.createElement("input");
 let skb_l = document.createElement("button");
 let skf_l = document.createElement("button");
@@ -1248,10 +1472,17 @@ bdivs.appendChild(butn);
 bdivs.appendChild(clse);
 bdivs.appendChild(skb_l);
 bdivs.appendChild(skf_l);
+if(doWB){
+	bdivs.appendChild(tglWB);
+}
 bdivs.appendChild(prgBarTime);
 sdivs.appendChild(bdivs);
 sdivs.appendChild(document.createElement("br"));
+if(doWB){
+	sdivs.appendChild(RGB_divs);
+}
 sdivs.appendChild(cvs);
+
 
 
 
@@ -1281,6 +1512,17 @@ obj.prgBarTime=prgBarTime;
 obj.bdivs=bdivs;
 obj.sdivs=sdivs;
 obj.cmu_sk=0;
+
+if(doWB){
+	obj.RGB_divs=RGB_divs;
+	obj.WB_eydrop=WB_eydrop;
+	obj.WB_eydrop_txt=WB_eydrop_txt;
+	obj.WB_eydrop_div=WB_eydrop_div;
+	obj.colSel=colSel;
+	obj.colInp=colInp;
+	obj.tglWB=tglWB;
+}
+
 butn.setAttribute('lddAhd',0);
 
 obj.pg_e=0;
@@ -1371,6 +1613,18 @@ clse.addEventListener('change',() => cl_inp(obj));
 clse.addEventListener('change',() => cl_inp(obj));
 
 clse.addEventListener('focus',() => cl_focus(obj));
+
+if(doWB){
+	colInp.addEventListener('dblclick',() => colInp_reset(obj));
+	colInp.addEventListener('input',() => colInp_inp(obj));
+	colSel.addEventListener('input',() => colInp_inp(obj,false));
+	WB_eydrop.addEventListener('click',() => WB_inp(obj));
+	WB_eydrop_div.addEventListener('dblclick',() => WB_inp(obj,'#ffffff'));
+	WB_eydrop.addEventListener('input',() => WB_inp(obj));
+	tglWB.addEventListener('click',() => showWB(obj));
+	RGB_divs.addEventListener('pointerenter',(evt) => pointerenter_hdl(evt,obj));
+	RGB_divs.addEventListener('pointerleave',(evt) => pointerleave_hdl(evt,obj));
+}
 
 bdivs.addEventListener('pointerenter',(evt) => pointerenter_hdl(evt,obj));
 bdivs.addEventListener('pointerleave',(evt) => pointerleave_hdl(evt,obj));
