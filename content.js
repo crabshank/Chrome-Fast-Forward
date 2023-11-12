@@ -19,8 +19,6 @@ var justUp=false;
 var doWB=false;
 var WB_defMtx,WB_defMtx_JSON,WB_defMtx_flat;
 
-var clrMtrx_tag2,svg_blob2 ,svg_url2,WB_defMtx_blob2;
-
 	let clrMtrx_tag=`<svg xmlns="http://www.w3.org/2000/svg">
 	<filter id="clrMtrx_svg">
 		<feColorMatrix type="matrix"
@@ -1004,7 +1002,7 @@ function colInp_inp(i,b,skp) {
 		let outp_flatJ=outp.flat().join(',');
 		
 		
-			let clrMtrx_tag2=`<svg xmlns="http://www.w3.org/2000/svg">
+			i.clrMtrx_tag2=`<svg xmlns="http://www.w3.org/2000/svg">
 	<filter id="clrMtrx_svg">
 		<feColorMatrix type="matrix"
 			values="${outp_flatJ}">
@@ -1012,11 +1010,10 @@ function colInp_inp(i,b,skp) {
 	</filter>
 </svg>`;
 					
-let svg_blob2 = new Blob([clrMtrx_tag2], { type: 'image/svg+xml' });
-let svg_url2 = URL.createObjectURL(svg_blob2);
-let WB_defMtx_blob2=svg_url2;
+	i.svg_blob2 = new Blob([i.clrMtrx_tag2], { type: 'image/svg+xml' });
+	i.svg_url2 = URL.createObjectURL(i.svg_blob2);
 
-		let flt=[`url('${WB_defMtx_blob2}#clrMtrx_svg')`];
+		let flt=[`url('${i.svg_url2}#clrMtrx_svg')`];
 		let opts=i.colSel.children;
 		for(let j=0, len_j=opts.length;j<len_j; j++ ){
 			let opj=opts[j];
@@ -1126,6 +1123,7 @@ if(b_pass){ //button not clicked directly
 }
 
 function cl_clk(i) {
+	let t=event.target;
 	i.s_vis=chkVis(i,false); //null -> true/false
 	i.c_vis=chkVis(i,true);	
 	let rectV=absBoundingClientRect(i.cvs);
@@ -1133,29 +1131,29 @@ function cl_clk(i) {
 event.stopPropagation();
 let b_pass=true;
 let ct=false;
-	if(event.target===i.clse){
+	if(t===i.clse){
 		i.clse.focus();
 		b_pass=false;
-	}else if(event.target===i.butn){
+	}else if(t===i.butn){
 		//i.butn.click();
 		btclk(i);
 		b_pass=false;
-	}else if(event.target===i.skb){
+	}else if(t===i.skb){
 		//i.skb.click();
 		sk_bk(i);
 		b_pass=false;
-	}else if(event.target===i.skf){
+	}else if(t===i.skf){
 		//i.skf.click();
 		sk_fw(i);
 		b_pass=false;
-	}else if(event.target===i.cvs){
+	}else if(t===i.cvs){
 		b_pass=false;
 	}else if(sk_buff){
-		if(event.target===i.skb_l){
+		if(t===i.skb_l){
 			//i.skb_l.click();
 			sk_l_bk(i);
 			b_pass=false;
-		}else if(event.target===i.skf_l){
+		}else if(t===i.skf_l){
 			//i.skf_l.click();
 			sk_l_fw(i);
 			b_pass=false;
@@ -1204,11 +1202,18 @@ let ct=false;
 	if (b_pass && !ct && i.clse.matches(':focus')){
 		i.clse.blur();
 	}
+	if((t===i.WB_eydrop_div || t===i.WB_eydrop_txt) && i.cmpWB===false){
+		i.cmpWB=true;
+		i.oldWB=i.WB_eydrop.value;
+		i.WB_eydrop.value='#ffffff';
+		i.WB_eydrop.dispatchEvent(new Event('input'));
+	}
 }
 
 function cl_ptUp(i) {
+	let t=event.target;
 	cvs_clkd=false;
-	if(event.target!==i.cvs){
+	if(t!==i.cvs){
 		justUp=true;
 		i.entered_cvs=false;
 		clearTimeout(i.timer3);
@@ -1216,6 +1221,11 @@ function cl_ptUp(i) {
 			def_retCSS(i,false,false);
 			justUp=false;
 		},1250);
+	}
+	if(i.cmpWB===true){
+		i.cmpWB=false;
+		i.WB_eydrop.value=i.oldWB;
+		i.WB_eydrop.dispatchEvent(new Event('input'));
 	}
 }
 
@@ -1435,7 +1445,7 @@ if(doWB){
 	RGB_divs.insertAdjacentHTML('beforeend',`<div><input class="col" type="color" style="width: 4.808ch !important; background-color: #000000 !important; border: #000000 !important;" id="vis" value="#ffffff">#FFFFFF</input></div>`);
 	let chn=RGB_divs.childNodes;
 	WB_eydrop_div=chn[0];
-	WB_eydrop_div.title='White balance - Double-click to reset to default';
+	WB_eydrop_div.title='White balance - Double-click to reset to default - Click and hold down to compare with original';
 	WB_eydrop_div.style.cssText="all: initial !important;display: flex !important;align-items: center !important;background: #000000 !important;width: fit-content !important;padding-right: 0.5ch !important;";
 	chn=WB_eydrop_div.childNodes;
 	WB_eydrop=chn[0];
@@ -1515,6 +1525,11 @@ obj.sdivs=sdivs;
 obj.cmu_sk=0;
 
 if(doWB){
+	obj.cmpWB=false;
+	obj.oldWB='#ffffff';
+	obj.clrMtrx_tag2={};
+	obj.svg_blob2={};
+	obj.svg_url2='';
 	obj.RGB_divs=RGB_divs;
 	obj.WB_eydrop=WB_eydrop;
 	obj.WB_eydrop_txt=WB_eydrop_txt;
