@@ -422,7 +422,20 @@ if(i.video.tagName==='AUDIO'){
 					)
 			)
 		){
-			i.top+=vrct.top;
+			vrct.centre_y=vrct.top+vrct.height*0.5;
+			let wScl=vrct.width/i.video.videoWidth;
+			let hScld=wScl*i.video.videoHeight;
+			let hScl=vrct.height/i.video.videoHeight;
+			let wScld=hScl*i.video.videoWidth; 
+			let hlf_h=0.5*((wScl<=hScl)?hScld:vrct.height);
+			vrct.vid_top=vrct.centre_y-hlf_h;
+			let hlf_w=0.5*((wScl<=hScl)?vrct.width:wScld);
+			vrct.centre_x=vrct.left+vrct.width*0.5;
+			vrct.vid_left=vrct.centre_x-hlf_w;
+			vrct.vid_right=vrct.centre_x+hlf_w;
+			vrct.vid_width=vrct.vid_right-vrct.vid_left;
+			i.right=vrct.vid_left+0.001*vrct.vid_width;
+			i.top+=vrct.vid_top;
 		}
 i.sDivsCSS2='top: '+i.top+'px !important;  left: '+i.right+'px !important;';
 }
@@ -442,7 +455,7 @@ i.sdivs.style.cssText=sDivsCSS+i.sDivsCSS2;
 i.faded=false;
 }
 sdrct=absBoundingClientRect(i.bdivs);
-i.cvs.style.setProperty('width',((sdrct.width>vrct.width)?sdrct.width:vrct.width)+'px','important');
+i.cvs.style.setProperty('width',((sdrct.width>vrct.vid_width)?sdrct.width:vrct.vid_width)+'px','important');
 i.cvs.style.setProperty('height',(sdrct.height)+'px','important');
 i.cvs.style.setProperty('margin-top','1px','important');
 
