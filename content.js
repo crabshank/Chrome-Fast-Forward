@@ -701,7 +701,7 @@ function drawBuffered(i){
 			}
 		}
 	}
-					ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+					//ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 					ctx.putImageData(iData, 0, 0);
 	}
 			
