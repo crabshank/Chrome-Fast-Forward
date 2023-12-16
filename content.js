@@ -398,6 +398,7 @@ i.cvs.style.setProperty('opacity',0,'important');
 }
 
 let vrct=absBoundingClientRect(i.video);
+vrct.vid_width=vrct.width;
 let sdrct=absBoundingClientRect(i.bdivs);
 
 i.right=vrct.left+0.001*vrct.width;
