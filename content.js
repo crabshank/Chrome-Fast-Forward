@@ -402,7 +402,7 @@ let vrct=absBoundingClientRect(i.video);
 let sdrct=absBoundingClientRect(i.bdivs);
 let wg=0.001*vrct.width;
 i.right=vrct.left+wg;
-vrct.vid_width=vrct.width-wg;
+vrct.vid_width=vrct.width-2*wg;
 
 if(i.video.tagName==='AUDIO'){
 	if(vrct.top<2*sdrct.height+0.102*vrct.height){
@@ -437,7 +437,7 @@ if(i.video.tagName==='AUDIO'){
 			vrct.vid_right=vrct.centre_x+hlf_w;
 			vrct.vid_width=vrct.vid_right-vrct.vid_left;
 			wg=0.001*vrct.vid_width;
-			vrct.vid_width-=wg;
+			vrct.vid_width-=2*wg;
 			i.right=vrct.vid_left+wg;
 			i.top+=vrct.vid_top;
 		}
