@@ -459,8 +459,8 @@ i.sdivs.style.cssText=sDivsCSS+i.sDivsCSS2;
 i.faded=false;
 }
 sdrct=absBoundingClientRect(i.bdivs);
-i.cvs.style.setProperty('width',((sdrct.width>vrct.vid_width)?sdrct.width:vrct.vid_width)+'px','important');
-i.cvs.style.setProperty('height',(sdrct.height)+'px','important');
+i.cvs.width=(sdrct.width>vrct.vid_width)?sdrct.width:vrct.vid_width;
+i.cvs.height=i.skb.getBoundingClientRect().height;
 i.cvs.style.setProperty('margin-top','1px','important');
 
 if(cvs_clkd===false && (scrl || !showPrg) && !i.entered_cvs ){
@@ -627,48 +627,48 @@ function elRemover(el){
 
 function setPix(pixels, x, y, r, g, b, width) {
     var index = 4 * (x + y * width);
-    pixels[index+0] = r;
+    pixels[index] = r;
     pixels[index+1] = g;
     pixels[index+2] = b;
-    pixels[index+3] =255 ;
+    pixels[index+3] =255;
 }
 
 function drawBuffered(i){
-	var len=i.video.buffered.length;
+	let len=i.video.buffered.length;
 	if(len>0){
-			var ctx = i.cvs.getContext('2d', {willReadFrequently: true});
+			let ctx = i.cvs.getContext('2d', {willReadFrequently: true});
 			ctx.globalCompositeOperation = "source-over";
-			var canvasWidth = i.cvs.scrollWidth;
-			var canvasHeight = i.cvs.scrollHeight;
+			let canvasWidth = i.cvs.width;
+			let canvasHeight = i.cvs.height;
 			
-			if(canvasWidth>0 && canvasHeight>0){
+		if(canvasWidth>0 && canvasHeight>0){
+				let canvasWidth_1 = canvasWidth-1;
 				if(i.firstBuf===false){
 					i.firstBuf=true;
 				}
-				i.cvs.width =canvasWidth;
-				i.cvs.height =canvasHeight;
-				var iData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-				var pixels = iData.data;
-				
-	if(isFinite(i.video.duration)){
+				let iData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+				let pixels = iData.data;
+				let dur=i.video.duration;
+	if(isFinite(dur)){
 		i.cvs.setAttribute('start', 0);
-		i.cvs.setAttribute('end', i.video.duration);
-			for (let k=len-1; k>=0; k--){
+		i.cvs.setAttribute('end', dur);
+		
+			for (let k=len-1; k>=0; --k){
 				let t_i=i.video.buffered.end(k);
 				let s_i=i.video.buffered.start(k);
-				let prp=canvasWidth/i.video.duration;
+				let prp=canvasWidth_1/dur;
 				let xds=Math.ceil(s_i*prp);
 				let xdt=Math.floor(t_i*prp);
 				let c_i=i.video.currentTime;
 				let xdc=(c_i>=s_i && c_i<=t_i)?Math.ceil(c_i*prp):-1;
-				for (let x=xds; x<=xdt; x++){
+				for (let x=xds; x<=xdt; ++x){
 					let grn=(xdc!=-1 && x>=xdc && x<=xdt)?true:false;
 					if(grn===true){
-						for (let y=canvasHeight-1; y>=0; y--){
+						for (let y=canvasHeight-1; y>=0; --y){
 							setPix(pixels, x, y, 0,171,14, canvasWidth);
 						}
 					}else{
-						for (let y=canvasHeight-1; y>=0; y--){
+						for (let y=canvasHeight-1; y>=0; --y){
 							setPix(pixels, x, y, 144,67,204, canvasWidth);
 						}
 					}
@@ -676,36 +676,34 @@ function drawBuffered(i){
 			}	
 			
 	}else{
-		
 		let c_i=i.video.currentTime;
 		let latest=Math.max(i.video.buffered.end(len-1), c_i);
 		let earliest=Math.min(i.video.buffered.start(0), c_i);
 		i.cvs.setAttribute('start', earliest);
 		i.cvs.setAttribute('end', latest);
 		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-		for (let k=len-1; k>=0; k--){
+		for (let k=len-1; k>=0; --k){
 			let t_i=i.video.buffered.end(k);
 			let s_i=i.video.buffered.start(k);
-			let prp=canvasWidth/(latest-earliest)
+			let prp=canvasWidth_1/(latest-earliest);
 			let xds=Math.ceil((s_i-earliest)*prp);
 			let xdt=Math.floor((t_i-earliest)*prp);
 			let c_i=i.video.currentTime;
 			let xdc=(c_i>=s_i && c_i<=t_i)?Math.ceil((c_i-earliest)*prp):-1;
-			for (let x=xds; x<=xdt; x++){
+			for (let x=xds; x<=xdt; ++x){
 				let grn=(xdc!=-1 && x>=xdc && x<=xdt)?true:false;
 				if(grn===true){
-					for (let y=canvasHeight-1; y>=0; y--){
+					for (let y=canvasHeight-1; y>=0; --y){
 						setPix(pixels, x, y, 0,171,14, canvasWidth);
 					}
 				}else{
-					for (let y=canvasHeight-1; y>=0; y--){
+					for (let y=canvasHeight-1; y>=0; --y){
 						setPix(pixels, x, y, 144,67,204, canvasWidth);
 					}
 				}
 			}
 		}
 	}
-					//ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 					ctx.putImageData(iData, 0, 0);
 	}
 			
