@@ -459,9 +459,25 @@ i.sdivs.style.cssText=sDivsCSS+i.sDivsCSS2;
 i.faded=false;
 }
 sdrct=absBoundingClientRect(i.bdivs);
-i.cvs.width=(sdrct.width>vrct.vid_width)?sdrct.width:vrct.vid_width;
-i.cvs.height=i.skb.getBoundingClientRect().height;
-i.cvs.style.setProperty('margin-top','1px','important');
+
+let cvsChg=false;
+let ncw=(sdrct.width>vrct.vid_width)?sdrct.width:vrct.vid_width;
+ncw=Math.floor(ncw);
+let nch=Math.floor(i.skb.getBoundingClientRect().height);
+
+if(ncw!==i.cvs.width){
+	i.cvs.width=ncw;
+	cvsChg=true;
+}
+
+if(nch!==i.cvs.height){
+	i.cvs.height=nch;
+	cvsChg=true;
+}
+
+if(cvsChg===true){
+	drawBuffered(i);
+}
 
 if(cvs_clkd===false && (scrl || !showPrg) && !i.entered_cvs ){
 	 	i.cvs.style.setProperty('opacity',0,'important');
@@ -1509,10 +1525,8 @@ if(doWB){
 }
 sdivs.appendChild(cvs);
 
-
-
-
 cvs.style.setProperty('background','#167ac6','important');
+cvs.style.setProperty('margin-top','1px','important');
 cvs.style.setProperty('user-select','none','important');
 cvs.style.setProperty('visibility','visible','important');
 cvs.style.setProperty('float','initial','important');
