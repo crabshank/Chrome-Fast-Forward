@@ -384,6 +384,10 @@ function findInst(v, mon){
 	}
 }
 
+function chkVisTime(i){
+	return (i.prgBarTime.style['display']==='none')?false:true;
+}
+
 function chkVis(i,cvs){
 	return (((cvs)?i.cvs:i.sdivs).style['opacity']==='0')?false:true;
 }
@@ -554,9 +558,10 @@ i.timer3 = setTimeout(function(){
 	
 	clearTimeout(i.timer2);
 i.timer2 = setTimeout(function(){
+	let visTime=chkVisTime(i);
 			i.faded=true;
-	if(!i.entered){
-		if(mbMde || (mbMdeFs && !(document.fullscreen || document.webkitIsFullScreen))){
+	if(!i.entered || visTime===true){
+		if( visTime===true || mbMde || (mbMdeFs && !(document.fullscreen || document.webkitIsFullScreen))){
 			let bfStyle2="all: initial !important;font-family: system-ui !important;min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2_1+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol_1+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 
 i.skb.style.cssText=bfStyle2+ds_i;
@@ -575,7 +580,7 @@ if(!sk_buff){
 i.butn.style.cssText = "all: initial !important;font-family: system-ui !important;min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 i.clse.style.cssText ="all: initial !important;font-family: system-ui !important;-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color: rgba(240, 0, 0, 0.5) !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
 
-if(cvs_clkd===false && !i.entered_cvs){
+if(cvs_clkd===false && !i.entered_cvs && visTime===false){
 	i.cvs.style.setProperty('opacity',0,'important');
 	i.prgBarTime.style.setProperty('display','none','important');
 }
@@ -765,8 +770,6 @@ function calcSp(i,noAdj){
 					}
 					
 					}
-		
-					
 
 						lddRaw=(i.video.playbackRate==0)?tot:tot/i.video.playbackRate;
 					if(!noAdj && ( (!i.video.paused) ||  (i.video.paused && lddRaw<2))){
