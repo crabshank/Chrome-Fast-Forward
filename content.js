@@ -44,6 +44,30 @@ function hex2rgb(hex) { //Source: https://stackoverflow.com/a/12342275
 	return h;
 }
 
+function fadeBtns(i){
+	let ds_i=" display: initial !important;";
+	let ds_n=" display: none !important;";
+	let bfStyle2="all: initial !important;font-family: system-ui !important;min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2_1+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol_1+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+
+	i.skb.style.cssText=bfStyle2+ds_i;
+	i.skf.style.cssText=bfStyle2+ds_i;
+	if(doWB){
+		i.tglWB.style.cssText=bfStyle2+ds_i;
+	}
+	if(!sk_buff){
+		i.skb_l.style.cssText=bfStyle2+ds_n;
+		i.skf_l.style.cssText=bfStyle2+ds_n;
+	}else{
+		i.skb_l.style.cssText=bfStyle2+ds_i;
+		i.skf_l.style.cssText=bfStyle2+ds_i;
+	}
+
+	i.butn.style.cssText = "all: initial !important;font-family: system-ui !important;min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+	i.clse.style.cssText ="all: initial !important;font-family: system-ui !important;-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color: rgba(240, 0, 0, 0.5) !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
+	i.fadedBtnsTime=true;
+	i.faded=true;
+}
+
 function keepMatchesShadow(els,slcArr,isNodeName){
    if(slcArr[0]===false){
       return els;
@@ -500,7 +524,7 @@ function def_retCSS(i,bool, showPrg){
 
 positionBar(i,bool, showPrg);
 
-
+	if((i.fadedBtnsTime===false || i.entered===false) && (cvs_clkd===false && justUp===false)){
 if(i.ff===1){ // Playback rate adj. activated (button green)
 	bdkCol="#007500";
 	txCol="white";
@@ -537,7 +561,11 @@ if(!sk_buff){
 
 i.butn.style.cssText = "all: initial !important;font-family: system-ui !important;min-width: 75px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 i.clse.style.cssText = "all: initial !important;font-family: system-ui !important;-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color:  #f00000 !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
+}
 
+	if(justUp===true && cvs_clkd===false){
+		i.fadedBtnsTime=false;
+	}
 clearTimeout(i.timer3);
 i.timer3 = setTimeout(function(){
 	if(!i.entered_cvs){
@@ -559,27 +587,9 @@ i.timer3 = setTimeout(function(){
 	clearTimeout(i.timer2);
 i.timer2 = setTimeout(function(){
 	let visTime=chkVisTime(i);
-			i.faded=true;
-	if(!i.entered || visTime===true){
-		if( visTime===true || mbMde || (mbMdeFs && !(document.fullscreen || document.webkitIsFullScreen))){
-			let bfStyle2="all: initial !important;font-family: system-ui !important;min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2_1+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol_1+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
-
-i.skb.style.cssText=bfStyle2+ds_i;
-i.skf.style.cssText=bfStyle2+ds_i;
-if(doWB){
-	i.tglWB.style.cssText=bfStyle2+ds_i;
-}
-if(!sk_buff){
-	i.skb_l.style.cssText=bfStyle2+ds_n;
-	i.skf_l.style.cssText=bfStyle2+ds_n;
-}else{
-	i.skb_l.style.cssText=bfStyle2+ds_i;
-	i.skf_l.style.cssText=bfStyle2+ds_i;
-}
-
-i.butn.style.cssText = "all: initial !important;font-family: system-ui !important;min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
-i.clse.style.cssText ="all: initial !important;font-family: system-ui !important;-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color: rgba(240, 0, 0, 0.5) !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
-
+	if(!i.entered /*|| visTime===true*/){
+		if(/*visTime===true ||*/ mbMde || (mbMdeFs && !(document.fullscreen || document.webkitIsFullScreen))){
+			fadeBtns(i);
 if(cvs_clkd===false && !i.entered_cvs && visTime===false){
 	i.cvs.style.setProperty('opacity',0,'important');
 	i.prgBarTime.style.setProperty('display','none','important');
@@ -1587,6 +1597,7 @@ obj.wh_e=0;
 obj.timer2;
 obj.entered=false;
 obj.entered_cvs=false;
+obj.fadedBtnsTime=false;
 obj.faded=false;
 obj.top=0;
 obj.right=0;
@@ -1944,6 +1955,7 @@ function cvs_hdl(e,i,m){
 		i.entered_cvs=false;
 		i.prgBarTime.style.setProperty('display','none','important');
 	}else{
+				 
 		if(  ( m==1 || outsideScrub===true ) || m==2 || (m==4) ){
 			i.entered_cvs=true;
 			if(!i.faded){
@@ -1975,6 +1987,8 @@ function cvs_hdl(e,i,m){
 							}
 		},3000);
 		}
+		
+	
 	let s=parseFloat(i.cvs.getAttribute('start'));
 	let t=parseFloat(i.cvs.getAttribute('end'));
 	let l;
@@ -1995,6 +2009,7 @@ function cvs_hdl(e,i,m){
 	let timeFmt=bf_s_hmmss(time,true);
 	let vt=(!isNaN(time) && isFinite(time))?true:false;
 	if(vt){
+		fadeBtns(i);
 		i.cvs.style.setProperty('opacity',0.64,'important');
 		//i.cvs.title=timeFmt;
 		i.prgBarTime.innerText=timeFmt;
@@ -2012,6 +2027,7 @@ function cvs_hdl(e,i,m){
 						i.c_vis=null;
 					}
 			if( (c_pass || outsideScrub===true) && vt){
+				fadeBtns(i);
 				i.cvs.style.setProperty('opacity',0.64,'important');
 				i.video.currentTime=time;
 				i.prgBarTime.innerText=timeFmt;
