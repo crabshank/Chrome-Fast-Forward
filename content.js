@@ -1,8 +1,5 @@
 var global={instances:[], monitored:[]};
 
-var bdkCol="buttonface";
-var txCol="black";
-var bdkCol2="#f0f0f080";
 var dfSpd=2.2;
 var dfStp=0.1;
 var mbMde=false;
@@ -44,10 +41,62 @@ function hex2rgb(hex) { //Source: https://stackoverflow.com/a/12342275
 	return h;
 }
 
+function showBtns(i){
+	let bdkCol,txCol,bdkCol2,bdc;
+	if(i.ff===1){ // Playback rate adj. activated (button green)
+	bdkCol=["buttonface","#007500"];
+	txCol=["white","white"];
+	bdkCol2="#00750080";
+	bdc=bdkCol;
+}else{
+	bdkCol=["buttonface","buttonface"];
+	txCol=["black","white"];
+	bdkCol2="#f0f0f080";
+	bdc='buttonface';
+}
+
+let bfStyle="all: initial !important;font-family: system-ui !important;min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: buttonface !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+
+let ds_i=" display: initial !important;";
+let ds_n=" display: none !important;";
+
+i.skb.style.cssText=bfStyle+ds_i;
+i.skf.style.cssText=bfStyle+ds_i;
+if(doWB){
+	i.tglWB.style.cssText=bfStyle+ds_i;
+}
+
+if(!sk_buff){
+	i.skb_l.style.cssText=bfStyle+ds_n;
+	i.skf_l.style.cssText=bfStyle+ds_n;
+}else{
+	i.skb_l.style.cssText=bfStyle+ds_i;
+	i.skf_l.style.cssText=bfStyle+ds_i;
+}
+
+i.butn.style.cssText = "all: initial !important;font-family: system-ui !important;min-width: 75px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[1]+" !important; border-color: "+bdc+" !important; float: initial !important; text-align-last: right !important; color: "+txCol[1]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+i.clse.style.cssText = "all: initial !important;font-family: system-ui !important;-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color:  #f00000 !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
+i.faded=false;
+i.fadedBtns=false;
+}
+
 function fadeBtns(i){
+	let bdkCol,txCol,bdkCol2,bdc;
+
+
+	if(i.ff===1){ // Playback rate adj. activated (button green)
+	bdkCol=["#f0f0f080","#00750080"];
+	txCol=["white","white"];
+	bdc=bdkCol;
+}else{
+	bdkCol=["#f0f0f080","#f0f0f080"];
+	txCol=["black","white"];
+	bdc=["buttonface",'transparent'];
+}
+	
 	let ds_i=" display: initial !important;";
 	let ds_n=" display: none !important;";
-	let bfStyle2="all: initial !important;font-family: system-ui !important;min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2_1+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol_1+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+	let bfStyle2="all: initial !important;font-family: system-ui !important;min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 
 	i.skb.style.cssText=bfStyle2+ds_i;
 	i.skf.style.cssText=bfStyle2+ds_i;
@@ -62,8 +111,9 @@ function fadeBtns(i){
 		i.skf_l.style.cssText=bfStyle2+ds_i;
 	}
 
-	i.butn.style.cssText = "all: initial !important;font-family: system-ui !important;min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol2+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+	i.butn.style.cssText = "all: initial !important;font-family: system-ui !important;min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[1]+" !important; border-color: "+bdc[1]+" !important; float: initial !important; text-align-last: right !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 	i.clse.style.cssText ="all: initial !important;font-family: system-ui !important;-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color: rgba(240, 0, 0, 0.5) !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
+	i.fadedBtns=true;
 	i.fadedBtnsTime=true;
 	i.faded=true;
 }
@@ -525,46 +575,36 @@ function def_retCSS(i,bool, showPrg){
 positionBar(i,bool, showPrg);
 
 	if((i.fadedBtnsTime===false || i.entered===false) && (cvs_clkd===false && justUp===false)){
-if(i.ff===1){ // Playback rate adj. activated (button green)
-	bdkCol="#007500";
+		showBtns(i);
+}else{
+
+	let bdc,bck,txCol;
+	if(i.ff===1){ // Playback rate adj. activated (button green)
 	txCol="white";
-	bdkCol2="#00750080";
+	if(i.fadedBtns){
+		bdc="#00750080";
+		bck="#00750080";
+	}else{
+		bdc="#007500";
+		bck="#007500";
+	}
 }else{
-	bdkCol="buttonface";
 	txCol="black";
-	bdkCol2="#f0f0f080";
+	if(i.fadedBtns){
+		bdc="transparent";
+		bck="#f0f0f080";
+	}else{
+		bdc="black";
+		bck="buttonface";
+	}
 }
 
-
-bdkCol_1="buttonface";
-txCol_1="black";
-bdkCol2_1="#f0f0f080";
-
-let bfStyle="all: initial !important;font-family: system-ui !important;min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol_1+" !important; border-color: "+bdkCol_1+" !important; float: initial !important; text-align-last: center !important; color: "+txCol_1+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
-
-let ds_i=" display: initial !important;";
-let ds_n=" display: none !important;";
-
-i.skb.style.cssText=bfStyle+ds_i;
-i.skf.style.cssText=bfStyle+ds_i;
-if(doWB){
-	i.tglWB.style.cssText=bfStyle+ds_i;
-}
-
-if(!sk_buff){
-	i.skb_l.style.cssText=bfStyle+ds_n;
-	i.skf_l.style.cssText=bfStyle+ds_n;
-}else{
-	i.skb_l.style.cssText=bfStyle+ds_i;
-	i.skf_l.style.cssText=bfStyle+ds_i;
-}
-
-i.butn.style.cssText = "all: initial !important;font-family: system-ui !important;min-width: 75px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol+" !important; border-color: "+bdkCol+" !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
-i.clse.style.cssText = "all: initial !important;font-family: system-ui !important;-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color:  #f00000 !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
+i.butn.style.cssText = "all: initial !important;font-family: system-ui !important;min-width: 75px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bck+" !important; border-color: "+bdc+" !important; float: initial !important; text-align-last: right !important; color: "+txCol+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 }
 
 	if(justUp===true && cvs_clkd===false){
 		i.fadedBtnsTime=false;
+		showBtns(i);
 	}
 clearTimeout(i.timer3);
 i.timer3 = setTimeout(function(){
@@ -1598,6 +1638,7 @@ obj.timer2;
 obj.entered=false;
 obj.entered_cvs=false;
 obj.fadedBtnsTime=false;
+obj.fadedBtns=false;
 obj.faded=false;
 obj.top=0;
 obj.right=0;
