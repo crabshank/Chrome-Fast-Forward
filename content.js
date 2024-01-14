@@ -15,6 +15,7 @@ var justUp=false;
 
 var doWB=false;
 var WB_defMtx,WB_defMtx_JSON,WB_defMtx_flat;
+const wb_filt=[" filter: saturate(3.15) contrast(1.74) !important"," filter: saturate(3.12) contrast(1.56) brightness(0.75) !important;"];
 
 	let clrMtrx_tag=`<svg xmlns="http://www.w3.org/2000/svg">
 	<filter id="clrMtrx_svg">
@@ -45,12 +46,12 @@ function showBtns(i){
 	let bdkCol,txCol,bdkCol2,bdc;
 	if(i.ff===1){ // Playback rate adj. activated (button green)
 	bdkCol=["buttonface","#007500"];
-	txCol=["white","white"];
+	txCol=["black","buttonface"];
 	bdkCol2="#00750080";
-	bdc=bdkCol;
+	bdc="#00750080";
 }else{
 	bdkCol=["buttonface","buttonface"];
-	txCol=["black","white"];
+	txCol=["black","black"];
 	bdkCol2="#f0f0f080";
 	bdc='buttonface';
 }
@@ -63,7 +64,7 @@ let ds_n=" display: none !important;";
 i.skb.style.cssText=bfStyle+ds_i;
 i.skf.style.cssText=bfStyle+ds_i;
 if(doWB){
-	i.tglWB.style.cssText=bfStyle+ds_i;
+	i.tglWB.style.cssText=bfStyle+ds_i+wb_filt[1];
 }
 
 if(!sk_buff){
@@ -86,11 +87,11 @@ function fadeBtns(i){
 
 	if(i.ff===1){ // Playback rate adj. activated (button green)
 	bdkCol=["#f0f0f080","#00750080"];
-	txCol=["white","white"];
-	bdc=bdkCol;
+	txCol=["f0f0f080","buttonface"];
+	bdc=["#007500","#00750080"];
 }else{
 	bdkCol=["#f0f0f080","#f0f0f080"];
-	txCol=["black","white"];
+	txCol=["black","black"];
 	bdc=["buttonface",'transparent'];
 }
 	
@@ -101,7 +102,7 @@ function fadeBtns(i){
 	i.skb.style.cssText=bfStyle2+ds_i;
 	i.skf.style.cssText=bfStyle2+ds_i;
 	if(doWB){
-		i.tglWB.style.cssText=bfStyle2+ds_i;
+		i.tglWB.style.cssText=bfStyle2+ds_i+wb_filt[0];
 	}
 	if(!sk_buff){
 		i.skb_l.style.cssText=bfStyle2+ds_n;
@@ -111,7 +112,7 @@ function fadeBtns(i){
 		i.skf_l.style.cssText=bfStyle2+ds_i;
 	}
 
-	i.butn.style.cssText = "all: initial !important;font-family: system-ui !important;min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[1]+" !important; border-color: "+bdc[1]+" !important; float: initial !important; text-align-last: right !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+	i.butn.style.cssText = "all: initial !important;font-family: system-ui !important;min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[1]+" !important; border-color: "+bdc[1]+" !important; float: initial !important; text-align-last: right !important; color: "+txCol[1]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 	i.clse.style.cssText ="all: initial !important;font-family: system-ui !important;-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color: rgba(240, 0, 0, 0.5) !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
 	i.fadedBtns=true;
 	i.fadedBtnsTime=true;
@@ -580,7 +581,7 @@ positionBar(i,bool, showPrg);
 
 	let bdc,bck,txCol;
 	if(i.ff===1){ // Playback rate adj. activated (button green)
-	txCol="white";
+	txCol="buttonface";
 	if(i.fadedBtns){
 		bdc="#00750080";
 		bck="#00750080";
@@ -594,7 +595,7 @@ positionBar(i,bool, showPrg);
 		bdc="transparent";
 		bck="#f0f0f080";
 	}else{
-		bdc="black";
+		bdc="#007500";
 		bck="buttonface";
 	}
 }
@@ -1530,7 +1531,7 @@ if(doWB){
 	let chn=RGB_divs.childNodes;
 	WB_eydrop_div=chn[0];
 	WB_eydrop_div.title='White balance - Double-click to reset to default - Click and hold down to compare with original';
-	WB_eydrop_div.style.cssText="all: initial !important;display: flex !important;align-items: center !important;background: #000000 !important;width: fit-content !important;padding-right: 0.5ch !important;";
+	WB_eydrop_div.style.cssText="all: initial !important;display: flex !important;align-items: center !important;background: #000000 !important;width: fit-content !important;padding-right: 0.5ch !important; color: white !important;";
 	chn=WB_eydrop_div.childNodes;
 	WB_eydrop=chn[0];
 	WB_eydrop_txt=chn[1];
