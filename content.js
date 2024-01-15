@@ -1495,7 +1495,7 @@ if(doWB){
 
 
 	colSel= document.createElement("select");
-	colSel.style.cssText="all: initial !important; align-items: center !important; background: buttonface !important; appearance: auto !important;";
+	colSel.style.cssText="all: initial !important; align-items: center !important; background: buttonface !important; appearance: auto !important; color: black !important;";
 
 	let setts=[
 		['hue-rotate',0,360,1,0],
@@ -1517,7 +1517,7 @@ if(doWB){
 		opt.setAttribute('preText',preTxt);
 		let isDeg=(sett[0]==='hue-rotate')?'deg)':')';
 		opt.setAttribute('postText',isDeg);
-		opt.style.cssText='color: black;';
+		opt.style.cssText="all: initial !important; align-items: center !important; background: buttonface !important; appearance: auto !important; color: black !important;";
 		opt.textContent =sett[0]+' '+preTxt+sett[4]+isDeg;
 		colSel.appendChild(opt);	
 	  });
@@ -1528,7 +1528,7 @@ if(doWB){
 	colInp.value=0;
 	colInp.title= 'Double-click to reset to default';
 	colInp.style.cssText="all: initial !important;appearance: auto !important;width: -webkit-fill-available !important;vertical-align: middle !important;";
-	RGB_divs.insertAdjacentHTML('beforeend',`<div><input class="col" type="color" style="width: 4.808ch !important; background-color: #000000 !important; border: #000000 !important;" id="vis" value="#ffffff">#FFFFFF</input></div>`);
+	RGB_divs.insertAdjacentHTML('beforeend',`<div><input class="col" type="color" style="all: initial !important;width: 4.808ch !important;background-color: #000000 !important;border: #000000 !important;height: 3ch !important; color: white !important;" id="vis" value="#ffffff">#FFFFFF</input></div>`);
 	let chn=RGB_divs.childNodes;
 	WB_eydrop_div=chn[0];
 	WB_eydrop_div.title='White balance - Double-click to reset to default - Click and hold down to compare with original';
