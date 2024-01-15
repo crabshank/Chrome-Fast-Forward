@@ -46,7 +46,7 @@ function showBtns(i){
 	let bdkCol,txCol,bdkCol2,bdc;
 	if(i.ff===1){ // Playback rate adj. activated (button green)
 	bdkCol=["buttonface","#007500"];
-	txCol=["black","buttonface"];
+	txCol=["black","white"];
 	bdkCol2="#00750080";
 	bdc="#00750080";
 }else{
@@ -64,7 +64,7 @@ let ds_n=" display: none !important;";
 i.skb.style.cssText=bfStyle+ds_i;
 i.skf.style.cssText=bfStyle+ds_i;
 if(doWB){
-	i.tglWB.style.cssText=bfStyle+ds_i+wb_filt[1];
+	i.tglWB.style.cssText=bfStyle+ds_i+wb_filt[1]+'background: #8a8a8a !important;';
 }
 
 if(!sk_buff){
@@ -87,7 +87,7 @@ function fadeBtns(i){
 
 	if(i.ff===1){ // Playback rate adj. activated (button green)
 	bdkCol=["#f0f0f080","#00750080"];
-	txCol=["f0f0f080","buttonface"];
+	txCol=["black","white"];
 	bdc=["#007500","#00750080"];
 }else{
 	bdkCol=["#f0f0f080","#f0f0f080"];
@@ -102,7 +102,7 @@ function fadeBtns(i){
 	i.skb.style.cssText=bfStyle2+ds_i;
 	i.skf.style.cssText=bfStyle2+ds_i;
 	if(doWB){
-		i.tglWB.style.cssText=bfStyle2+ds_i+wb_filt[0];
+		i.tglWB.style.cssText=bfStyle2+ds_i+wb_filt[0]+'background: #8a8a8a80 !important;';
 	}
 	if(!sk_buff){
 		i.skb_l.style.cssText=bfStyle2+ds_n;
@@ -581,11 +581,12 @@ positionBar(i,bool, showPrg);
 
 	let bdc,bck,txCol;
 	if(i.ff===1){ // Playback rate adj. activated (button green)
-	txCol="buttonface";
 	if(i.fadedBtns){
+		txCol="white";
 		bdc="#00750080";
 		bck="#00750080";
 	}else{
+		txCol="white";
 		bdc="#007500";
 		bck="#007500";
 	}
@@ -595,7 +596,7 @@ positionBar(i,bool, showPrg);
 		bdc="transparent";
 		bck="#f0f0f080";
 	}else{
-		bdc="#007500";
+		bdc="buttonface";
 		bck="buttonface";
 	}
 }
