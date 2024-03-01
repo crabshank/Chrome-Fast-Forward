@@ -1108,7 +1108,7 @@ function colInp_inp(i,b,skp) {
 	}
 					
 	i.svg_blob2 = new Blob([i.clrMtrx_tag2], { type: 'image/svg+xml' });
-	i.svg_url2 = URL.createObjectURL(i.svg_blob2).split('/')[1].split('-').join('');
+	i.svg_url2 = URL.createObjectURL(i.svg_blob2).split('/').at(-1).split('-').join('');
 	if(i.filt===null || typeof(i.filt)==='undefined'){
 		i.video.insertAdjacentHTML('beforeend',`<svg style="display:none !important"; xmlns="http://www.w3.org/2000/svg"><filter x='0' y='0' width='100%' height='100%' id="${i.svg_url2}">`+i.clrMtrx_tag2+'</filter></svg>');
 		i.filt=i.video.lastElementChild;
