@@ -1087,21 +1087,41 @@ function colInp_inp(i,b,skp) {
 		}
 		let outp_flatJ=outp.flat().join(',');
 		
-		
-			i.clrMtrx_tag2=`<svg xmlns="http://www.w3.org/2000/svg">
-	<filter id="clrMtrx_svg">
-		<feColorMatrix type="matrix"
+		let grn=i.colSel.querySelector('option[nm="dither"]');
+		let grn_val=parseFloat(grn.getAttribute('curr'));
+		if(grn_val>0){
+			i.clrMtrx_tag2=`<feTurbulence y="0px" result="waves" type="turbulence" baseFrequency="14.46" numOctaves="1" seed="5">
+			<animate attributeName="seed" from="0" to="2147483648" dur="12ms" repeatCount="indefinite"></animate>
+		</feTurbulence>
+       <feColorMatrix result="grey" type="matrix" values="0.3333 0.3333 0.3333 -0.54 0 0.3333 0.3333 0.3333 -0.54 0 0.3333 0.3333 0.3333 -0.54 0 0 0 0 ${grn_val} 0"></feColorMatrix>
+	  <feMerge result="compos">
+		<feMergeNode in="SourceGraphic"></feMergeNode>
+		<feMergeNode in="grey"></feMergeNode>
+	</feMerge>
+    <feColorMatrix in="compos" type="matrix"
 			values="${outp_flatJ}">
-		</feColorMatrix>
-	</filter>
-</svg>`;
+	</feColorMatrix>`;
+		}else{
+			i.clrMtrx_tag2=`<feColorMatrix type="matrix"
+			values="${outp_flatJ}">
+	</feColorMatrix>`;
+	}
 					
 	i.svg_blob2 = new Blob([i.clrMtrx_tag2], { type: 'image/svg+xml' });
-	i.svg_url2 = URL.createObjectURL(i.svg_blob2);
+	i.svg_url2 = URL.createObjectURL(i.svg_blob2).split('/')[1].split('-').join('');
+	if(i.filt===null || typeof(i.filt)==='undefined'){
+		i.video.insertAdjacentHTML('beforeend',`<svg style="display:none !important"; xmlns="http://www.w3.org/2000/svg"><filter x='0' y='0' width='100%' height='100%' id="${i.svg_url2}">`+i.clrMtrx_tag2+'</filter></svg>');
+		i.filt=i.video.lastElementChild;
+		if(i.filt.tagName!=='svg'){
+			 i.filt=getMatchingNodesShadow(i.video, 'SVG#'+i.svg_url2, false, false)[0];
+		}
+	}else{
+		i.filt.innerHTML=`<filter x='0' y='0' width='100%' height='100%' id="${i.svg_url2}">`+i.clrMtrx_tag2+'</filter>';
+	}
 
-		let flt=[`url('${i.svg_url2}#clrMtrx_svg')`];
+		let flt=[`url(#${i.svg_url2})`];
 		let opts=i.colSel.children;
-		for(let j=0, len_j=opts.length;j<len_j; j++ ){
+		for(let j=0, len_j=opts.length-1;j<len_j; j++ ){
 			let opj=opts[j];
 			 flt.push(opj.getAttribute('nm')+opj.getAttribute('preText')+opj.getAttribute('curr')+opj.getAttribute('postText'));
 		}
@@ -1503,6 +1523,7 @@ if(doWB){
 		['contrast',0,10,0.001,1],
 		['brightness',0,10,0.001,1],
 		['invert',0,1,1,0],
+		['dither',0,1,0.001,0],
 	];
 	setts.forEach(sett => {
 		// Create option element
@@ -1613,6 +1634,7 @@ if(doWB){
 	obj.oldWB='#ffffff';
 	obj.clrMtrx_tag2={};
 	obj.svg_blob2={};
+	obj.filt=null;
 	obj.svg_url2='';
 	obj.RGB_divs=RGB_divs;
 	obj.WB_eydrop=WB_eydrop;
