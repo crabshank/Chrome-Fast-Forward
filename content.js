@@ -57,10 +57,12 @@ function showBtns(i){
 }
 
 let bfStyle="all: initial !important;font-family: system-ui !important;min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: buttonface !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+let bfStyle_plp="all: initial !important;font-family: Segoe UI Symbol !important;min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0ch 0ch 0.188ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: buttonface !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 
 let ds_i=" display: initial !important;";
 let ds_n=" display: none !important;";
 
+i.plp.style.cssText=bfStyle_plp+ds_i;
 i.skb.style.cssText=bfStyle+ds_i;
 i.skf.style.cssText=bfStyle+ds_i;
 if(doWB){
@@ -98,7 +100,9 @@ function fadeBtns(i){
 	let ds_i=" display: initial !important;";
 	let ds_n=" display: none !important;";
 	let bfStyle2="all: initial !important;font-family: system-ui !important;min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+	let bfStyle2_plp="all: initial !important;font-family: Segoe UI Symbol !important;min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0ch 0ch 0.188ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 
+	i.plp.style.cssText=bfStyle2_plp+ds_i;
 	i.skb.style.cssText=bfStyle2+ds_i;
 	i.skf.style.cssText=bfStyle2+ds_i;
 	if(doWB){
@@ -1244,6 +1248,9 @@ let ct=false;
 		//i.butn.click();
 		btclk(i);
 		b_pass=false;
+	}else if(t===i.plp){
+		plp_clk(i);
+		b_pass=false;
 	}else if(t===i.skb){
 		//i.skb.click();
 		sk_bk(i);
@@ -1272,9 +1279,13 @@ let ct=false;
 		let rectB=absBoundingClientRect(i.butn);
 		let rectK=absBoundingClientRect(i.skb);
 		let rectF=absBoundingClientRect(i.skf);
+		let rectP=absBoundingClientRect(i.plp);
 	
 		if(event.pageX >= rectC.left && event.pageX <= rectC.right && event.pageY >= rectC.top && event.pageY <= rectC.bottom){
 			i.clse.focus();
+			ct=true;
+		}else if(event.pageX >= rectP.left && event.pageX <= rectP.right && event.pageY >= rectP.top && event.pageY <= rectP.bottom){
+			plp_clk(i);
 			ct=true;
 		}else if(event.pageX >= rectB.left && event.pageX <= rectB.right && event.pageY >= rectB.top && event.pageY <= rectB.bottom){
 			//i.butn.click();
@@ -1498,6 +1509,7 @@ var obj={};
 obj.video=vid;
 obj.ff=-1;
 
+let plp = document.createElement("button");
 let skb = document.createElement("button");
 let skf = document.createElement("button");
 let butn = document.createElement("button");
@@ -1568,6 +1580,7 @@ prgBarTime.style.cssText="all: initial !important;font-family: system-ui !import
 let cvs = document.createElement("canvas");
 
 clse.type = "number";
+plp.innerHTML="⏯"
 skb.innerHTML=(prefPerc && isFinite(vid.duration))?'-'+skp.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'%':'-'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 	
 skf.innerHTML=(prefPerc && isFinite(vid.duration))?'+'+skp.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'%':'+'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 	
 butn.innerText = vid.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
@@ -1584,6 +1597,7 @@ clse.step=dfStp;
 
 clse.title="Maximum speed when fast forwarding; scroll to change.";
 
+bdivs.appendChild(plp);
 bdivs.appendChild(skb);
 bdivs.appendChild(skf);
 bdivs.appendChild(butn);
@@ -1617,6 +1631,7 @@ if(document.fullscreen || document.webkitIsFullScreen){
 	fpt.insertAdjacentElement('beforebegin', sdivs);
 }
 
+obj.plp=plp;
 obj.skb_l=skb_l;
 obj.skb=skb;
 obj.skf=skf;
@@ -1795,6 +1810,14 @@ function btclk(i) {
 			}
 			def_retCSS(i,false,true);
 			}
+}
+
+function plp_clk(i){
+	if(i.video.paused===true){
+		i.video.play();
+	}else{
+		i.video.pause();
+	}
 }
 
 function sk_bk(i, bypss){
@@ -2175,6 +2198,7 @@ function checker(){
 					finally{
 					elRemover(inst.butn);
 					elRemover(inst.clse);
+					elRemover(inst.plp);
 					elRemover(inst.skf);
 					elRemover(inst.skb);
 					elRemover(inst.cvs);
