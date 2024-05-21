@@ -514,6 +514,8 @@ if(i.video.tagName==='AUDIO'){
 			let wScld=hScl*i.video.videoWidth; 
 			let hlf_h=0.5*((wScl<=hScl)?hScld:vrct.height);
 			vrct.vid_top=vrct.centre_y-hlf_h;
+			vrct.vid_bottom=vrct.centre_y+hlf_h;
+			vrct.vid_height=vrct.vid_bottom-vrct.vid_top;
 			let hlf_w=0.5*((wScl<=hScl)?vrct.width:wScld);
 			vrct.centre_x=vrct.left+vrct.width*0.5;
 			vrct.vid_left=vrct.centre_x-hlf_w;
@@ -522,7 +524,7 @@ if(i.video.tagName==='AUDIO'){
 			wg=0.001*vrct.vid_width;
 			vrct.vid_width-=2*wg;
 			i.right=vrct.vid_left+wg;
-			i.top+=vrct.vid_top;
+			i.top=vrct.vid_top+0.102*vrct.vid_height;
 		}
 i.sDivsCSS2='top: '+i.top+'px !important;  left: '+i.right+'px !important;';
 }
