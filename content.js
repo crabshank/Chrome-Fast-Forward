@@ -1148,9 +1148,9 @@ function WB_inp(i,c) {
 	}
 }
 
-function cl_inp(i) {
-//event.preventDefault();
-event.stopPropagation();
+function cl_inp(i,evt) {
+//evt.preventDefault();
+evt.stopPropagation();
 def_retCSS(i,false,true);
 if(i.ip_e==1){
 let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
@@ -1188,7 +1188,7 @@ function cl_whl(evt,i) {
 		}
 		}
 	if(i.wh_e==1){
-		cl_inp(i);
+		cl_inp(i,evt);
 	}
 	}
 }
@@ -1626,7 +1626,7 @@ cvs.style.setProperty('border-radius','0%','important');
 
 
 if(document.fullscreen || document.webkitIsFullScreen){
-	i.video.insertAdjacentElement('beforebegin',i.sdivs);
+	obj.video.insertAdjacentElement('beforebegin',sdivs);
 }else{
 	let anc=getAncestors(obj.video, true, true, false, true);
 	let fpt=anc[anc.length-1];
@@ -1748,10 +1748,10 @@ cvs.addEventListener("wheel", (evt) =>cvs_whl(evt,obj));
 bdivs.addEventListener('wheel',(evt) => cl_whl(evt,obj));
 vid.addEventListener('ratechange',ratechange_hdl);
 
-clse.addEventListener('keyup',() => cl_inp(obj));
-clse.addEventListener('keydown',() => cl_inp(obj));
-clse.addEventListener('change',() => cl_inp(obj));
-clse.addEventListener('change',() => cl_inp(obj));
+clse.addEventListener('keyup',(evt) => cl_inp(obj,evt));
+clse.addEventListener('keydown',(evt) => cl_inp(obj,evt));
+clse.addEventListener('change',(evt) => cl_inp(obj,evt));
+clse.addEventListener('change',(evt) => cl_inp(obj,evt));
 
 clse.addEventListener('focus',() => cl_focus(obj));
 
