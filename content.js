@@ -2096,23 +2096,15 @@ function cvs_hdl(e,i,m){
 	}
 	
 	let time=(1-l)*s+l*t;
-	time=isFinite(i.video.duration) ? Math.max(0,Math.min(time,i.video.duration)) : time;
 	let timeFmt=bf_s_hmmss(time,true);
 	let vt=(!isNaN(time) && isFinite(time))?true:false;
-	let vN=(typeof(l)!=='undefined')?Math.round((1+15*Math.max(Math.min(l,1),0))*100)*0.01:null;
-	let icv=(vN===null)?null:vN.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false});
-	let ctv=e.ctrlKey && icv!==null ? true: false;
-	if(vt && !e.ctrlKey){
+	if(vt){
 		fadeBtns(i);
 		i.cvs.style.setProperty('opacity',0.64,'important');
 		//i.cvs.title=timeFmt;
 		i.prgBarTime.innerText=timeFmt;
-	}else if(ctv){
-		fadeBtns(i);
-		i.cvs.style.setProperty('opacity',0.64,'important');
-		i.prgBarTime.innerText=icv+'x';
+		i.prgBarTime.style.setProperty('display','block','important');
 	}
-	i.prgBarTime.style.setProperty('display','block','important');
 	
 	if(( outsideScrub===true) || (m>=1 && m<=3 && e.buttons!=0 && cvs_clk<1 ) || (m==4)){
 					let c_pass=false;
@@ -2124,18 +2116,11 @@ function cvs_hdl(e,i,m){
 					}else{
 						i.c_vis=null;
 					}
-			if( (c_pass || outsideScrub===true) && (vt || ctv ) ){
+			if( (c_pass || outsideScrub===true) && vt){
 				fadeBtns(i);
 				i.cvs.style.setProperty('opacity',0.64,'important');
-				if(ctv){ //Hold Ctrl and click/drag to set speed
-					i.clse.value=icv;
-					if(i.ff===1){
-						forcePlaybackRate(i);
-					}
-				}else{
-					i.video.currentTime=time;
-					i.prgBarTime.innerText=timeFmt;
-				}
+				i.video.currentTime=time;
+				i.prgBarTime.innerText=timeFmt;
 				i.prgBarTime.style.setProperty('display','block','important');
 			}
 		}
