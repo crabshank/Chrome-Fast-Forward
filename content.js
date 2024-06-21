@@ -2020,7 +2020,7 @@ function sk_l_fw(i){
 }
 
 function cvs_hdl(e,i,m){
-	let outsideScrub=(m==0 && cvs_clkd===true)?true:false;
+	let outsideScrub=(m==0 && cvs_clkd===true )?true:false;
 	if(m==3 && cvs_clkd===false){
 		i.prgBarTime.style.setProperty('display','none','important');
 		i.entered_cvs=false;
@@ -2096,13 +2096,16 @@ function cvs_hdl(e,i,m){
 	}
 	
 	let time=(1-l)*s+l*t;
+	time=isFinite(i.video.duration) ? Math.max(0,Math.min(time,i.video.duration)) : time;
 	let timeFmt=bf_s_hmmss(time,true);
 	let vt=(!isNaN(time) && isFinite(time))?true:false;
-	if(vt){
+	let vN=(typeof(l)!=='undefined')?Math.round((1+15*Math.max(Math.min(l,1),0))*100)*0.01:null;
+	let icv=(vN===null)?null:vN.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false});
+	let ctv=e.ctrlKey && icv!==null ? true: false;
+	if(vt || ctv){
 		fadeBtns(i);
 		i.cvs.style.setProperty('opacity',0.64,'important');
-		//i.cvs.title=timeFmt;
-		i.prgBarTime.innerText=timeFmt;
+		i.prgBarTime.innerText= ctv ? icv+'x' :  timeFmt  ;
 		i.prgBarTime.style.setProperty('display','block','important');
 	}
 	
@@ -2116,11 +2119,19 @@ function cvs_hdl(e,i,m){
 					}else{
 						i.c_vis=null;
 					}
-			if( (c_pass || outsideScrub===true) && vt){
+			if( (c_pass || outsideScrub===true) && (vt || ctv)){
 				fadeBtns(i);
 				i.cvs.style.setProperty('opacity',0.64,'important');
-				i.video.currentTime=time;
-				i.prgBarTime.innerText=timeFmt;
+				if(ctv){
+					i.clse.value=icv;
+					i.prgBarTime.innerText=icv+'x' ;
+					if(i.ff===1){
+						forcePlaybackRate(i);
+					}
+				}else if(vt){
+					i.video.currentTime=time;
+					i.prgBarTime.innerText=timeFmt;
+				}else 
 				i.prgBarTime.style.setProperty('display','block','important');
 			}
 		}
