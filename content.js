@@ -508,9 +508,9 @@ if(i.video.tagName==='AUDIO'){
 			)
 		){
 			vrct.centre_y=vrct.top+vrct.height*0.5;
-			let wScl=vrct.width/i.video.videoWidth;
+			let wScl= i.video.videoWidth===0 ? 1 : vrct.width/i.video.videoWidth;
 			let hScld=wScl*i.video.videoHeight;
-			let hScl=vrct.height/i.video.videoHeight;
+			let hScl=i.video.videoHeight===0 ? 1 : vrct.height/i.video.videoHeight;
 			let wScld=hScl*i.video.videoWidth; 
 			let hlf_h=0.5*((wScl<=hScl)?hScld:vrct.height);
 			vrct.vid_top=vrct.centre_y-hlf_h;
@@ -643,7 +643,7 @@ if(cvs_clkd===false && !i.entered_cvs && visTime===false){
 	i.prgBarTime.style.setProperty('display','none','important');
 }
 		}else if (cvs_clkd===false){
-				if(!i.entered){
+				if(!i.entered && visTime===false){
 					i.sdivs.style.cssText=sDivsCSS+i.sDivsCSS2+'opacity: 0 !important;';
 					i.faded=true;
 				}
@@ -2209,15 +2209,8 @@ function checker(){
 						;
 					}
 					finally{
-					elRemover(inst.butn);
-					elRemover(inst.clse);
-					elRemover(inst.plp);
-					elRemover(inst.skf);
-					elRemover(inst.skb);
-					elRemover(inst.cvs);
-					elRemover(inst.bdivs);
-					elRemover(inst.sdivs);
-					global.instances=removeEls(inst,global.instances);
+						elRemover(inst.sdivs);
+						global.instances=removeEls(inst,global.instances);
 					}
 				}
 			}
