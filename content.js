@@ -731,7 +731,7 @@ function drawBuffered(i){
 	if(isFinite(dur)){
 		i.cvs.setAttribute('start', 0);
 		i.cvs.setAttribute('end', dur);
-		
+		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 			for (let k=len-1; k>=0; --k){
 				let t_i=i.video.buffered.end(k);
 				let s_i=i.video.buffered.start(k);
@@ -741,19 +741,24 @@ function drawBuffered(i){
 				let c_i=i.video.currentTime;
 				let xdc=(c_i>=s_i && c_i<=t_i)?Math.ceil(c_i*prp):-1;
 				for (let x=xds; x<=xdt; ++x){
-					let grn=(xdc!=-1 && x>=xdc && x<=xdt)?true:false;
-					if(grn===true){
+					if(x===xdc){
 						for (let y=canvasHeight-1; y>=0; --y){
-							setPix(pixels, x, y, 0,171,14, canvasWidth);
+							setPix(pixels, x, y, 198,198,22, canvasWidth);
 						}
 					}else{
-						for (let y=canvasHeight-1; y>=0; --y){
-							setPix(pixels, x, y, 144,67,204, canvasWidth);
+						let grn=(xdc!=-1 && x>=xdc && x<=xdt)?true:false;
+						if(grn===true){
+							for (let y=canvasHeight-1; y>=0; --y){
+								setPix(pixels, x, y, 0,171,14, canvasWidth);
+							}
+						}else{
+							for (let y=canvasHeight-1; y>=0; --y){
+								setPix(pixels, x, y, 144,67,204, canvasWidth);
+							}
 						}
-					}
+				}
 				}
 			}	
-			
 	}else{
 		let c_i=i.video.currentTime;
 		let latest=Math.max(i.video.buffered.end(len-1), c_i);
@@ -770,14 +775,20 @@ function drawBuffered(i){
 			let c_i=i.video.currentTime;
 			let xdc=(c_i>=s_i && c_i<=t_i)?Math.ceil((c_i-earliest)*prp):-1;
 			for (let x=xds; x<=xdt; ++x){
-				let grn=(xdc!=-1 && x>=xdc && x<=xdt)?true:false;
-				if(grn===true){
+				if(x===xdc){
 					for (let y=canvasHeight-1; y>=0; --y){
-						setPix(pixels, x, y, 0,171,14, canvasWidth);
+						setPix(pixels, x, y,198,198,22, canvasWidth);
 					}
 				}else{
-					for (let y=canvasHeight-1; y>=0; --y){
-						setPix(pixels, x, y, 144,67,204, canvasWidth);
+					let grn=(xdc!=-1 && x>=xdc && x<=xdt)?true:false;
+					if(grn===true){
+						for (let y=canvasHeight-1; y>=0; --y){
+							setPix(pixels, x, y, 0,171,14, canvasWidth);
+						}
+					}else{
+						for (let y=canvasHeight-1; y>=0; --y){
+							setPix(pixels, x, y, 144,67,204, canvasWidth);
+						}
 					}
 				}
 			}
