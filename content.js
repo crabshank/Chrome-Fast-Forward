@@ -725,6 +725,7 @@ function drawBuffered(i){
 				if(i.firstBuf===false){
 					i.firstBuf=true;
 				}
+                ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 				let iData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
 				let pixels = iData.data;
 				let dur=i.video.duration;
@@ -792,7 +793,6 @@ function drawBuffered(i){
 			}
 		}
 	}
-					ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 					ctx.putImageData(iData, 0, 0);
 	}
 			
