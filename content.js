@@ -454,8 +454,13 @@ var sDivsCSS="all: initial !important;font-family: system-ui !important;max-widt
 	}
 
 function findInst(v){
-	let arrChk=insts.filter((i)=>{return i.video===v;});
-	return (arrChk.length>0)?arrChk[0]:null;
+	for(let i=0, len_i=insts.length; i<len_i; ++i){
+		let inst=insts[i];
+		if(inst.video===v){
+			return inst;
+		}
+	}
+	return null;
 }
 
 function chkVisTime(i){
