@@ -1,4 +1,4 @@
-var global={instances:[], monitored:[]};
+var insts=[];
 
 var dfSpd=2.2;
 var dfStp=0.1;
@@ -453,14 +453,9 @@ var sDivsCSS="all: initial !important;font-family: system-ui !important;max-widt
 		return hh + mm + ":" + ss;
 	}
 
-function findInst(v, mon){
-	if(!mon){
-		let arrChk=global.instances.filter((i)=>{return i.video===v;});
-		return (arrChk.length>0)?arrChk[0]:null;
-	}else{
-		let arrChk=global.monitored.filter((m)=>{return m===v;});
-		return (arrChk.length>0)?arrChk[0]:null;
-	}
+function findInst(v){
+	let arrChk=insts.filter((i)=>{return i.video===v;});
+	return (arrChk.length>0)?arrChk[0]:null;
 }
 
 function chkVisTime(i){
@@ -670,11 +665,20 @@ function chgFlgs(i,on){
 			
 
 function eligVid(vid){
-if((get_src(vid)!='') && (vid.readyState != 0)){
-	return true;
-}else{
-	return false;
-}
+	let anc=getAncestors(vid, false, false, true, false);
+	let fnd=false;
+	let dEl=document.documentElement;
+	for(let i=0, len=anc.length; i<len; ++i){
+		if(anc[i]===dEl){
+			fnd=true;
+			break;
+		}
+	}
+	if( (fnd===true) && (get_src(vid)!='') && (vid.readyState > 0) ){
+		return true;
+	}else{
+		return false;
+	}
 }
 
 function get_src(vid){
@@ -881,7 +885,7 @@ drawBuffered(i);
 }
 
 function progress_hdl(event) {
-let i=findInst(event.target,false);
+let i=findInst(event.target);
 if(!!i){
 if(i.pg_e==1){
 if(i.video.readyState>2){
@@ -896,7 +900,7 @@ i.video.playbackRate=1;
 }
 
 function ended_hdl(event) {
-let i=findInst(event.target,false);
+let i=findInst(event.target);
 if(!!i){
 if(i.pg_e==1){
 if(i.video.readyState>2){
@@ -910,17 +914,8 @@ i.video.playbackRate=1;
 }
 }
 
-function progress_hdl_chk(event) {
-let i=findInst(event.target,true);
-if(!!i){
-if(i.readyState>2){
-checker();
-}
-}
-}
-
 function play_hdl(event) {
-let i=findInst(event.target,false);
+let i=findInst(event.target);
 if(!!i){
 def_retCSS(i,false,true);
 if(i.pl_e==1){
@@ -936,7 +931,7 @@ i.video.playbackRate=1;
 }
 
 function waiting_hdl(event) {
-let i=findInst(event.target,false);
+let i=findInst(event.target);
 if(!!i){
 if(i.wt_e==1){
 i.video.playbackRate=1;
@@ -955,7 +950,7 @@ function pointerenter_hdl(event,i) {
 }
 
 function pointermove_hdl(event) {
-let i=findInst(event.target,false);
+let i=findInst(event.target);
 if(!!i && cvs_clkd===false && justUp===false){
 def_retCSS(i,false,false);
 }
@@ -981,7 +976,7 @@ def_retCSS(i,true,true);
 }
 
 function seeked_hdl(event) {
-let i=findInst(event.target,false);
+let i=findInst(event.target);
 if(!!i){
 i.cmu_sk=0;
 i.skb.innerHTML=(prefPerc && isFinite(i.video.duration))?'-'+skp.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'%':'-'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 	
@@ -1001,7 +996,7 @@ i.video.playbackRate=1;
 }
 
 function seeking_hdl(event) {
-let i=findInst(event.target,false);
+let i=findInst(event.target);
 if(!!i){
 i.entered=true;
 def_retCSS(i,false,true);
@@ -1012,7 +1007,7 @@ i.butn.innerText=i.video.playbackRate.toLocaleString('en-GB', {minimumFractionDi
 }
 
 function ratechange_hdl(event) {
-let i=findInst(event.target,false);
+let i=findInst(event.target);
 if(!!i){
 if(i.rc_e==1){
 let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
@@ -1700,7 +1695,7 @@ obj.firstBuf=false;
 obj.s_vis=null;
 obj.c_vis=null;
 obj.obscPrg={};
-global.instances.push(obj);
+insts.push(obj);
 
 def_retCSS(obj, true, true);
 
@@ -2164,64 +2159,50 @@ function cvs_whl(e,i){
 }
 
 function checker(){
-			let DOMvids=getMatchingNodesShadow(document,['VIDEO','AUDIO'],true,false);
-
-			for (let j=0; j<DOMvids.length; j++){
-				let found=(global.monitored.includes(DOMvids[j]))?true:false;
-				let instVid=global.instances.map((i)=>{return i.video;});
-				
-				if(!found){
-					let found=(instVid.includes(DOMvids[j]))?true:false;
+	
+			let eligInsts=[];
+			let eligInsts_vids=[];
+			let toRmv=[];
+			
+			for(let i=0, len_i=insts.length; i<len_i; ++i){
+				let insti=insts[i];
+				let v=insti.video;
+				if( eligVid(v)===false ){
+					toRmv.push(insti);
+				}else{
+					eligInsts.push(insti);
+					eligInsts_vids.push(v);
 				}
-		
-				if(!found){
-					global.monitored.push(DOMvids[j]);
-					DOMvids[j].addEventListener('loadeddata',progress_hdl_chk);
-					DOMvids[j].addEventListener('progress',progress_hdl_chk);
-				}
-				
-				found=(instVid.includes(DOMvids[j]))?true:false;
-				
-				if(!found){
-					 if(eligVid(DOMvids[j])){
-						 if(global.monitored.includes(DOMvids[j])){
-							 DOMvids[j].removeEventListener('loadeddata',progress_hdl_chk);
-							 DOMvids[j].removeEventListener('progress',progress_hdl_chk);
-							 global.monitored=removeEls(DOMvids[j],global.monitored);
-						 }
-						 creator(DOMvids[j]);
-					 }
-				}
-				
 			}
 			
-			for(let n=0; n<global.monitored.length; n++){
-				let vid=global.monitored[n];
-				if(!checkInclude(DOMvids,vid)){
-					global.monitored=removeEls(vid,global.monitored);
+			insts=eligInsts;
+			
+			for(let i=0, len_i=toRmv.length; i<len_i; ++i){
+				let remi=toRmv[i];
+				let v=remi.video;
+				try{
+					v.removeEventListener('progress',progress_hdl);
+					v.removeEventListener('play',play_hdl);
+					v.removeEventListener('waiting',waiting_hdl);
+					v.removeEventListener('pointermove',pointermove_hdl);
+					v.removeEventListener('ratechange',ratechange_hdl);
+					v.removeEventListener('seeked',seeked_hdl);
+					v.removeEventListener('seeking',seeking_hdl);
+					v.removeEventListener('ended',ended_hdl);
+				}
+				catch(err){
+					;
+				}
+				finally{
+					elRemover(remi.sdivs);
 				}
 			}
-
-			for(let n=0; n<global.instances.length; n++){
-				let inst=global.instances[n];
-				if(!checkInclude(DOMvids,inst.video) || !eligVid(inst.video)){
-					try{
-						i.video.removeEventListener('progress',progress_hdl);
-						i.video.removeEventListener('play',play_hdl);
-						i.video.removeEventListener('waiting',waiting_hdl);
-						i.video.removeEventListener('pointermove',pointermove_hdl);
-						i.video.removeEventListener('ratechange',ratechange_hdl);
-						i.video.removeEventListener('seeked',seeked_hdl);
-						i.video.removeEventListener('seeking',seeking_hdl);
-						i.video.removeEventListener('ended',ended_hdl);
-					}
-					catch(err){
-						;
-					}
-					finally{
-						elRemover(inst.sdivs);
-						global.instances=removeEls(inst,global.instances);
-					}
+			
+			let DOMvids=getMatchingNodesShadow(document,['VIDEO','AUDIO'],true,false);
+			for(let i=0, len_i=DOMvids.length; i<len_i; ++i){
+				let dv=DOMvids[i];
+				if(!eligInsts_vids.includes(dv) && eligVid(dv)===true){
+					creator(dv);
 				}
 			}
 	}
