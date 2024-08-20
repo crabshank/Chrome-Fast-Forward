@@ -1125,19 +1125,39 @@ function colInp_inp(i,b,skp) {
 					
 	i.svg_blob2 = new Blob([i.clrMtrx_tag2], { type: 'image/svg+xml' });
 	i.svg_url2 = URL.createObjectURL(i.svg_blob2).split('/').at(-1).split('-').join('');
+	let opts=i.colSel.children;
+	let gmm=opts[3].getAttribute('curr');
+	let cf=parseFloat(opts[2].getAttribute('curr'));
+	let contFilt='';
+	if(cf!==1.0){
+		let cs=[0];
+		let n=40;
+		let rcp_n=1.0/n;
+		for(let k=1; k<n; ++k){
+			let kn=k*rcp_n;
+			cs.push(  kn>0.5 ? 0.5*(Math.pow(Math.abs(2*kn-1),cf)+1) : 0.5*(1-Math.pow(Math.abs(1-2*kn),cf))  ) 
+		}
+		cs.push(1);
+		let cntr=cs.join(' ');
+		contFilt=`<feComponentTransfer><feFuncR type="table" tableValues="${cntr}" /><feFuncG type="table" tableValues="${cntr}" /><feFuncB type="table" tableValues="${cntr}" /></feComponentTransfer>`;
+	}
+	let gammaFilt=gmm==1?'':`<feComponentTransfer><feFuncR type="gamma" exponent="${gmm}" amplitude="1" offset="0" /><feFuncG type="gamma" exponent="${gmm}" amplitude="1" offset="0" /><feFuncB type="gamma" exponent="${gmm}" amplitude="1" offset="0" /></feComponentTransfer>`;
 	if(i.filt===null || typeof(i.filt)==='undefined'){
-		i.video.insertAdjacentHTML('beforeend',`<svg style="display:none !important"; xmlns="http://www.w3.org/2000/svg"><filter x='0' y='0' width='100%' height='100%' id="${i.svg_url2}">`+i.clrMtrx_tag2+'</filter></svg>');
+		i.video.insertAdjacentHTML('beforeend',`<svg style="display:none !important"; xmlns="http://www.w3.org/2000/svg"><filter x='0' y='0' width='100%' height='100%' id="${i.svg_url2}">`+i.clrMtrx_tag2+contFilt+gammaFilt+'</filter></svg>');
 		i.filt=i.video.lastElementChild;
 		if(i.filt.tagName!=='svg'){
 			 i.filt=getMatchingNodesShadow(i.video, 'SVG#'+i.svg_url2, false, false)[0];
 		}
 	}else{
-		i.filt.innerHTML=`<filter x='0' y='0' width='100%' height='100%' id="${i.svg_url2}">`+i.clrMtrx_tag2+'</filter>';
+		i.filt.innerHTML=`<filter x='0' y='0' width='100%' height='100%' id="${i.svg_url2}">`+i.clrMtrx_tag2+contFilt+gammaFilt+'</filter>';
 	}
 
 		let flt=[`url(#${i.svg_url2})`];
-		let opts=i.colSel.children;
+		
 		for(let j=0, len_j=opts.length-1;j<len_j; j++ ){
+			if(j===2 || j===3){
+				continue;
+			}
 			let opj=opts[j];
 			 flt.push(opj.getAttribute('nm')+opj.getAttribute('preText')+opj.getAttribute('curr')+opj.getAttribute('postText'));
 		}
@@ -1545,7 +1565,7 @@ if(doWB){
 		['hue-rotate',0,360,1,0],
 		['saturate',0,5,0.001,1],
 		['contrast',0,10,0.001,1],
-		['brightness',0,10,0.001,1],
+		['gamma',0,6,0.001,1],
 		['invert',0,1,1,0],
 		['dither',0,1,0.001,0],
 	];
