@@ -1047,7 +1047,8 @@ function colInp_reset(i) {
 	i.colInp.value=val;
 	opt.setAttribute('curr',val);
 	let pst=opt.getAttribute('postText');
-	opt.textContent =  opt.getAttribute('nm')+' '+opt.getAttribute('preText')+val+pst;
+	let dpl=parseInt(opt.getAttribute('dp'));
+	opt.textContent =  opt.getAttribute('nm')+' '+opt.getAttribute('preText')+parseFloat(val).toFixed(dpl)+pst;
 	opt.title =val+pst.split(')')[0];
 	colInp_inp(i,null,true);
 }
@@ -1068,7 +1069,8 @@ function colInp_inp(i,b,skp) {
 			i.colInp.value=val;
 		}
 		let pst=opt.getAttribute('postText');
-		opt.textContent =  opt.getAttribute('nm')+' '+opt.getAttribute('preText')+val+pst;
+		let dpl=parseInt(opt.getAttribute('dp'));
+		opt.textContent =  opt.getAttribute('nm')+' '+opt.getAttribute('preText')+parseFloat(val).toFixed(dpl)+pst;
 		opt.title =val+pst.split(')')[0];
 	}
 	if(b!==false){
@@ -1592,14 +1594,14 @@ if(doWB){
 	colSel.style.cssText="all: initial !important; align-items: center !important; background: buttonface !important; appearance: auto !important; color: black !important;";
 
 	let setts=[
-		['Saturate',0,5,0.001,1],
-		['Hue rotate',0,360,1,0],
-		['Contrast (S-curve)',0,10,0.001,1],
-		['Gamma',0,6,0.001,1],
-		['White crush',1,2,0.001,1],
-		['Black crush',-1,0,0.001,0],
-		['Invert',0,1,1,0],
-		['Dither',0,1,0.001,0],
+		['Saturate',0,5,0.001,1,3],
+		['Hue rotate',0,360,1,0,0],
+		['Contrast (S-curve)',0,10,0.001,1,3],
+		['Gamma',0,6,0.001,1,3],
+		['White crush',1,2,0.001,1,3],
+		['Black crush',-1,0,0.001,0,3],
+		['Invert',0,1,1,0,0],
+		['Dither',0,1,0.001,0,3],
 	];
 	setts.forEach(sett => {
 		// Create option element
@@ -1610,12 +1612,13 @@ if(doWB){
 		opt.setAttribute('stp',sett[3]);
 		opt.setAttribute('curr',sett[4]);
 		opt.setAttribute('dft',sett[4]);
+		opt.setAttribute('dp',sett[5]);
 		let preTxt='(';
 		opt.setAttribute('preText',preTxt);
 		let isDeg=(sett[0]==='Hue rotate')?'deg)':')';
 		opt.setAttribute('postText',isDeg);
 		opt.style.cssText="all: initial !important; align-items: center !important; background: buttonface !important; appearance: auto !important; color: black !important;";
-		opt.textContent =sett[0]+' '+preTxt+sett[4]+isDeg;
+		opt.textContent =sett[0]+' '+preTxt+parseFloat(sett[4]).toFixed(parseFloat(sett[5]))+isDeg;
 		colSel.appendChild(opt);	
 	  });
 	colInp= document.createElement("input");
@@ -1625,6 +1628,7 @@ if(doWB){
 	colInp.max=s0[2];
 	colInp.step=s0[3];
 	colInp.value=s0[4];
+	colInp.dp=s0[5];
 	colInp.title= 'Double-click to reset to default';
 	colInp.style.cssText="all: initial !important;appearance: auto !important;width: -webkit-fill-available !important;vertical-align: middle !important;";
 	RGB_divs.insertAdjacentHTML('beforeend',`<div><input class="col" type="color" style="all: initial !important;width: 4.808ch !important;background-color: #000000 !important;border: #000000 !important;height: 3ch !important; color: white !important;" id="vis" value="#ffffff">#FFFFFF</input></div>`);
