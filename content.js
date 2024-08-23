@@ -1102,8 +1102,8 @@ function colInp_inp(i,b,skp) {
 			}
 		}
 		let outp_flatJ=outp.flat().join(',');
-		
-		let grn=i.colSel.querySelector('option[nm="dither"]');
+		let opts=i.colSel.children;
+		let grn=opts[7];
 		let grn_val=parseFloat(grn.getAttribute('curr'));
 		if(grn_val>0){
 			i.clrMtrx_tag2=`<feTurbulence y="0px" result="waves" type="turbulence" baseFrequency="14.46" numOctaves="1" seed="5">
@@ -1125,9 +1125,18 @@ function colInp_inp(i,b,skp) {
 					
 	i.svg_blob2 = new Blob([i.clrMtrx_tag2], { type: 'image/svg+xml' });
 	i.svg_url2 = URL.createObjectURL(i.svg_blob2).split('/').at(-1).split('-').join('');
-	let opts=i.colSel.children;
 	let gmm=opts[3].getAttribute('curr');
 	let cf=parseFloat(opts[2].getAttribute('curr'));
+	let st=parseFloat(opts[0].getAttribute('curr'));
+	let satFilt='';
+	if(st!==1.0){
+		satFilt=`<feColorMatrix type="saturate" values="${st}"/>`;
+	}
+	let hr=parseFloat(opts[1].getAttribute('curr'));
+	let hueFilt='';
+	if(hr!==0.0){
+		hueFilt=`<feColorMatrix type="hueRotate" values="${hr}"/>`;
+	}
 	let contFilt='';
 	if(cf!==1.0){
 		let cs=[0];
@@ -1141,18 +1150,33 @@ function colInp_inp(i,b,skp) {
 		let cntr=cs.join(' ');
 		contFilt=`<feComponentTransfer><feFuncR type="table" tableValues="${cntr}" /><feFuncG type="table" tableValues="${cntr}" /><feFuncB type="table" tableValues="${cntr}" /></feComponentTransfer>`;
 	}
+	let wcr=parseFloat(opts[4].getAttribute('curr'));
+	let bcr=parseFloat(opts[5].getAttribute('curr'));
+	let wbcFilt='';
+	if( (wcr!==1 || bcr!==0) && (wcr!==bcr) ){
+		let slp=1/(wcr-bcr);
+		let itp=-slp*bcr;
+		wbcFilt=`<feComponentTransfer><feFuncR type="linear" slope="${slp}" intercept="${itp}" /><feFuncG type="linear" slope="${slp}" intercept="${itp}" /><feFuncB type="linear" slope="${slp}" intercept="${itp}" /></feComponentTransfer>`;
+	}
+	
 	let gammaFilt=gmm==1?'':`<feComponentTransfer><feFuncR type="gamma" exponent="${gmm}" amplitude="1" offset="0" /><feFuncG type="gamma" exponent="${gmm}" amplitude="1" offset="0" /><feFuncB type="gamma" exponent="${gmm}" amplitude="1" offset="0" /></feComponentTransfer>`;
+	
+	let ivt=parseFloat(opts[6].getAttribute('curr'));
+	let ivtFilt='';
+	if(ivt!==0.0){
+		let ivt2=(1-ivt);
+		ivtFilt=`<feComponentTransfer><feFuncR type="table" tableValues="${ivt} ${ivt2}"/><feFuncG type="table" tableValues="${ivt} ${ivt2}"/><feFuncB type="table" tableValues="${ivt} ${ivt2}"/></feComponentTransfer>` 
+	}
+	
 	if(i.filt===null || typeof(i.filt)==='undefined'){
-		i.video.insertAdjacentHTML('beforeend',`<svg style="display:none !important"; xmlns="http://www.w3.org/2000/svg"><filter x='0' y='0' width='100%' height='100%' id="${i.svg_url2}">`+i.clrMtrx_tag2+contFilt+gammaFilt+'</filter></svg>');
-		i.filt=i.video.lastElementChild;
-		if(i.filt.tagName!=='svg'){
-			 i.filt=getMatchingNodesShadow(i.video, 'SVG#'+i.svg_url2, false, false)[0];
-		}
+		i.video.insertAdjacentHTML('beforeend',`<svg style="display:none !important"; xmlns="http://www.w3.org/2000/svg" primitiveUnits="objectBoundingBox"><filter x='0%' y='0%' width='100%' height='100%' id="${i.svg_url2}">`+i.clrMtrx_tag2+satFilt+hueFilt+contFilt+gammaFilt+wbcFilt+ivtFilt+`</filter></svg>`);
+			 i.filt=getMatchingNodesShadow(i.video, 'filter', true, false).find(t=>{return t.id===i.svg_url2;});
 	}else{
-		i.filt.innerHTML=`<filter x='0' y='0' width='100%' height='100%' id="${i.svg_url2}">`+i.clrMtrx_tag2+contFilt+gammaFilt+'</filter>';
+		i.filt.id=i.svg_url2;
+		i.filt.innerHTML=i.clrMtrx_tag2+satFilt+hueFilt+contFilt+gammaFilt+wbcFilt+ivtFilt;
 	}
 
-		let flt=[`url(#${i.svg_url2})`];
+		/*let flt=[`url(#${i.svg_url2})`];
 		
 		for(let j=0, len_j=opts.length-1;j<len_j; j++ ){
 			if(j===2 || j===3){
@@ -1162,20 +1186,24 @@ function colInp_inp(i,b,skp) {
 			 flt.push(opj.getAttribute('nm')+opj.getAttribute('preText')+opj.getAttribute('curr')+opj.getAttribute('postText'));
 		}
 		
-		i.video.style.setProperty('filter',flt.join(' '),'important');
+		i.video.style.setProperty('filter',flt.join(' '),'important');*/
+		
+		i.video.style.setProperty('filter',`url(#${i.svg_url2})`,'important');
 	}
 }
 
-function WB_inp(i,c) {
-	if(event.type==='input' || c){
-		if(c){
-			i.WB_eydrop.value=c;
+function WB_inp(i,c,d) {
+		if(d===true){
+			i.filt.innerHTML=`<feColorMatrix type="matrix" values="${WB_defMtx_flat}"></feColorMatrix>`;
+		}else if(d===false){
+			colInp_inp(i);
+		}else if(event.type==='input' || c){
+			if(c){
+				i.WB_eydrop.value=c;
+			}
+			i.WB_eydrop_txt.textContent=i.WB_eydrop.value.toLocaleUpperCase();
+			colInp_inp(i);
 		}
-		i.WB_eydrop_txt.textContent=i.WB_eydrop.value.toLocaleUpperCase();
-		colInp_inp(i);
-	}else{
-		i.video.style.setProperty('filter',`url('${WB_defMtx_blob}#clrMtrx_svg')`,'important');
-	}
 }
 
 function cl_inp(i,evt) {
@@ -1355,7 +1383,8 @@ let ct=false;
 		i.cmpWB=true;
 		i.oldWB=i.WB_eydrop.value;
 		i.WB_eydrop.value='#ffffff';
-		i.WB_eydrop.dispatchEvent(new Event('input'));
+		//i.WB_eydrop.dispatchEvent(new Event('input'));
+		WB_inp(i,undefined,true);
 	}
 }
 
@@ -1374,7 +1403,8 @@ function cl_ptUp(i) {
 	if(i.cmpWB===true){
 		i.cmpWB=false;
 		i.WB_eydrop.value=i.oldWB;
-		i.WB_eydrop.dispatchEvent(new Event('input'));
+		//i.WB_eydrop.dispatchEvent(new Event('input'));
+		WB_inp(i,undefined,false);
 	}
 }
 
@@ -1562,12 +1592,14 @@ if(doWB){
 	colSel.style.cssText="all: initial !important; align-items: center !important; background: buttonface !important; appearance: auto !important; color: black !important;";
 
 	let setts=[
-		['hue-rotate',0,360,1,0],
-		['saturate',0,5,0.001,1],
-		['contrast',0,10,0.001,1],
-		['gamma',0,6,0.001,1],
-		['invert',0,1,1,0],
-		['dither',0,1,0.001,0],
+		['Saturate',0,5,0.001,1],
+		['Hue rotate',0,360,1,0],
+		['Contrast (S-curve)',0,10,0.001,1],
+		['Gamma',0,6,0.001,1],
+		['White crush',1,2,0.001,1],
+		['Black crush',-1,0,0.001,0],
+		['Invert',0,1,1,0],
+		['Dither',0,1,0.001,0],
 	];
 	setts.forEach(sett => {
 		// Create option element
@@ -1580,7 +1612,7 @@ if(doWB){
 		opt.setAttribute('dft',sett[4]);
 		let preTxt='(';
 		opt.setAttribute('preText',preTxt);
-		let isDeg=(sett[0]==='hue-rotate')?'deg)':')';
+		let isDeg=(sett[0]==='Hue rotate')?'deg)':')';
 		opt.setAttribute('postText',isDeg);
 		opt.style.cssText="all: initial !important; align-items: center !important; background: buttonface !important; appearance: auto !important; color: black !important;";
 		opt.textContent =sett[0]+' '+preTxt+sett[4]+isDeg;
@@ -1588,15 +1620,17 @@ if(doWB){
 	  });
 	colInp= document.createElement("input");
 	colInp.type="range";
-	colInp.min=0;
-	colInp.max=360;
-	colInp.value=0;
+	let s0=setts[0];
+	colInp.min=s0[1];
+	colInp.max=s0[2];
+	colInp.step=s0[3];
+	colInp.value=s0[4];
 	colInp.title= 'Double-click to reset to default';
 	colInp.style.cssText="all: initial !important;appearance: auto !important;width: -webkit-fill-available !important;vertical-align: middle !important;";
 	RGB_divs.insertAdjacentHTML('beforeend',`<div><input class="col" type="color" style="all: initial !important;width: 4.808ch !important;background-color: #000000 !important;border: #000000 !important;height: 3ch !important; color: white !important;" id="vis" value="#ffffff">#FFFFFF</input></div>`);
 	let chn=RGB_divs.childNodes;
 	WB_eydrop_div=chn[0];
-	WB_eydrop_div.title='White balance - Double-click to reset to default - Click and hold down to compare with original';
+	WB_eydrop_div.title='White balance - Double-click to reset to default - Click and hold down to compare current settings with original (just custom colour matrix, if enabled)';
 	WB_eydrop_div.style.cssText="all: initial !important;display: flex !important;align-items: center !important;background: #000000 !important;width: fit-content !important;padding-right: 0.5ch !important; color: white !important;";
 	chn=WB_eydrop_div.childNodes;
 	WB_eydrop=chn[0];
@@ -1789,7 +1823,6 @@ if(doWB){
 	colInp.addEventListener('dblclick',() => colInp_reset(obj));
 	colInp.addEventListener('input',() => colInp_inp(obj));
 	colSel.addEventListener('input',() => colInp_inp(obj,false));
-	WB_eydrop.addEventListener('click',() => WB_inp(obj));
 	WB_eydrop_div.addEventListener('dblclick',() => WB_inp(obj,'#ffffff'));
 	WB_eydrop.addEventListener('input',() => WB_inp(obj));
 	tglWB.addEventListener('click',() => showWB(obj));
