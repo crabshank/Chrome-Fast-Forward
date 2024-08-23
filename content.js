@@ -1598,8 +1598,8 @@ if(doWB){
 		['Hue rotate',0,360,1,0,0],
 		['Contrast (S-curve)',0,10,0.001,1,3],
 		['Gamma',0,6,0.001,1,3],
-		['White crush',1,2,0.001,1,3],
-		['Black crush',-1,0,0.001,0,3],
+		['White crush',0,2,0.001,1,3],
+		['Black crush',-1,1,0.001,0,3],
 		['Invert',0,1,1,0,0],
 		['Dither',0,1,0.001,0,3],
 	];
