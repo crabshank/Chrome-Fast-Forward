@@ -710,7 +710,7 @@ function elRemover(el){
 		el.parentNode.removeChild(el);
 	}catch(e){;}
     try{
-        el.remove;
+        el.remove();
 	}catch(e){;}
 }
 
