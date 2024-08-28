@@ -1,5 +1,5 @@
 var insts=[];
-
+var tempInsts=[];
 var dfSpd=2.2;
 var dfStp=0.1;
 var mbMde=false;
@@ -706,11 +706,12 @@ function removeEls(d, array) {
 }
 
 function elRemover(el){
-	if(typeof el!=='undefined' && !!el){
-	if(typeof el.parentNode!=='undefined' && !!el.parentNode){
+	try{
 		el.parentNode.removeChild(el);
-	}
-	}
+	}catch(e){;}
+    try{
+        el.remove;
+	}catch(e){;}
 }
 
 function setPix(pixels, x, y, r, g, b, width) {
@@ -2256,15 +2257,18 @@ function checker(){
 					;
 				}
 				finally{
-					elRemover(remi.sdivs);
+                    remi.sdivs.style.display='none';
+                    elRemover(remi.sdivs);
 				}
 			}
 			
 			let DOMvids=getMatchingNodesShadow(document,['VIDEO','AUDIO'],true,false);
 			for(let i=0, len_i=DOMvids.length; i<len_i; ++i){
 				let dv=DOMvids[i];
-				if(!eligInsts_vids.includes(dv) && eligVid(dv)===true){
+				if( !tempInsts.includes(dv) && !eligInsts_vids.includes(dv) && eligVid(dv)===true ){
+                    tempInsts.push(dv);
 					creator(dv);
+                    tempInsts=tempInsts.filter( v=>{return v!==dv;});
 				}
 			}
 	}
