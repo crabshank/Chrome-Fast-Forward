@@ -970,6 +970,9 @@ function pointerleave_hdl(event,i) {
 }
 
 function fsc_hdl(i) {
+    if(i.elig===false){
+        return;
+    }
 let fsOn=document.fullscreen || document.webkitIsFullScreen;
 if(fsOn){
 	i.video.insertAdjacentElement('beforebegin',i.sdivs);
@@ -1572,6 +1575,7 @@ function creator(vid){
 var obj={};
 
 obj.video=vid;
+obj.elig=true;
 obj.ff=-1;
 
 let plp = document.createElement("button");
@@ -2242,6 +2246,7 @@ function checker(){
 			
 			for(let i=0, len_i=toRmv.length; i<len_i; ++i){
 				let remi=toRmv[i];
+                remi.elig=false;
 				let v=remi.video;
 				try{
 					v.removeEventListener('progress',progress_hdl);
@@ -2259,6 +2264,7 @@ function checker(){
 				finally{
                     remi.sdivs.style.display='none';
                     elRemover(remi.sdivs);
+                    remi=null;
 				}
 			}
 			
