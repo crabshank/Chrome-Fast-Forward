@@ -201,6 +201,56 @@ function getMatchingNodesShadow(docm, slc, isNodeName, onlyShadowRoots){
 	return out;
 }
 
+function getScreenWidth(mx){
+	let w=[
+					//document?.documentElement?.scrollWidth,
+					//document?.body?.parentNode?.scrollWidth,
+					//document?.body?.scrollWidth,
+					//document?.head?.scrollWidth,
+					//window.screen.availWidth,
+					//window.screen.width,
+					document?.documentElement?.clientWidth,
+					document?.body?.parentNode?.clientWidth,
+					document?.body?.clientWidth,
+					document?.head?.clientWidth
+				].filter( (d)=>{return d>0} );
+				
+		if(w.length>0){
+				if(mx){	
+					return Math.max(...w);
+				}else{
+					return Math.min(...w);
+				}
+			}else{
+				return 0;
+			}
+}
+
+function getScreenHeight(mx){
+	let w=[
+					//document?.documentElement?.scrollHeight,
+					//document?.body?.parentNode?.scrollHeight,
+					//document?.body?.scrollHeight,
+					//document?.head?.scrollHeight,
+					//window.screen.availHeight,
+					//window.screen.Height,
+					document?.documentElement?.clientHeight,
+					document?.body?.parentNode?.clientHeight,
+					document?.body?.clientHeight,
+					document?.head?.clientHeight
+				].filter( (d)=>{return d>0} );
+				
+		if(w.length>0){
+				if(mx){	
+					return Math.max(...w);
+				}else{
+					return Math.min(...w);
+				}
+			}else{
+				return 0;
+			}
+}
+
 function absBoundingClientRect(el){
 	let st = [window?.scrollY,
 					window?.pageYOffset,
@@ -235,6 +285,11 @@ function absBoundingClientRect(el){
 	const rct=el.getBoundingClientRect();
 	let r={};
 
+	r.left_raw=rct.left;
+	r.right_raw=rct.right;
+	r.top_raw=rct.top;
+	r.bottom_raw=rct.left;
+	
 	r.left=rct.left+scrollLeft;
 	r.right=rct.right+scrollLeft;
 	r.top=rct.top+scrollTop;
@@ -472,9 +527,10 @@ function chkVis(i,cvs){
 }
 
 function positionBar(i,scrl, showPrg){
-	
+let ftr_css=false;
 if(scrl && cvs_clkd===false){
 i.sdivs.style.cssText=sDivsCSS+'opacity: 0 !important;';
+ftr_css=true;
 i.faded=true;
 i.cvs.style.setProperty('opacity',0,'important');
 //i.prgBarTime.style.setProperty('display','none','important');
@@ -482,13 +538,29 @@ i.cvs.style.setProperty('opacity',0,'important');
 
 let vrct=absBoundingClientRect(i.video);
 
-let sdrct=absBoundingClientRect(i.bdivs);
+let sdrct;
 let wg=0.001*vrct.width;
 i.right=vrct.left+wg;
 vrct.vid_width=vrct.width-2*wg;
 
+let forcedTR=( vrct.top_raw===0 && vrct.left_raw===0 && vrct.height===0 && vrct.width===0 )?true:false; //if true, place in middle
+let ftp,frt;
+
+if(forcedTR===true){
+	if( ftr_css===false ){
+		i.sdivs.style.cssText=sDivsCSS+'opacity: 0 !important;';
+	}
+	sdrct=absBoundingClientRect(i.bdivs);
+	ftp=vrct.top+getScreenHeight(true)*0.5 - sdrct.height;
+	frt=vrct.left+getScreenWidth(false)*0.5 - sdrct.width*0.5;
+}else{
+	sdrct=absBoundingClientRect(i.bdivs);
+}
+
 if(i.video.tagName==='AUDIO'){
-	if(vrct.top<2*sdrct.height+0.102*vrct.height){
+	if(forcedTR===true){
+		i.sDivsCSS2='top: '+ftp+'px !important;  left: '+frt+'px !important;';
+	}else if(vrct.top<2*sdrct.height+0.102*vrct.height){
 		i.sDivsCSS2='top: '+(vrct.bottom+0.102*vrct.height)+'px !important;  left: '+i.right+'px !important;';
 	}else{
 		i.sDivsCSS2='top: '+(vrct.top-2*sdrct.height-0.102*vrct.height)+'px !important;  left: '+i.right+'px !important;';
@@ -497,7 +569,10 @@ if(i.video.tagName==='AUDIO'){
 	let vdc=i.video.ownerDocument;
 	let vdcf=vdc.fullscreenElement;
 	i.top=0.102*vrct.height;
-	if(	!(	vdc.fullscreen===true &&
+	if(forcedTR===true){
+		i.top=ftp;
+		i.right=frt;
+	}else if(	!(	vdc.fullscreen===true &&
 				  !!vdcf &&
 				  ( vdcf===i.video ||
 				  	( hasAncestor(i.video,vdcf) &&
