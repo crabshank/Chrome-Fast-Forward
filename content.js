@@ -754,7 +754,7 @@ function eligVid(vid){
 			break;
 		}
 	}
-	if( (fnd===true) && (get_src(vid)!='') && (vid.readyState > 0) ){
+	if( (fnd===true) && (get_src(vid)!='') /*&& (vid.readyState > 0)*/ ){
 		return true;
 	}else{
 		return false;
