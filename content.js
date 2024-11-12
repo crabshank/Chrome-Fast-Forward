@@ -744,7 +744,7 @@ function chgFlgs(i,on){
 }
 			
 
-function eligVid(vid,alrdyThere){
+function eligVid(vid){
 	let anc=getAncestors(vid, false, false, true, false);
 	let fnd=false;
 	let dEl=document.documentElement;
@@ -754,7 +754,7 @@ function eligVid(vid,alrdyThere){
 			break;
 		}
 	}
-	if( (fnd===true) && (get_src(vid)!='') && (vid.readyState > 0 || alrdyThere===true)){
+	if( (fnd===true) && (get_src(vid)!='') && (vid.readyState > 0) ){
 		return true;
 	}else{
 		return false;
@@ -1940,12 +1940,12 @@ function btclk(i) {
 			if(!!event && typeof event !=='undefined'){
 			event.preventDefault();
 			event.stopPropagation();
-			if(i.ff===-1){
+			if(i.ff==-1){
 				chgFlgs(i,true);
 				let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 				i.video.playbackRate=vN;	
 				i.ff=1;
-			}else if (i.ff===0){
+			}else if (i.ff==0){
 				chgFlgs(i,true);
 				let vN=(Number.isNaN(i.clse.valueAsNumber))?1:i.clse.valueAsNumber;
 				i.video.playbackRate=vN;
@@ -2309,7 +2309,7 @@ function checker(){
 			for(let i=0, len_i=insts.length; i<len_i; ++i){
 				let insti=insts[i];
 				let v=insti.video;
-				if( eligVid(v,true)===false ){
+				if( eligVid(v)===false ){
 					toRmv.push(insti);
 				}else{
 					eligInsts.push(insti);
