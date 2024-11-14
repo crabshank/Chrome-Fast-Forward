@@ -755,7 +755,7 @@ function eligVid(vid){
 			break;
 		}
 	}
-	if( (fnd===true) && (get_src(vid)!='') && (vid.readyState > 0) ){
+	if( (fnd===true) && (get_src(vid)!=='') && (vid.readyState > 0) ){
 		return [fnd,true];
 	}else{
 		return [fnd,false];
@@ -2313,7 +2313,7 @@ function checker(){
                 let ev=eligVid(v);
                 if(ev[0]===false){ //not in page
                     toRmv.push(insti);
-                }else if( ev[1]===false ){ //in page but readyState=0
+                }else if( ev[1]===false ){ //in page but readyState=0 and non-empty src
                     insti.elig=false;
 					elRemover(insti.sdivs);
 				}else{
@@ -2353,7 +2353,7 @@ function checker(){
 			for(let i=0, len_i=DOMvids.length; i<len_i; ++i){
 				let dv=DOMvids[i];
                 let fnd=null;
-                if(dv.readyState>0){
+                if(get_src(dv)!=='' && dv.readyState>0){
                     for(let j=0, len_j=activeInsts.length; j<len_j; ++j){
                         let aij=activeInsts[j];
                         let ajv=aij.video;
