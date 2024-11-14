@@ -1,5 +1,6 @@
 var insts=[];
 var tempInsts=[];
+var activeInsts=[];
 var dfSpd=2.2;
 var dfStp=0.1;
 var mbMde=false;
@@ -755,9 +756,9 @@ function eligVid(vid){
 		}
 	}
 	if( (fnd===true) && (get_src(vid)!='') && (vid.readyState > 0) ){
-		return true;
+		return [fnd,true];
 	}else{
-		return false;
+		return [fnd,false];
 	}
 }
 
@@ -1839,7 +1840,7 @@ obj.s_vis=null;
 obj.c_vis=null;
 obj.obscPrg={};
 insts.push(obj);
-
+activeInsts.push(obj);
 def_retCSS(obj, true, true);
 
 function wdw(event){
@@ -2305,18 +2306,22 @@ function checker(){
 			let eligInsts=[];
 			let eligInsts_vids=[];
 			let toRmv=[];
-			
+            
 			for(let i=0, len_i=insts.length; i<len_i; ++i){
 				let insti=insts[i];
 				let v=insti.video;
-				if( eligVid(v)===false ){
-					toRmv.push(insti);
+                let ev=eligVid(v);
+                if(ev[0]===false){ //not in page
+                    toRmv.push(insti);
+                }else if( ev[1]===false ){ //in page but readyState=0
+                    insti.elig=false;
+					elRemover(insti.sdivs);
 				}else{
 					eligInsts.push(insti);
 					eligInsts_vids.push(v);
 				}
 			}
-			
+
 			insts=eligInsts;
 			
 			for(let i=0, len_i=toRmv.length; i<len_i; ++i){
@@ -2339,6 +2344,7 @@ function checker(){
 				finally{
                     remi.sdivs.style.display='none';
                     elRemover(remi.sdivs);
+                    activeInsts=activeInsts.filter( s=>{return s!==remi;});
                     remi=null;
 				}
 			}
@@ -2346,7 +2352,30 @@ function checker(){
 			let DOMvids=getMatchingNodesShadow(document,['VIDEO','AUDIO'],true,false);
 			for(let i=0, len_i=DOMvids.length; i<len_i; ++i){
 				let dv=DOMvids[i];
-				if( !tempInsts.includes(dv) && !eligInsts_vids.includes(dv) && eligVid(dv)===true ){
+                let fnd=null;
+                if(dv.readyState>0){
+                    for(let j=0, len_j=activeInsts.length; j<len_j; ++j){
+                        let aij=activeInsts[j];
+                        let ajv=aij.video;
+                        if(ajv===dv){
+                            fnd=aij;
+                            break;
+                        }
+                    }
+                }
+                if(fnd!==null){
+                    fnd.elig=true;
+                    insts.push(fnd);
+                    //re-inject:
+                    if(document.fullscreen || document.webkitIsFullScreen){
+                        fnd.video.insertAdjacentElement('beforebegin',fnd.sdivs);
+                    }else{
+                        let anc=getAncestors(fnd.video, true, true, false, true);
+                        let fpt=anc[anc.length-1];
+                        fpt.insertAdjacentElement('beforebegin', fnd.sdivs);
+                    }
+                    def_retCSS(fnd,false,true);
+                }else if( !tempInsts.includes(dv) && !eligInsts_vids.includes(dv) && eligVid(dv)[1]===true ){
                     tempInsts.push(dv);
 					creator(dv);
                     tempInsts=tempInsts.filter( v=>{return v!==dv;});
