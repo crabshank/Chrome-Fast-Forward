@@ -2359,7 +2359,7 @@ function checker(){
 			for(let i=0, len_i=DOMvids.length; i<len_i; ++i){
 				let dv=DOMvids[i];
                 let fnd=null;
-                if(get_src(dv)!=='' && dv.readyState>0){
+                if(!eligInsts_vids.includes(dv) && get_src(dv)!=='' && dv.readyState>0){
                     for(let j=0, len_j=activeInsts.length; j<len_j; ++j){
                         let aij=activeInsts[j];
                         let ajv=aij.video;
