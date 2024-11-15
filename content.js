@@ -527,9 +527,9 @@ function chkVis(i,cvs){
 	return (((cvs)?i.cvs:i.sdivs).style['opacity']==='0')?false:true;
 }
 
-function positionBar(i,scrl, showPrg){
+function positionBar(i,scrl, showPrg,onlyReloc){
 let ftr_css=false;
-if(scrl && cvs_clkd===false){
+if(scrl && cvs_clkd===false && onlyReloc!==true){
 i.sdivs.style.cssText=sDivsCSS+'opacity: 0 !important;';
 ftr_css=true;
 i.faded=true;
@@ -603,6 +603,12 @@ if(i.video.tagName==='AUDIO'){
 			i.top=vrct.vid_top+0.102*vrct.vid_height;
 		}
 i.sDivsCSS2='top: '+i.top+'px !important;  left: '+i.right+'px !important;';
+}
+
+if(onlyReloc===true){
+    i.sdivs.style.cssText=sDivsCSS+i.sDivsCSS2;
+    drawBuffered(i);
+    return;
 }
 
 
@@ -2374,7 +2380,7 @@ function checker(){
                         let fpt=anc[anc.length-1];
                         fpt.insertAdjacentElement('beforebegin', fnd.sdivs);
                     }
-                    positionBar(fnd,true,true);
+                    positionBar(fnd,true,true,true);
                 }else if( !tempInsts.includes(dv) && !eligInsts_vids.includes(dv) && eligVid(dv)[1]===true ){
                     tempInsts.push(dv);
 					creator(dv);
