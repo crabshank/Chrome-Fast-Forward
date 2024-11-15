@@ -2374,7 +2374,7 @@ function checker(){
                         let fpt=anc[anc.length-1];
                         fpt.insertAdjacentElement('beforebegin', fnd.sdivs);
                     }
-                    def_retCSS(fnd,true,true);
+                    positionBar(fnd,false,true);
                 }else if( !tempInsts.includes(dv) && !eligInsts_vids.includes(dv) && eligVid(dv)[1]===true ){
                     tempInsts.push(dv);
 					creator(dv);
