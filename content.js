@@ -541,11 +541,18 @@ let vrct=absBoundingClientRect(i.video);
 
 let sdrct;
 let wg=0.001*vrct.width;
-i.right=vrct.left+wg;
+let sdp=i.sdivs.parentElement;
+let ancUndef=(sdp===null || typeof(sdp)==='undefined')?true:false;
+let ancR=(ancUndef===true)?{left:0,top:0}:absBoundingClientRect(sdp);
+if( (document.fullscreen || document.webkitIsFullScreen) && ancUndef===false){
+	ancR.left=ancR.left_raw;
+	ancR.top=ancR.top_raw;
+}
+i.left=vrct.left+wg-ancR.left;
 vrct.vid_width=vrct.width-2*wg;
 
 let forcedTR=( vrct.top_raw===0 && vrct.left_raw===0 && vrct.height===0 && vrct.width===0 )?true:false; //if true, place in middle
-let ftp,frt;
+let ftp,flf;
 
 if(forcedTR===true){
 	if( ftr_css===false ){
@@ -553,26 +560,26 @@ if(forcedTR===true){
 	}
 	sdrct=absBoundingClientRect(i.bdivs);
 	ftp=vrct.top+getScreenHeight(true)*0.5 - sdrct.height;
-	frt=vrct.left+getScreenWidth(false)*0.5 - sdrct.width*0.5;
+	flf=vrct.left+getScreenWidth(false)*0.5 - sdrct.width*0.5;
 }else{
 	sdrct=absBoundingClientRect(i.bdivs);
 }
 
 if(i.video.tagName==='AUDIO'){
 	if(forcedTR===true){
-		i.sDivsCSS2='top: '+ftp+'px !important;  left: '+frt+'px !important;';
+		i.sDivsCSS2='top: '+ftp+'px !important;  left: '+flf+'px !important;';
 	}else if(vrct.top<2*sdrct.height+0.102*vrct.height){
-		i.sDivsCSS2='top: '+(vrct.bottom+0.102*vrct.height)+'px !important;  left: '+i.right+'px !important;';
+		i.sDivsCSS2='top: '+(vrct.bottom+0.102*vrct.height-ancR.top)+'px !important;  left: '+(i.left-ancR.left)+'px !important;';
 	}else{
-		i.sDivsCSS2='top: '+(vrct.top-2*sdrct.height-0.102*vrct.height)+'px !important;  left: '+i.right+'px !important;';
+		i.sDivsCSS2='top: '+(vrct.top-2*sdrct.height-0.102*vrct.height-ancR.top)+'px !important;  left: '+(i.left-ancR.left)+'px !important;';
 	}
 }else{
 	let vdc=i.video.ownerDocument;
 	let vdcf=vdc.fullscreenElement;
-	i.top=0.102*vrct.height;
+	i.top=0.102*vrct.height-ancR.top;
 	if(forcedTR===true){
-		i.top=ftp;
-		i.right=frt;
+		i.top=ftp-ancR.top;
+		i.left=flf-ancR.left;
 	}else if(	!(	vdc.fullscreen===true &&
 				  !!vdcf &&
 				  ( vdcf===i.video ||
@@ -599,10 +606,10 @@ if(i.video.tagName==='AUDIO'){
 			vrct.vid_width=vrct.vid_right-vrct.vid_left;
 			wg=0.001*vrct.vid_width;
 			vrct.vid_width-=2*wg;
-			i.right=vrct.vid_left+wg;
-			i.top=vrct.vid_top+0.102*vrct.vid_height;
+			i.left=vrct.vid_left+wg-ancR.left;
+			i.top=vrct.vid_top+0.102*vrct.vid_height-ancR.top;
 		}
-i.sDivsCSS2='top: '+i.top+'px !important;  left: '+i.right+'px !important;';
+i.sDivsCSS2='top: '+i.top+'px !important;  left: '+i.left+'px !important;';
 }
 
 if(onlyReloc===true){
@@ -1837,7 +1844,7 @@ obj.fadedBtnsTime=false;
 obj.fadedBtns=false;
 obj.faded=false;
 obj.top=0;
-obj.right=0;
+obj.left=0;
 obj.sDivsCSS2="";
 obj.sclr=false;
 obj.bufEnd=false;
