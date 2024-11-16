@@ -542,9 +542,11 @@ let vrct=absBoundingClientRect(i.video);
 let sdrct;
 let wg=0.001*vrct.width;
 let sdp=i.sdivs.parentElement;
-let ancUndef=(sdp===null || typeof(sdp)==='undefined')?true:false;
+let ancUndef=(sdp===null || typeof(sdp)==='undefined' || sdp===document.body || sdp===document.head || sdp===document.documentElement)?true:false;
 let ancR=(ancUndef===true)?{left:0,top:0}:absBoundingClientRect(sdp);
-if( (document.fullscreen || document.webkitIsFullScreen) && ancUndef===false){
+let vdc=i.video.ownerDocument;
+let vdcf=vdc.fullscreenElement;
+if( (vdc.fullscreen===true || ( vdcf===i.video || hasAncestor(i.video,vdcf) ) ) && ancUndef===false){
 	ancR.left=ancR.left_raw;
 	ancR.top=ancR.top_raw;
 }
@@ -574,8 +576,7 @@ if(i.video.tagName==='AUDIO'){
 		i.sDivsCSS2='top: '+(vrct.top-2*sdrct.height-0.102*vrct.height-ancR.top)+'px !important;  left: '+(i.left-ancR.left)+'px !important;';
 	}
 }else{
-	let vdc=i.video.ownerDocument;
-	let vdcf=vdc.fullscreenElement;
+	
 	i.top=0.102*vrct.height-ancR.top;
 	if(forcedTR===true){
 		i.top=ftp-ancR.top;
