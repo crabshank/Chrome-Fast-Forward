@@ -546,7 +546,8 @@ let ancUndef=(sdp===null || typeof(sdp)==='undefined' || sdp===document.body || 
 let ancR=(ancUndef===true)?{left:0,top:0}:absBoundingClientRect(sdp);
 let vdc=i.video.ownerDocument;
 let vdcf=vdc.fullscreenElement;
-if( (vdc.fullscreen===true || ( vdcf===i.video || hasAncestor(i.video,vdcf) ) ) && ancUndef===false){
+let fsa=hasAncestor(i.video,vdcf);
+if( (vdc.fullscreen===true || ( vdcf===i.video || fsa===true ) ) && ancUndef===false){
 	ancR.left=ancR.left_raw;
 	ancR.top=ancR.top_raw;
 }
@@ -584,7 +585,7 @@ if(i.video.tagName==='AUDIO'){
 	}else if(	!(	vdc.fullscreen===true &&
 				  !!vdcf &&
 				  ( vdcf===i.video ||
-				  	( hasAncestor(i.video,vdcf) &&
+				  	(  fsa===true &&
 							( vdcf.clientHeight===i.video.clientHeight ||
 							   absBoundingClientRect(vdcf).top===vrct.top )
 					   )
