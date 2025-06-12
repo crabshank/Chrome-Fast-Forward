@@ -1,6 +1,7 @@
 var insts=[];
 var tempInsts=[];
 var activeInsts=[];
+var ldmv=[];
 var dfSpd=2.2;
 var dfStp=0.1;
 var mbMde=false;
@@ -2392,12 +2393,13 @@ function checker(){
                     positionBar(fnd,true,true,true);
                 }else if( !tempInsts.includes(dv) && !eligInsts_vids.includes(dv) && eligVid(dv)[1]===true ){
                     tempInsts.push(dv);
-                    try{
+                    if(ldmv.includes(dv)){
+                        ldmv=ldmv.filter( s=>{return s!==dv;});
                         dv.removeEventListener('loadedmetadata',checker);
-                    }catch(e){;}
+                    }
 					creator(dv);
                     tempInsts=tempInsts.filter( v=>{return v!==dv;});
-				}else{ //loadedmetadata backup
+				}else if(!ldmv.includes(dv)){ //loadedmetadata backup
                     dv.addEventListener('loadedmetadata',checker);
                 }
 			}
