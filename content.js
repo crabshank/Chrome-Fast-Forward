@@ -2401,6 +2401,7 @@ function checker(){
                     tempInsts=tempInsts.filter( v=>{return v!==dv;});
 				}else if(!ldmv.includes(dv)){ //loadedmetadata backup
                     dv.addEventListener('loadedmetadata',checker);
+                    ldmv.push(dv);
                 }
 			}
 	}
