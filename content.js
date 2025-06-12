@@ -2392,9 +2392,14 @@ function checker(){
                     positionBar(fnd,true,true,true);
                 }else if( !tempInsts.includes(dv) && !eligInsts_vids.includes(dv) && eligVid(dv)[1]===true ){
                     tempInsts.push(dv);
+                    try{
+                        dv.removeEventListener('loadedmetadata',checker);
+                    }catch(e){;}
 					creator(dv);
                     tempInsts=tempInsts.filter( v=>{return v!==dv;});
-				}
+				}else{ //loadedmetadata backup
+                    dv.addEventListener('loadedmetadata',checker);
+                }
 			}
 	}
 
