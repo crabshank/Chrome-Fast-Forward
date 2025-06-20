@@ -1776,9 +1776,9 @@ clse.step=dfStp;
 clse.title="Maximum speed when fast forwarding; scroll to change.";
 
 bdivs.appendChild(plp);
-bdivs.appendChild(isl);
 bdivs.appendChild(skb);
 bdivs.appendChild(skf);
+bdivs.appendChild(isl);
 bdivs.appendChild(butn);
 bdivs.appendChild(clse);
 bdivs.appendChild(skb_l);
