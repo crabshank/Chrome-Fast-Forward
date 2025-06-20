@@ -14,6 +14,7 @@ var prefPerc=false;
 var cvs_clk=0;
 var cvs_clkd=false;
 var justUp=false;
+var isolator_HTML="*:not(video):not(audio):not(.vController-video-control){visibility:hidden !important;} video::-webkit-media-controls{display: flex !important; opacity: 1 !important;}";
 
 var doWB=false;
 var WB_defMtx,WB_defMtx_JSON,WB_defMtx_flat;
@@ -60,11 +61,13 @@ function showBtns(i){
 
 let bfStyle="all: initial !important;font-family: system-ui !important;min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: buttonface !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 let bfStyle_plp="all: initial !important;font-family: Segoe UI Symbol !important;min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0ch 0ch 0.188ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: buttonface !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+let bfStyle_isl="all: initial !important;filter: grayscale(1) !important;font-family: monospace !important;min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0ch 0ch 0.188ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: buttonface !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 
 let ds_i=" display: initial !important;";
 let ds_n=" display: none !important;";
 
 i.plp.style.cssText=bfStyle_plp+ds_i;
+i.isl.style.cssText=bfStyle_isl+ds_i;
 i.skb.style.cssText=bfStyle+ds_i;
 i.skf.style.cssText=bfStyle+ds_i;
 if(doWB){
@@ -103,8 +106,10 @@ function fadeBtns(i){
 	let ds_n=" display: none !important;";
 	let bfStyle2="all: initial !important;font-family: system-ui !important;min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 	let bfStyle2_plp="all: initial !important;font-family: Segoe UI Symbol !important;min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0ch 0ch 0.188ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
-
+    let bfStyle2_isl="all: initial !important;filter: grayscale(1) !important;font-family: monospace !important;min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0ch 0ch 0.188ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+    
 	i.plp.style.cssText=bfStyle2_plp+ds_i;
+	i.isl.style.cssText=bfStyle2_isl+ds_i;
 	i.skb.style.cssText=bfStyle2+ds_i;
 	i.skf.style.cssText=bfStyle2+ds_i;
 	if(doWB){
@@ -788,11 +793,6 @@ function get_src(vid){
 	}
 }
 
-function checkInclude(arr,el){
-	let arrChk=arr.filter((a)=>{return a===el;});
-	return (arrChk.length>0)?true:false;
-}
-
 function removeEls(d, array) {
     return array.filter((a)=>{return a!==d});
 }
@@ -1409,6 +1409,9 @@ let ct=false;
 	}else if(t===i.plp){
 		plp_clk(i);
 		b_pass=false;
+	}else if(t===i.isl){
+		isl_clk(i);
+		b_pass=false;
 	}else if(t===i.skb){
 		//i.skb.click();
 		sk_bk(i);
@@ -1438,12 +1441,16 @@ let ct=false;
 		let rectK=absBoundingClientRect(i.skb);
 		let rectF=absBoundingClientRect(i.skf);
 		let rectP=absBoundingClientRect(i.plp);
+        let rectI=absBoundingClientRect(i.isl);
 	
 		if(event.pageX >= rectC.left && event.pageX <= rectC.right && event.pageY >= rectC.top && event.pageY <= rectC.bottom){
 			i.clse.focus();
 			ct=true;
 		}else if(event.pageX >= rectP.left && event.pageX <= rectP.right && event.pageY >= rectP.top && event.pageY <= rectP.bottom){
 			plp_clk(i);
+			ct=true;
+		}else if(event.pageX >= rectI.left && event.pageX <= rectI.right && event.pageY >= rectI.top && event.pageY <= rectI.bottom){
+			isl_clk(i);
 			ct=true;
 		}else if(event.pageX >= rectB.left && event.pageX <= rectB.right && event.pageY >= rectB.top && event.pageY <= rectB.bottom){
 			//i.butn.click();
@@ -1667,10 +1674,12 @@ function creator(vid){
 var obj={};
 
 obj.video=vid;
+obj.defCtrls=vid.controls;
 obj.elig=true;
 obj.ff=-1;
 
 let plp = document.createElement("button");
+let isl = document.createElement("button");
 let skb = document.createElement("button");
 let skf = document.createElement("button");
 let butn = document.createElement("button");
@@ -1748,6 +1757,8 @@ let cvs = document.createElement("canvas");
 
 clse.type = "number";
 plp.innerHTML="⏯"
+isl.innerHTML="🎞"
+isl.title="Isolate video";
 skb.innerHTML=(prefPerc && isFinite(vid.duration))?'-'+skp.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'%':'-'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 	
 skf.innerHTML=(prefPerc && isFinite(vid.duration))?'+'+skp.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'%':'+'+sks.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7, useGrouping: false})+'s'; 	
 butn.innerText = vid.playbackRate.toLocaleString('en-GB', {minimumFractionDigits: 0, maximumFractionDigits: 7})+"x";
@@ -1765,6 +1776,7 @@ clse.step=dfStp;
 clse.title="Maximum speed when fast forwarding; scroll to change.";
 
 bdivs.appendChild(plp);
+bdivs.appendChild(isl);
 bdivs.appendChild(skb);
 bdivs.appendChild(skf);
 bdivs.appendChild(butn);
@@ -1799,6 +1811,7 @@ if(document.fullscreen || document.webkitIsFullScreen){
 }
 
 obj.plp=plp;
+obj.isl=isl;
 obj.skb_l=skb_l;
 obj.skb=skb;
 obj.skf=skf;
@@ -1984,6 +1997,54 @@ function plp_clk(i){
 	}else{
 		i.video.pause();
 	}
+}
+
+function isl_clk(i){
+
+    let shds=getMatchingNodesShadow(document,false,true,true);
+    let hed=document.head;
+    let shdows=[hed,...shds.map((n)=>{return n.root;})];
+    let shdows_ch=[[...hed.children],...shds.map((n)=>{return n.childNodes;})];
+    let fnd=[];
+    let shl=shdows.length;
+
+    for(let j=0; j<shl; j++){
+        try{
+                let isolts=shdows_ch[j].filter((c)=>{return (c.nodeName==='STYLE' && c.innerHTML===isolator_HTML);});
+                
+                if(isolts.length>0){
+                        fnd.push(...isolts); //found some
+                }
+                
+        }catch(e){;}
+    }
+
+    if(fnd.length>0){
+        for(let j=0, len_j=fnd.length; j<len_j; j++){
+            let fj=fnd[j];
+            fj.innerHTML='';
+            elRemover(fj);
+        }
+        i.video.controls = i.defCtrls;
+    }else{
+        for(let j=0; j<shl; j++){
+            try{
+                        let s=document.createElement('style');
+                        s.innerHTML=isolator_HTML;
+                        if(j===0){
+                            shdows[j].insertAdjacentElement('afterbegin',s);
+                        }else{
+                            shdows[j].shadowRoot.prepend(s);
+                        }
+            }catch(e){;}
+        }
+        
+        i.video.style.display = 'initial';
+        i.video.style.visibility = 'initial';
+        i.video.controls = true;
+    }
+            
+			
 }
 
 function sk_bk(i, bypss){
