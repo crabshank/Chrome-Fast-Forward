@@ -1399,7 +1399,10 @@ function cl_clk(i) {
 event.stopPropagation();
 let b_pass=true;
 let ct=false;
-    if(i.s_vis===true){
+    if(i.justScrolled===true && i.s_vis===false){
+        i.justScrolled=false;
+    }else{
+        i.justScrolled=false;
         if(t===i.clse){
             i.clse.focus();
             b_pass=false;
@@ -1865,6 +1868,7 @@ obj.top=0;
 obj.left=0;
 obj.sDivsCSS2="";
 obj.sclr=false;
+obj.justScrolled=false;
 obj.bufEnd=false;
 obj.firstBuf=false;
 obj.s_vis=null;
@@ -1877,6 +1881,7 @@ def_retCSS(obj, true, true);
 function wdw(event){
 	if(!obj.sclr){
 		obj.sclr=true;
+        obj.justScrolled=true;
 		let scl=true;
 		let rectV=absBoundingClientRect(obj.cvs);
 		//event.preventDefault();
