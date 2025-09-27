@@ -1399,87 +1399,89 @@ function cl_clk(i) {
 event.stopPropagation();
 let b_pass=true;
 let ct=false;
-	if(t===i.clse){
-		i.clse.focus();
-		b_pass=false;
-	}else if(t===i.butn){
-		//i.butn.click();
-		btclk(i);
-		b_pass=false;
-	}else if(t===i.plp){
-		plp_clk(i);
-		b_pass=false;
-	}else if(t===i.isl){
-		isl_clk(i);
-		b_pass=false;
-	}else if(t===i.skb){
-		//i.skb.click();
-		sk_bk(i);
-		b_pass=false;
-	}else if(t===i.skf){
-		//i.skf.click();
-		sk_fw(i);
-		b_pass=false;
-	}else if(t===i.cvs){
-		b_pass=false;
-	}else if(sk_buff){
-		if(t===i.skb_l){
-			//i.skb_l.click();
-			sk_l_bk(i);
-			b_pass=false;
-		}else if(t===i.skf_l){
-			//i.skf_l.click();
-			sk_l_fw(i);
-			b_pass=false;
-		}
-	}
-	
-	if(b_pass){ //button not clicked directly
-		
-		let rectC=absBoundingClientRect(i.clse);
-		let rectB=absBoundingClientRect(i.butn);
-		let rectK=absBoundingClientRect(i.skb);
-		let rectF=absBoundingClientRect(i.skf);
-		let rectP=absBoundingClientRect(i.plp);
-        let rectI=absBoundingClientRect(i.isl);
-	
-		if(event.pageX >= rectC.left && event.pageX <= rectC.right && event.pageY >= rectC.top && event.pageY <= rectC.bottom){
-			i.clse.focus();
-			ct=true;
-		}else if(event.pageX >= rectP.left && event.pageX <= rectP.right && event.pageY >= rectP.top && event.pageY <= rectP.bottom){
-			plp_clk(i);
-			ct=true;
-		}else if(event.pageX >= rectI.left && event.pageX <= rectI.right && event.pageY >= rectI.top && event.pageY <= rectI.bottom){
-			isl_clk(i);
-			ct=true;
-		}else if(event.pageX >= rectB.left && event.pageX <= rectB.right && event.pageY >= rectB.top && event.pageY <= rectB.bottom){
-			//i.butn.click();
-			btclk(i);
-			ct=true;
-		}else if(event.pageX >= rectK.left && event.pageX <= rectK.right && event.pageY >= rectK.top && event.pageY <= rectK.bottom){
-			//i.skb.click();
-			sk_bk(i);
-			ct=true;
-		}else if(event.pageX >= rectF.left && event.pageX <= rectF.right && event.pageY >= rectF.top && event.pageY <= rectF.bottom){
-			//i.skf.click();
-			sk_fw(i);
-			ct=true;
-		}else if(event.pageX >= rectV.left && event.pageX <= rectV.right && event.pageY >= rectV.top && event.pageY <= rectV.bottom){
-				ct=true;
-		}else if(sk_buff){
-			let rectKL=absBoundingClientRect(i.skb_l);
-			let rectFL=absBoundingClientRect(i.skf_l);
-			if(event.pageX >= rectKL.left && event.pageX <= rectKL.right && event.pageY >= rectKL.top && event.pageY <= rectKL.bottom){
-				//i.skb_l.click();
-				sk_l_bk(i);
-				ct=true;
-			}else if(event.pageX >= rectFL.left && event.pageX <= rectFL.right && event.pageY >= rectFL.top && event.pageY <= rectFL.bottom){
-				//i.skf_l.click();
-				sk_l_fw(i);
-				ct=true;
-			}
-		}
-	}
+    if(i.s_vis===true){
+        if(t===i.clse){
+            i.clse.focus();
+            b_pass=false;
+        }else if(t===i.butn){
+            //i.butn.click();
+            btclk(i);
+            b_pass=false;
+        }else if(t===i.plp){
+            plp_clk(i);
+            b_pass=false;
+        }else if(t===i.isl){
+            isl_clk(i);
+            b_pass=false;
+        }else if(t===i.skb){
+            //i.skb.click();
+            sk_bk(i);
+            b_pass=false;
+        }else if(t===i.skf){
+            //i.skf.click();
+            sk_fw(i);
+            b_pass=false;
+        }else if(t===i.cvs){
+            b_pass=false;
+        }else if(sk_buff){
+            if(t===i.skb_l){
+                //i.skb_l.click();
+                sk_l_bk(i);
+                b_pass=false;
+            }else if(t===i.skf_l){
+                //i.skf_l.click();
+                sk_l_fw(i);
+                b_pass=false;
+            }
+        }
+        
+        if(b_pass){ //button not clicked directly
+            
+            let rectC=absBoundingClientRect(i.clse);
+            let rectB=absBoundingClientRect(i.butn);
+            let rectK=absBoundingClientRect(i.skb);
+            let rectF=absBoundingClientRect(i.skf);
+            let rectP=absBoundingClientRect(i.plp);
+            let rectI=absBoundingClientRect(i.isl);
+        
+            if(event.pageX >= rectC.left && event.pageX <= rectC.right && event.pageY >= rectC.top && event.pageY <= rectC.bottom){
+                i.clse.focus();
+                ct=true;
+            }else if(event.pageX >= rectP.left && event.pageX <= rectP.right && event.pageY >= rectP.top && event.pageY <= rectP.bottom){
+                plp_clk(i);
+                ct=true;
+            }else if(event.pageX >= rectI.left && event.pageX <= rectI.right && event.pageY >= rectI.top && event.pageY <= rectI.bottom){
+                isl_clk(i);
+                ct=true;
+            }else if(event.pageX >= rectB.left && event.pageX <= rectB.right && event.pageY >= rectB.top && event.pageY <= rectB.bottom){
+                //i.butn.click();
+                btclk(i);
+                ct=true;
+            }else if(event.pageX >= rectK.left && event.pageX <= rectK.right && event.pageY >= rectK.top && event.pageY <= rectK.bottom){
+                //i.skb.click();
+                sk_bk(i);
+                ct=true;
+            }else if(event.pageX >= rectF.left && event.pageX <= rectF.right && event.pageY >= rectF.top && event.pageY <= rectF.bottom){
+                //i.skf.click();
+                sk_fw(i);
+                ct=true;
+            }else if(event.pageX >= rectV.left && event.pageX <= rectV.right && event.pageY >= rectV.top && event.pageY <= rectV.bottom){
+                    ct=true;
+            }else if(sk_buff){
+                let rectKL=absBoundingClientRect(i.skb_l);
+                let rectFL=absBoundingClientRect(i.skf_l);
+                if(event.pageX >= rectKL.left && event.pageX <= rectKL.right && event.pageY >= rectKL.top && event.pageY <= rectKL.bottom){
+                    //i.skb_l.click();
+                    sk_l_bk(i);
+                    ct=true;
+                }else if(event.pageX >= rectFL.left && event.pageX <= rectFL.right && event.pageY >= rectFL.top && event.pageY <= rectFL.bottom){
+                    //i.skf_l.click();
+                    sk_l_fw(i);
+                    ct=true;
+                }
+            }
+        }
+    }
 	def_retCSS(i,false,true);
 	if (b_pass && !ct && i.clse.matches(':focus')){
 		i.clse.blur();
