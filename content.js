@@ -2006,7 +2006,7 @@ function plp_clk(i){
 	}
 }
 
-function isl_clk(i){
+function isl_clk(i,forceUnhide){
 
     let shds=getMatchingNodesShadow(document,false,true,true);
     let hed=document.head;
@@ -2033,7 +2033,7 @@ function isl_clk(i){
             elRemover(fj);
         }
         i.video.controls = i.defCtrls;
-    }else{
+    }else if(forceUnhide!==true){
         for(let j=0; j<shl; j++){
             try{
                         let s=document.createElement('style');
@@ -2397,8 +2397,10 @@ function checker(){
                 let ev=eligVid(v);
                 if(ev[0]===false){ //not in page
                     toRmv.push(insti);
+                    isl_clk(insti,true);
                 }else if( ev[1]===false ){ //in page but readyState=0 and non-empty src
                     insti.elig=false;
+                    isl_clk(insti,true);
 					elRemover(insti.sdivs);
 				}else{
 					eligInsts.push(insti);
