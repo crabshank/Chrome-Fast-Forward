@@ -45,6 +45,32 @@ function hex2rgb(hex) { //Source: https://stackoverflow.com/a/12342275
 	return h;
 }
 
+function hs2rgb(hu_sa){ //0-360, 0-255
+    let h=hu_sa[0]/360.0;
+    let s=hu_sa[1]/255.0;
+    let v=1;
+
+    let i = Math.floor(h * 6);
+    let f = h * 6 - i;
+    let p = v * (1 - s);
+    let q = v * (1 - f * s);
+    let t = v * (1 - (1 - f) * s);
+    let rgb=[0,0,0];
+    switch (i % 6) {
+        case 0: rgb[0] = v, rgb[1] = t, rgb[2] = p; break;
+        case 1: rgb[0] = q, rgb[1] = v, rgb[2] = p; break;
+        case 2: rgb[0] = p, rgb[1] = v, rgb[2] = t; break;
+        case 3: rgb[0] = p, rgb[1] = q, rgb[2] = v; break;
+        case 4: rgb[0] = t, rgb[1] = p, rgb[2] = v; break;
+        case 5: rgb[0] = v, rgb[1] = p, rgb[2] = q; break;
+    }
+    rgb[0]=Math.round(rgb[0]*255);
+    rgb[1]=Math.round(rgb[1]*255);
+    rgb[2]=Math.round(rgb[2]*255);
+    return rgb;
+}
+
+
 function showBtns(i){
 	let bdkCol,txCol,bdkCol2,bdc;
 	if(i.ff===1){ // Playback rate adj. activated (button green)
@@ -1153,10 +1179,25 @@ function colInp_inp(i,b,skp) {
 		//event.preventDefault();
 		event.stopPropagation();
 		let opt=i.colSel.selectedOptions[0];
+        let onm=opt.getAttribute('nm');
 		let val;
 		if(b!==false){
 			val=i.colInp.value;
 			opt.setAttribute('curr',val);
+            
+        if(event.target!==i.WB_eydrop &&
+            (onm==='WB hue'||onm==='WB saturation')
+        ){
+                let whs=(onm==='WB hue')?
+                [parseFloat(val),parseFloat(opt.nextElementSibling.getAttribute('curr'))]
+                :[parseFloat(opt.previousElementSibling.getAttribute('curr')),parseFloat(val)];
+                
+                let wc=hs2rgb(whs);
+                let whx='#'+wc[0].toString(16).padStart(2,'0')+wc[1].toString(16).padStart(2,'0')+wc[2].toString(16).padStart(2,'0');
+                i.WB_eydrop.value=whx; //hex
+                i.WB_eydrop_txt.textContent=whx.toLocaleUpperCase();
+        }
+            
 		}else{ //sel change
 			i.colInp.min= opt.getAttribute('lw');
 			i.colInp.max= opt.getAttribute('hi');
@@ -1166,7 +1207,9 @@ function colInp_inp(i,b,skp) {
 		}
 		let pst=opt.getAttribute('postText');
 		let dpl=parseInt(opt.getAttribute('dp'));
-		opt.textContent =  opt.getAttribute('nm')+' '+opt.getAttribute('preText')+parseFloat(val).toFixed(dpl)+pst;
+        
+        
+		opt.textContent =  onm +' '+opt.getAttribute('preText')+parseFloat(val).toFixed(dpl)+pst;
 		opt.title =val+pst.split(')')[0];
 	}
 	if(b!==false){
@@ -1713,6 +1756,8 @@ if(doWB){
 		['Black crush',-1,1,0.001,0,3],
 		['Invert',0,1,1,0,0],
 		['Dither',0,1,0.001,0,3],
+        ['WB hue',0,360,0.1,0,1],
+        ['WB saturation',0,255,0.1,64,1]
 	];
 	setts.forEach(sett => {
 		// Create option element
@@ -1726,7 +1771,7 @@ if(doWB){
 		opt.setAttribute('dp',sett[5]);
 		let preTxt='(';
 		opt.setAttribute('preText',preTxt);
-		let isDeg=(sett[0]==='Hue rotate')?'deg)':')';
+		let isDeg=(sett[0]==='Hue rotate'||sett[0]==='WB hue')?'deg)':')';
 		opt.setAttribute('postText',isDeg);
 		opt.style.cssText="all: initial !important; align-items: center !important; background: buttonface !important; appearance: auto !important; color: black !important;";
 		opt.textContent =sett[0]+' '+preTxt+parseFloat(sett[4]).toFixed(parseFloat(sett[5]))+isDeg;
