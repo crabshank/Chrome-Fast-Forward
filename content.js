@@ -14,6 +14,7 @@ var prefPerc=false;
 var cvs_clk=0;
 var cvs_clkd=false;
 var justUp=false;
+var doCustMtx=false;
 var isolator_HTML="*:not(video):not(audio):not(.vController-video-control){visibility:hidden !important;} video::-webkit-media-controls{display: flex !important; opacity: 1 !important;}";
 
 var doWB=false;
@@ -1616,14 +1617,26 @@ function restore_options()
 				}
 			}
 			
-			if(typeof(items.custMtx)!=='undefined'){
+			if(typeof(items.custMtx)!=='undefined' && typeof(items.custMtx2)!=='undefined'){
+                
 				if(items.custMtx==true){
-					WB_defMtx=[ //original matrix used on videos
-						[1.036,-0.0286,0.0005,0,-0.0041],
+                    let cm2=JSON.parse(items.custMtx2);
+                    cm2=cm2.map( v=>{return parseFloat(v) });
+                
+                WB_defMtx=[
+                    [cm2[0],cm2[1],cm2[2],cm2[3],cm2[4]],
+                    [cm2[5],cm2[6],cm2[7],cm2[8],cm2[9]],
+                    [cm2[10],cm2[11],cm2[12],cm2[13],cm2[14]],
+                    [cm2[15],cm2[16],cm2[17],cm2[18],cm2[19]]
+                ];
+                    
+                    //[ //original matrix used on videos
+						/*[1.036,-0.0286,0.0005,0,-0.0041],
 						[-0.1218,1.2056,-0.0745,0,-0.0003],
 						[-0.0147,0.002,1.0219,0,-0.0046],
-						[0,0,0,1,0]
-					];
+						[0,0,0,1,0]*/
+					//];
+                    doCustMtx=true;
 				}else{
 					WB_defMtx=[ [1,0,0,0,0],[0,1,0,0,0],[0,0,1,0,0],[0,0,0,1,0] ];
 				}
@@ -1707,7 +1720,8 @@ function save_options()
 		skbcbx: false,
 		vidFilts: false,
 		custMtx: true,
-		bList: ""
+		bList: "",
+        custMtx2: '["1.036","-0.0286","0.0005","0","-0.0041","-0.1218","1.2056","-0.0745","0","-0.0003","-0.0147","0.002","1.0219","0","-0.0046","0","0","0","1","0"]'
 	}, function()
 	{
 		console.log('Default options saved.');
@@ -2016,6 +2030,11 @@ vid.addEventListener('play',play_hdl);
 vid.addEventListener('progress',progress_hdl);
 vid.addEventListener('waiting',waiting_hdl);
 vid.addEventListener('ended',ended_hdl);
+
+if(doCustMtx===true){
+    colInp_inp(obj,true,true);
+}
+
 }
 
 function btclk(i) {

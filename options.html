@@ -32,6 +32,35 @@ textarea#blacklist {
 	width: -webkit-fill-available;
 	min-height: 3.1ch;
 }
+
+div#clrMtrx div {
+	width: 52px;
+	-webkit-appearance: textfield;
+	background-color: white;
+	-webkit-rtl-ordering: logical;
+	cursor: text;
+	padding: 1px;
+	border-width: 2px;
+	border-style: inset;
+	border-color: initial;
+	border-image: initial;
+	text-rendering: auto;
+	color: initial;
+	letter-spacing: normal;
+	word-spacing: normal;
+	text-transform: none;
+	text-indent: 0px;
+	text-shadow: none;
+	display: inline-block;
+	text-align: start;
+	margin: 0em;
+	font: 400 13.3333px Arial;
+	-webkit-writing-mode: horizontal-tb !important;
+}
+
+div#clrMtrx {
+	max-width: 312px;
+}
 </style>
 </head>
 <body>
@@ -57,8 +86,32 @@ Seconds to seek (buttons): <input type="number" id="ska" min="0" step="1" value=
 	<label for="vfBar">Enable video filter bar:</label>
 	<input type="checkbox" id="vfBar"></input><br>
 	
-	<label for="fMtx">Use custom colour matrix with white balance (provides better greens and pinks) (only relevant if video filter bar is enabled)?:</label>
+	<label for="fMtx">Use custom colour matrix with white balance (initial extension default provides better greens and pinks) (only active if video filter bar is enabled)?:</label>
 	<input type="checkbox" id="fMtx"></input><br>
+
+<div id="clrMtrx">
+<div contenteditable="true" id="colMat1">1.036</div>
+<div contenteditable="true" id="colMat2">-0.0286</div>
+<div contenteditable="true" id="colMat3">0.0005</div>
+<div contenteditable="true" id="colMat4">0</div>
+<div contenteditable="true" id="colMat5">-0.0041</div>
+<div contenteditable="true" id="colMat6">-0.1218</div>
+<div contenteditable="true" id="colMat7">1.2056</div>
+<div contenteditable="true" id="colMat8">-0.0745</div>
+<div contenteditable="true" id="colMat9">0</div>
+<div contenteditable="true" id="colMat10">-0.0003</div>
+<div contenteditable="true" id="colMat11">-0.0147</div>
+<div contenteditable="true" id="colMat12">0.002</div>
+<div contenteditable="true" id="colMat13">1.0219</div>
+<div contenteditable="true" id="colMat14">0</div>
+<div contenteditable="true" id="colMat15">-0.0046</div>
+<div contenteditable="true" id="colMat16">0</div>
+<div contenteditable="true" id="colMat17">0</div>
+<div contenteditable="true" id="colMat18">0</div>
+<div contenteditable="true" id="colMat19">1</div>
+<div contenteditable="true" id="colMat20">0</div>
+</div>
+<br>
 	
 <label for="cclk">Progress bar seek click setting:</label>
 <select id="cclk">

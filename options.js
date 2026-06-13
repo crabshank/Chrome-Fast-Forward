@@ -9,6 +9,7 @@ var scorpr=document.getElementById('sorp');
 var c_clk=document.getElementById('cclk');
 var sk_buff_cbx=document.getElementById('sk_buff');
 var blklst=document.getElementById('blacklist');
+var v_clrMtrx = document.getElementById('clrMtrx'); //v_clrMtrx.innerText
 
 var vfBar=document.getElementById('vfBar');
 var fMtx=document.getElementById('fMtx');
@@ -40,6 +41,11 @@ function unDef(v,d,r){
 }
 
 var saver =function(){
+                let mv=v_clrMtrx.children;
+                let mvs=[];
+                for(let i=0, len=mv.length; i<len; ++i){
+                    mvs.push(mv[i].innerText);
+                }
 	 	spd.value=(spd.valueAsNumber>=1 && spd.valueAsNumber<=16)?spd.value:"2.2";
 		stp.value=(stp.valueAsNumber>=0.01 && stp.valueAsNumber<=15)?stp.value:"0.1";
 		seeka.value=(seeka.valueAsNumber>=0)?seeka.value:"10";
@@ -97,8 +103,10 @@ var saver =function(){
 			cvsClk: c_clk.selectedIndex,
 			skbcbx: sk_buff_cbx.checked,
 			vidFilts: vfBar.checked,
-			custMtx: fMtx.checked,
-			bList: blklst.value
+			bList: blklst.value,
+            custMtx: fMtx.checked,
+            custMtx2: JSON.stringify(mvs)
+            //matrix save JSON
 		}, function()
 		{
 			let status = document.getElementById('stats');
@@ -139,6 +147,15 @@ function restore_options()
 blklst.style.height = 'inherit';
 blklst.style.height = (blklst.scrollHeight+7)+"px";
 			svbt.onclick = () => saver();
+            
+            //matrix fill
+            if(typeof items.custMtx2 !=='undefined'){
+                let c=v_clrMtrx.children;
+                let m=JSON.parse(items.custMtx2);
+                for(let i=0, len=c.length; i<len; ++i){
+                    c[i].innerText=m[i];
+                }
+            }
 		}
 		else
 		{
@@ -163,7 +180,8 @@ function save_options()
 		skbcbx: false,
 		vidFilts: false,
 		custMtx: true,
-		bList: ""
+		bList: "",
+        custMtx2: '["1.036","-0.0286","0.0005","0","-0.0041","-0.1218","1.2056","-0.0745","0","-0.0003","-0.0147","0.002","1.0219","0","-0.0046","0","0","0","1","0"]'
 	}, function(){
 		restore_options();
 	});
