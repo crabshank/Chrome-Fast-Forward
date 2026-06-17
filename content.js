@@ -30,12 +30,12 @@ function getStyle(el,prop,pat){
         }
 }
 
-function setStyle(el,prop,val,pat){
+function setStyle(el,prop,val,pat,ovrw){
 		let c=el.style.cssText;
 		pat=(typeof(pat)==='undefined')?new RegExp(`(?<=(^\\s*|;\\s*))${prop}\\s*\:\\s*[^;]*;?`):new RegExp(pat);
 		let cs=[...c];
 		let p=c.match(pat);
-		let nv=`${prop}: ${val} !important;`;
+		let nv=ovrw===true?`${val};`:`${prop}: ${val} !important;`;
 		if(p===null){
 			let sc=(c.trim().endsWith(';'))?'':';';
 			el.setAttribute('style',c+sc+nv);
@@ -1987,7 +1987,7 @@ obj.firstBuf=false;
 obj.s_vis=null;
 obj.c_vis=null;
 obj.obscPrg={};
-obj.fsc={wrapper:null, vidCss:[], ctrls:null};
+obj.fsc={wrapper:null, vidCss:[], vidCssText:'', ctrls:null};
 insts.push(obj);
 activeInsts.push(obj);
 def_retCSS(obj, true, true);
@@ -2185,17 +2185,21 @@ function doFs(i){ //make parent, put sdivs & video inside
     
     let woh=(window.screen.availHeight > window.screen.availWidth)?true:false;
     let hw=(woh)?'max-width:100% !important; width:100% !important; min-width:100% !important;' : 'max-height:100% !important; height:100% !important;min-height:100% !important;';
-    i.fsc.vidCss= [
-        getStyle(i.video,'margin'),
-        getStyle(i.video,'padding'),
-        getStyle(i.video,'border'),
-        getStyle(i.video,'display'),
-        getStyle(i.video,'object-fit'),
-        setStyle(i.video,'pointer-events'),
-        getStyle(i.video,woh?'max-width':'max-height'),
-        getStyle(i.video,woh?'width':'height'),
-        getStyle(i.video,woh?'min-width':'min-height')
-    ].filter(n=>{return n!==''});
+    let pr=[
+            'margin',
+            'padding',
+            'border',
+            'display',
+            'object-fit',
+            'pointer-events',
+            woh?'max-width':'max-height',
+            woh?'width':'height',
+            woh?'min-width':'min-height'
+        ];
+        
+    i.fsc.vidCss= pr.map(p=>{return [p,getStyle(i.video,p)]}).filter(n=>{return n[1]!==''});
+    i.fsc.vidCssText=i.video.style.cssText;
+
     setStyle(i.video,'margin','0px');
     setStyle(i.video,'padding','0px');
     setStyle(i.video,'border','none');
@@ -2220,8 +2224,15 @@ function resetFs(i,resetSdivs){ //remove wrapper
         return
     }else{
         i.fsc.wrapper.insertAdjacentElement('beforebegin',i.video);
-        i.video.setAttribute('style',i.fsc.vidCss.join(';')+';');
+        i.video.setAttribute('style', i.fsc.vidCssText);
+        if(i.fsc.vidCss.length>0){
+            i.fsc.vidCss.forEach(p=>{
+                
+                setStyle(i.video,p[0],p[1],undefined,true);
+            });
+        }
         i.fsc.vidCss=[];
+        i.fsc.vidCssText='';
     }
     if(resetSdivs===true){
         let anc=getAncestors(i.video, true, true, false, true);
