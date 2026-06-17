@@ -2174,9 +2174,6 @@ function doFs(i){ //make parent, put sdivs & video inside
         i.fsc.ctrls=s;
     p.insertAdjacentElement('beforeend',i.sdivs);
     p.insertAdjacentElement('beforeend',i.video);
-    try{
-        i.video.insertAdjacentElement('beforeend',i.filt);
-    }catch(e){;}
     
     let woh=(window.screen.availHeight > window.screen.availWidth)?true:false;
     let hw=(woh)?'max-width:100% !important; width:100% !important; min-width:100% !important;' : 'max-height:100% !important; height:100% !important;min-height:100% !important;';
@@ -2244,9 +2241,6 @@ function resetFs(i,resetSdivs){ //remove wrapper
     i.fsc.ctrls=null;
     elRemover(i.fsc.wrapper);
     i.fsc.wrapper=null;
-    try{
-        i.video.insertAdjacentElement('beforeend',i.filt);
-    }catch(e){;}
 }
 
 function fsb_clk(i,forceNotFull){
