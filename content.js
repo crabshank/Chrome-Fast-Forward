@@ -17,6 +17,38 @@ var justUp=false;
 var doCustMtx=false;
 var isolator_HTML="*:not(video):not(audio):not(.vController-video-control){visibility:hidden !important;} video::-webkit-media-controls{display: flex !important; opacity: 1 !important;}";
 
+function getStyle(el,prop,pat){
+		let c=el.style.cssText;
+		pat=(typeof(pat)==='undefined')?new RegExp(`(?<=(^\\s*|;\\s*))${prop}\\s*\:\\s*[^;]*;?`):new RegExp(pat);
+		let cs=[...c];
+		let p=c.match(pat);
+		if(p!==null){
+            let s=p[0].trim();
+            return s.endsWith(';') ? s.slice(0, -1) : s;
+        }else{
+            return '';
+        }
+}
+
+function setStyle(el,prop,val,pat){
+		let c=el.style.cssText;
+		pat=(typeof(pat)==='undefined')?new RegExp(`(?<=(^\\s*|;\\s*))${prop}\\s*\:\\s*[^;]*;?`):new RegExp(pat);
+		let cs=[...c];
+		let p=c.match(pat);
+		let nv=`${prop}: ${val} !important;`;
+		if(p===null){
+			let sc=(c.trim().endsWith(';'))?'':';';
+			el.setAttribute('style',c+sc+nv);
+		}else if(p[0]!==nv){
+			let px=p.index;
+			for(let i=px+1, z=px+p[0].length; i<z; ++i){
+				cs[i]='';
+			}
+			cs[px]=nv;
+			el.setAttribute('style',cs.join(''));
+		}
+}
+
 var doWB=false;
 var WB_defMtx,WB_defMtx_JSON,WB_defMtx_flat;
 const wb_filt=[" filter: saturate(3.15) contrast(1.74) !important"," filter: saturate(3.12) contrast(1.56) brightness(0.75) !important;"];
@@ -89,6 +121,7 @@ function showBtns(i){
 let bfStyle="all: initial !important;font-family: system-ui !important;min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: buttonface !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 let bfStyle_plp="all: initial !important;font-family: Segoe UI Symbol !important;min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0ch 0ch 0.188ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: buttonface !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 let bfStyle_isl="all: initial !important;filter: grayscale(1) !important;font-family: system-ui !important;min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0ch 0ch 0ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: buttonface !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+let bfStyle_fsb="all: initial !important;font-family: system-ui !important;min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.12ch 0ch 0ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: buttonface !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 
 let ds_i=" display: initial !important;";
 let ds_n=" display: none !important;";
@@ -108,7 +141,7 @@ if(!sk_buff){
 	i.skb_l.style.cssText=bfStyle+ds_i;
 	i.skf_l.style.cssText=bfStyle+ds_i;
 }
-
+i.fsb.style.cssText=bfStyle_fsb+ds_i;
 i.butn.style.cssText = "all: initial !important;font-family: system-ui !important;min-width: 75px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[1]+" !important; border-color: "+bdc+" !important; float: initial !important; text-align-last: right !important; color: "+txCol[1]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 i.clse.style.cssText = "all: initial !important;font-family: system-ui !important;-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color:  #f00000 !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
 i.faded=false;
@@ -1096,6 +1129,7 @@ let fsOn=document.fullscreen || document.webkitIsFullScreen;
 if(fsOn){
 	i.video.insertAdjacentElement('beforebegin',i.sdivs);
 }else{
+resetFs(i);
 let anc=getAncestors(i.video, true, true, false, true);
 let fpt=anc[anc.length-1];
 fpt.insertAdjacentElement('beforebegin', i.sdivs);
@@ -1460,6 +1494,9 @@ let ct=false;
         }else if(t===i.isl){
             isl_clk(i);
             b_pass=false;
+        }else if(t===i.fsb){
+            fsb_clk(i);
+            b_pass=false;
         }else if(t===i.skb){
             //i.skb.click();
             sk_bk(i);
@@ -1490,6 +1527,7 @@ let ct=false;
             let rectF=absBoundingClientRect(i.skf);
             let rectP=absBoundingClientRect(i.plp);
             let rectI=absBoundingClientRect(i.isl);
+            let rectS=absBoundingClientRect(i.fsb);
         
             if(event.pageX >= rectC.left && event.pageX <= rectC.right && event.pageY >= rectC.top && event.pageY <= rectC.bottom){
                 i.clse.focus();
@@ -1499,6 +1537,9 @@ let ct=false;
                 ct=true;
             }else if(event.pageX >= rectI.left && event.pageX <= rectI.right && event.pageY >= rectI.top && event.pageY <= rectI.bottom){
                 isl_clk(i);
+                ct=true;
+            }else if(event.pageX >= rectS.left && event.pageX <= rectS.right && event.pageY >= rectS.top && event.pageY <= rectS.bottom){
+                fsb_clk(i);
                 ct=true;
             }else if(event.pageX >= rectB.left && event.pageX <= rectB.right && event.pageY >= rectB.top && event.pageY <= rectB.bottom){
                 //i.butn.click();
@@ -1742,6 +1783,7 @@ obj.ff=-1;
 
 let plp = document.createElement("button");
 let isl = document.createElement("button");
+let fsb = document.createElement("button");
 let skb = document.createElement("button");
 let skf = document.createElement("button");
 let butn = document.createElement("button");
@@ -1808,6 +1850,7 @@ if(doWB){
 	WB_eydrop_div.style.cssText="all: initial !important;display: flex !important;align-items: center !important;background: #000000 !important;width: fit-content !important;padding-right: 0.5ch !important; color: white !important;";
 	chn=WB_eydrop_div.childNodes;
 	WB_eydrop=chn[0];
+    //WB_eydrop.value='#ffffff';
 	WB_eydrop_txt=chn[1];
 	RGB_divs.appendChild(colSel);
 	RGB_divs.appendChild(colInp);
@@ -1838,6 +1881,8 @@ clse.max=16;
 clse.step=dfStp;
 
 clse.title="Maximum speed when fast forwarding; scroll to change.";
+fsb.innerHTML="⛶"
+fsb.title="Toggle fullscreen video";
 
 bdivs.appendChild(plp);
 bdivs.appendChild(skb);
@@ -1845,6 +1890,7 @@ bdivs.appendChild(skf);
 bdivs.appendChild(isl);
 bdivs.appendChild(butn);
 bdivs.appendChild(clse);
+bdivs.appendChild(fsb);
 bdivs.appendChild(skb_l);
 bdivs.appendChild(skf_l);
 if(doWB){
@@ -1883,6 +1929,7 @@ obj.skf_l=skf_l;
 obj.cvs=cvs;
 obj.butn=butn;
 obj.clse=clse;
+obj.fsb=fsb;
 obj.prgBarTime=prgBarTime;
 obj.bdivs=bdivs;
 obj.sdivs=sdivs;
@@ -1933,6 +1980,7 @@ obj.firstBuf=false;
 obj.s_vis=null;
 obj.c_vis=null;
 obj.obscPrg={};
+obj.fsc={wrapper:null, vidCss:[], ctrls:null};
 insts.push(obj);
 activeInsts.push(obj);
 def_retCSS(obj, true, true);
@@ -2031,7 +2079,7 @@ vid.addEventListener('progress',progress_hdl);
 vid.addEventListener('waiting',waiting_hdl);
 vid.addEventListener('ended',ended_hdl);
 
-if(doCustMtx===true){
+if(doWB && doCustMtx===true){
     colInp_inp(obj,true,true);
 }
 
@@ -2068,6 +2116,158 @@ function plp_clk(i){
 	}else{
 		i.video.pause();
 	}
+}
+
+function exitFs(){
+    if(document.exitFullscreen){
+        document.exitFullscreen();
+    }else if(document.webkitExitFullscreen){
+        document.webkitExitFullscreen();
+    }
+}
+
+
+function reqFs(el){
+    if(el.requestFullscreen) {
+        el.requestFullscreen();
+    }else if(el.webkitRequestFullscreen) {
+        el.webkitRequestFullscreen();
+    }
+}
+
+function doFs(i){ //make parent, put sdivs & video inside
+    let p=document.createElement('section');
+    let s=document.createElement('style');
+    s.innerHTML = "video::-webkit-media-controls{display: flex !important; opacity: 1 !important;}";
+    i.fsc.wrapper=p;
+    i.fsc.ctrls=s;
+    let wrapperCSS = `
+        all: initial !important;
+        position: relative !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: black !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        margin: 0px !important;
+        padding: 0px !important;
+        border: none !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+    `;
+    let wrapperCSS2 = `
+        all: initial !important;
+        max-width: 0px !important;
+        max-height: 0px !important;
+        width: 0px !important;
+        height: 0px !important;
+        min-width: 0px !important;
+        max-height: 0px !important;
+        display: none !important;
+        margin: 0px !important;
+        padding: 0px !important;
+        border: none !important;
+        
+    `;
+    p.setAttribute('style', wrapperCSS);
+    s.setAttribute('style', wrapperCSS2);
+    i.video.insertAdjacentElement('afterend',p);
+    p.insertAdjacentElement('beforeend',s);
+    p.insertAdjacentElement('beforeend',i.sdivs);
+    p.insertAdjacentElement('beforeend',i.video);
+    
+    let woh=(window.screen.availHeight > window.screen.availWidth)?true:false;
+    let hw=(woh)?'max-width:100% !important; width:100% !important; min-width:100% !important;' : 'max-height:100% !important; height:100% !important;min-height:100% !important;';
+    i.fsc.vidCss= [
+        getStyle(i.video,'margin'),
+        getStyle(i.video,'padding'),
+        getStyle(i.video,'border'),
+        getStyle(i.video,'display'),
+        getStyle(i.video,'object-fit'),
+        setStyle(i.video,'pointer-events'),
+        getStyle(i.video,woh?'max-width':'max-height'),
+        getStyle(i.video,woh?'width':'height'),
+        getStyle(i.video,woh?'min-width':'min-height')
+    ].filter(n=>{return n!==''});
+    setStyle(i.video,'margin','0px');
+    setStyle(i.video,'padding','0px');
+    setStyle(i.video,'border','none');
+    setStyle(i.video,'display','block');
+    setStyle(i.video,'object-fit','contain');
+    setStyle(i.video,'pointer-events','all');
+    if(woh){
+        setStyle(i.video,'max-width','100%');
+        setStyle(i.video,'width','100%');
+        setStyle(i.video,'min-width','100%');
+    }else{
+        setStyle(i.video,'max-height','100%');
+        setStyle(i.video,'height','100%');
+        setStyle(i.video,'min-height','100%');
+    }
+    reqFs(p);
+    i.video.controls = true;
+}
+
+function resetFs(i,resetSdivs){ //remove wrapper
+    if(i.fsc.wrapper===null){
+        return
+    }else{
+        i.fsc.wrapper.insertAdjacentElement('beforebegin',i.video);
+        i.video.setAttribute('style',i.fsc.vidCss.join(';')+';');
+        i.fsc.vidCss=[];
+    }
+    if(resetSdivs===true){
+        let anc=getAncestors(i.video, true, true, false, true);
+        let fpt=anc[anc.length-1];
+        fpt.insertAdjacentElement('beforebegin', i.sdivs);
+        def_retCSS(i,true,true);
+    }else{
+         i.fsc.wrapper.insertAdjacentElement('beforebegin',i.sdivs);
+    }
+    elRemover(i.fsc.ctrls);
+    i.fsc.ctrls=null;
+    elRemover(i.fsc.wrapper);
+    i.fsc.wrapper=null;
+}
+
+function fsb_clk(i,forceNotFull){
+    let dfe=document.fullscreenElement||document.webkitFullscreenElement;
+    
+    if(i.fsc.wrapper===null){
+        if(dfe!==null){ //other element is full
+            exitFs();
+            i.video.controls = i.defCtrls;
+        }
+        
+        if(forceNotFull!==true){
+            doFs(i);
+        }
+    }else{ // i.fsc.wrapper registered already 
+        if(i.fsc.wrapper.isFullscreen===true){ //exit fs
+            exitFs();
+            i.video.controls = i.defCtrls;
+            resetFs(i,true);
+        }else if(dfe===i.fsc.wrapper){ 
+            exitFs();
+            i.video.controls = i.defCtrls;
+            resetFs(i,true);
+        }else if(dfe!==null){ //other element is full
+            exitFs();
+            i.video.controls = i.defCtrls;
+            if(forceNotFull===true){
+                resetFs(i,true);
+            }else{
+                doFs(i);
+            }
+        }else{ //no element is full
+            if(forceNotFull===true){
+                resetFs(i,true);
+            }else{
+                doFs(i);
+            }
+        }
+    }
 }
 
 function isl_clk(i,forceUnhide){
@@ -2462,9 +2662,11 @@ function checker(){
                 if(ev[0]===false){ //not in page
                     toRmv.push(insti);
                     isl_clk(insti,true);
+                    fsb_clk(insti,true);
                 }else if( ev[1]===false ){ //in page but readyState=0 and non-empty src
                     insti.elig=false;
                     isl_clk(insti,true);
+                    fsb_clk(insti,true);
 					elRemover(insti.sdivs);
 				}else{
 					eligInsts.push(insti);
