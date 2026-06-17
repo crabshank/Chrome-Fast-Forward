@@ -613,9 +613,11 @@ let ancR=(ancUndef===true)?{left:0,top:0}:absBoundingClientRect(sdp);
 let vdc=i.video.ownerDocument;
 let vdcf=vdc.fullscreenElement;
 let fsa=hasAncestor(i.video,vdcf);
-if( (vdc.fullscreen===true || ( vdcf===i.video || fsa===true ) ) && ancUndef===false){
+if(  i.fsc.wrapper!==null || ( (vdc.fullscreen===true || ( vdcf===i.video || fsa===true ) ) && ancUndef===false)){
 	ancR.left=ancR.left_raw;
 	ancR.top=ancR.top_raw;
+    vrct.left=vrct.left_raw;
+	vrct.top=vrct.top_raw;
 }
 i.left=vrct.left+wg-ancR.left;
 vrct.vid_width=vrct.width-2*wg;
@@ -860,10 +862,15 @@ function removeEls(d, array) {
 function elRemover(el){
 	try{
 		el.parentNode.removeChild(el);
-	}catch(e){;}
-    try{
-        el.remove();
-	}catch(e){;}
+	}catch(e){
+        try{
+            el.outerHTML='';
+        }catch(e){
+            try{
+                el.remove();
+            }catch(e){;}
+        }
+    }
 }
 
 function setPix(pixels, x, y, r, g, b, width) {
@@ -2139,8 +2146,6 @@ function doFs(i){ //make parent, put sdivs & video inside
     let p=document.createElement('section');
     let s=document.createElement('style');
     s.innerHTML = "video::-webkit-media-controls{display: flex !important; opacity: 1 !important;}";
-    i.fsc.wrapper=p;
-    i.fsc.ctrls=s;
     let wrapperCSS = `
         all: initial !important;
         position: relative !important;
@@ -2168,12 +2173,13 @@ function doFs(i){ //make parent, put sdivs & video inside
         margin: 0px !important;
         padding: 0px !important;
         border: none !important;
-        
     `;
     p.setAttribute('style', wrapperCSS);
     s.setAttribute('style', wrapperCSS2);
     i.video.insertAdjacentElement('afterend',p);
+        i.fsc.wrapper=p;
     p.insertAdjacentElement('beforeend',s);
+        i.fsc.ctrls=s;
     p.insertAdjacentElement('beforeend',i.sdivs);
     p.insertAdjacentElement('beforeend',i.video);
     
@@ -2225,6 +2231,7 @@ function resetFs(i,resetSdivs){ //remove wrapper
     }else{
          i.fsc.wrapper.insertAdjacentElement('beforebegin',i.sdivs);
     }
+    i.video.controls = i.defCtrls;
     elRemover(i.fsc.ctrls);
     i.fsc.ctrls=null;
     elRemover(i.fsc.wrapper);
@@ -2237,7 +2244,6 @@ function fsb_clk(i,forceNotFull){
     if(i.fsc.wrapper===null){
         if(dfe!==null){ //other element is full
             exitFs();
-            i.video.controls = i.defCtrls;
         }
         
         if(forceNotFull!==true){
@@ -2246,24 +2252,23 @@ function fsb_clk(i,forceNotFull){
     }else{ // i.fsc.wrapper registered already 
         if(i.fsc.wrapper.isFullscreen===true){ //exit fs
             exitFs();
-            i.video.controls = i.defCtrls;
             resetFs(i,true);
         }else if(dfe===i.fsc.wrapper){ 
             exitFs();
-            i.video.controls = i.defCtrls;
             resetFs(i,true);
         }else if(dfe!==null){ //other element is full
             exitFs();
-            i.video.controls = i.defCtrls;
             if(forceNotFull===true){
                 resetFs(i,true);
             }else{
+                resetFs(i);
                 doFs(i);
             }
         }else{ //no element is full
             if(forceNotFull===true){
                 resetFs(i,true);
             }else{
+                resetFs(i);
                 doFs(i);
             }
         }
