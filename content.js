@@ -710,9 +710,9 @@ ncw=Math.floor(ncw);
 let nch=Math.floor(i.skb.getBoundingClientRect().height);
 
 if(ncw!==i.cvs.width){
-	i.cvs.width=ncw;
     setStyle(i.sdivs,'width',ncw+'px');
     setStyle(i.bdivs,'width',ncw+'px');
+	i.cvs.width=ncw;
 	cvsChg=true;
 }
 
