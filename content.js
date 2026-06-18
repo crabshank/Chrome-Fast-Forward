@@ -1853,6 +1853,16 @@ if(doWB){
 	WB_eydrop_txt=chn[1];
 	RGB_divs.appendChild(colSel);
 	RGB_divs.appendChild(colInp);
+    
+    let wb_shield_elements = [RGB_divs, colSel, colInp, WB_eydrop_div, WB_eydrop, WB_eydrop_txt];
+    
+    wb_shield_elements.forEach(el => {
+        if(el){
+            ['mousedown', 'mouseup', 'click'].forEach(evt => {
+                el.addEventListener(evt, e => e.stopPropagation(), true);
+            });
+        }
+    });
 }
 let clse = document.createElement("input");
 let skb_l = document.createElement("button");
