@@ -2133,20 +2133,9 @@ function plp_clk(i){
 	}
 }
 
-function exitFs(){
-    if(document.exitFullscreen){
-        document.exitFullscreen();
-    }else if(document.webkitExitFullscreen){
-        document.webkitExitFullscreen();
-    }
-}
-
-
 function reqFs(el){
     if(el.requestFullscreen) {
         el.requestFullscreen();
-    }else if(el.webkitRequestFullscreen) {
-        el.webkitRequestFullscreen();
     }
 }
 
