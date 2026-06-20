@@ -1496,7 +1496,8 @@ let ct=false;
             isl_clk(i);
             b_pass=false;
         }else if(t===i.fsb){
-            fsb_clk(i);
+            //fsb_clk(i);
+            i.fsb.dispatchEvent(new Event('click'));
             b_pass=false;
         }else if(t===i.skb){
             //i.skb.click();
@@ -1540,7 +1541,8 @@ let ct=false;
                 isl_clk(i);
                 ct=true;
             }else if(event.pageX >= rectS.left && event.pageX <= rectS.right && event.pageY >= rectS.top && event.pageY <= rectS.bottom){
-                fsb_clk(i);
+                //fsb_clk(i);
+                i.fsb.dispatchEvent(new Event('click'));
                 ct=true;
             }else if(event.pageX >= rectB.left && event.pageX <= rectB.right && event.pageY >= rectB.top && event.pageY <= rectB.bottom){
                 //i.butn.click();
@@ -2058,6 +2060,8 @@ clse.addEventListener('change',(evt) => cl_inp(obj,evt));
 
 clse.addEventListener('focus',(evt) => cl_focus(evt,obj));
 
+fsb.addEventListener('click',async (evt) => {await fsb_clk(evt,obj)});
+
 if(doWB){
 	colInp.addEventListener('dblclick',(evt) => colInp_reset(evt,obj));
 	colInp.addEventListener('input',(evt) => colInp_inp(evt,obj));
@@ -2255,34 +2259,34 @@ function resetFs(i,resetSdivs){ //remove wrapper
     i.fsc.wrapper=null;
 }
 
-function fsb_clk(i,forceNotFull){
+async function fsb_clk(event,i){
     let dfe=document.fullscreenElement||document.webkitFullscreenElement;
     
     if(i.fsc.wrapper===null){
         if(dfe!==null){ //other element is full
-            exitFs();
+            await document.exitFullscreen();
         }
         
-        if(forceNotFull!==true){
+        if(event.forceNotFull!==true){
             doFs(i);
         }
     }else{ // i.fsc.wrapper registered already 
         if(i.fsc.wrapper.isFullscreen===true){ //exit fs
-            exitFs();
+            await document.exitFullscreen();
             resetFs(i,true);
         }else if(dfe===i.fsc.wrapper){ 
-            exitFs();
+            await document.exitFullscreen();
             resetFs(i,true);
         }else if(dfe!==null){ //other element is full
-            exitFs();
-            if(forceNotFull===true){
+            await document.exitFullscreen();
+            if(event.forceNotFull===true){
                 resetFs(i,true);
             }else{
                 resetFs(i);
                 doFs(i);
             }
         }else{ //no element is full
-            if(forceNotFull===true){
+            if(event.forceNotFull===true){
                 resetFs(i,true);
             }else{
                 resetFs(i);
@@ -2684,11 +2688,14 @@ function checker(){
                 if(ev[0]===false){ //not in page
                     toRmv.push(insti);
                     isl_clk(insti,true);
-                    fsb_clk(insti,true);
+                    let fe=new Event('click');
+                    fe.forceNotFull=true;
+                    insti.fsb.dispatchEvent(fe);
                 }else if( ev[1]===false ){ //in page but readyState=0 and non-empty src
                     insti.elig=false;
-                    isl_clk(insti,true);
-                    fsb_clk(insti,true);
+                    let fe=new Event('click');
+                    fe.forceNotFull=true;
+                    insti.fsb.dispatchEvent(fe);
 					elRemover(insti.sdivs);
 				}else{
 					eligInsts.push(insti);
