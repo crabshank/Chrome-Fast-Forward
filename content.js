@@ -122,6 +122,7 @@ let bfStyle="all: initial !important;font-family: system-ui !important;min-width
 let bfStyle_plp="all: initial !important;font-family: Segoe UI Symbol !important;min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0ch 0ch 0.188ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: buttonface !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 let bfStyle_isl="all: initial !important;filter: grayscale(1) !important;font-family: system-ui !important;min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0ch 0ch 0ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: buttonface !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 let bfStyle_fsb="all: initial !important;font-family: system-ui !important;min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.12ch 0ch 0ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: buttonface !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+let bfStyle_wb="all: initial !important;font-family: system-ui !important;min-width: 42px !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.194ch 0ch 0ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: buttonface !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 
 let ds_i=" display: initial !important;";
 let ds_n=" display: none !important;";
@@ -131,7 +132,7 @@ i.isl.style.cssText=bfStyle_isl+ds_i;
 i.skb.style.cssText=bfStyle+ds_i;
 i.skf.style.cssText=bfStyle+ds_i;
 if(doWB){
-	i.tglWB.style.cssText=bfStyle+ds_i+wb_filt[1]+'background: #8a8a8a !important;';
+	i.tglWB.style.cssText=bfStyle_wb+ds_i+wb_filt[1]+'background: #8a8a8a !important;';
 }
 
 if(!sk_buff){
@@ -167,13 +168,15 @@ function fadeBtns(i){
 	let bfStyle2="all: initial !important;font-family: system-ui !important;min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 	let bfStyle2_plp="all: initial !important;font-family: Segoe UI Symbol !important;min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0ch 0ch 0.188ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
     let bfStyle2_isl="all: initial !important;filter: grayscale(1) !important;font-family: system-ui !important;min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0ch 0ch 0ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+let bfStyle2_fsb="all: initial !important;font-family: system-ui !important;min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.12ch 0ch 0ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
+let bfStyle2_wb="all: initial !important;font-family: system-ui !important;min-width: 42px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.194ch 0ch 0ch 0ch !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[0]+" !important; border-color: #00000000 !important; float: initial !important; text-align-last: center !important; color: "+txCol[0]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
     
 	i.plp.style.cssText=bfStyle2_plp+ds_i;
 	i.isl.style.cssText=bfStyle2_isl+ds_i;
 	i.skb.style.cssText=bfStyle2+ds_i;
 	i.skf.style.cssText=bfStyle2+ds_i;
 	if(doWB){
-		i.tglWB.style.cssText=bfStyle2+ds_i+wb_filt[0]+'background: #8a8a8a80 !important;';
+		i.tglWB.style.cssText=bfStyle2_wb+ds_i+wb_filt[0]+'background: #8a8a8a80 !important;';
 	}
 	if(!sk_buff){
 		i.skb_l.style.cssText=bfStyle2+ds_n;
@@ -182,7 +185,9 @@ function fadeBtns(i){
 		i.skb_l.style.cssText=bfStyle2+ds_i;
 		i.skf_l.style.cssText=bfStyle2+ds_i;
 	}
-
+    
+    i.fsb.style.cssText=bfStyle2_fsb+ds_i;
+    
 	i.butn.style.cssText = "all: initial !important;font-family: system-ui !important;min-width: 75px  !important; line-height: 1.91ch !important; transform: translate(0, 0.06ch) !important; padding: 0.05ch 0.25ch 0.05ch 0.25ch !important; display: initial !important; visibility:initial !important;  webkit-text-fill-color: black !important; border-width: 2px !important; border-style: outset !important; background-color: "+bdkCol[1]+" !important; border-color: "+bdc[1]+" !important; float: initial !important; text-align-last: right !important; color: "+txCol[1]+" !important; font-size: unset !important; border-radius: 0% !important; user-select: none !important;";
 	i.clse.style.cssText ="all: initial !important;font-family: system-ui !important;-webkit-text-fill-color: #ececec !important;max-width: max-content !important;line-height: 1.91ch !important;transform: translate(0px, 0.06ch) !important;padding: 0em 0.27em 0em 0.27em !important;display: initial !important;visibility: initial !important;background-color: rgba(240, 0, 0, 0.5) !important;float: initial !important;text-align-last: left !important;font-size: unset !important;border-radius: 0% !important;user-select: none !important;margin: 0px !important;min-width: 75px !important;border: 0px !important;color: #ececec !important;";
 	i.fadedBtns=true;
